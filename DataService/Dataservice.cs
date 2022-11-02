@@ -12,7 +12,7 @@ namespace DataLayer
         {
             using var db = new PortfolioDBContext();
 
-            return db.TitleBasic.ToList();
+            return db.TitleBasics.ToList();
         }
 
         /*
@@ -20,7 +20,7 @@ namespace DataLayer
         {
             using var db = new PortfolioDBContext();
 
-            return db.TitleBasic.Find(id);
+            return db.TitleBasics.Find(id);
         }*/
     }
 }
