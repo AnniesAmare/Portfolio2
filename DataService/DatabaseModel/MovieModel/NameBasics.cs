@@ -8,5 +8,6 @@ namespace DataLayer.DatabaseModel
 {
     public class NameBasics
     {
+        public string NConst { get; set; }
     }
 }

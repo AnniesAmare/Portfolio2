@@ -8,5 +8,10 @@ namespace DataLayer.DatabaseModel
 {
     public class BookmarkTitle
     {
+        public string Username { get; set; }
+        public User User { get; set; }
+        public string TConst { get; set; }
+        public TitleBasics TitleBasics { get; set; }
+        public string Annotation { get; set; }
     }
 }
