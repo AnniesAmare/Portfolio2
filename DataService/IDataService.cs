@@ -11,5 +11,7 @@ namespace DataLayer
     {
         IList<TitleBasics> GetTitleBasics();
         //TitleBasics GetTitleBasics(int id);
+        IList<TitleAkas> GetTitleAkas();
+
     }
 }

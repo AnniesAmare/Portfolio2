@@ -20,7 +20,7 @@ namespace WebServer.Controllers
             _generator = generator;
             _mapper = mapper;
         }
-
+        /*
         [HttpGet]
         public IActionResult GetTitleBasics()
         {
@@ -28,8 +28,14 @@ namespace WebServer.Controllers
                 _dataService.GetTitleBasics().First();
             return Ok(titlebasics);
         }
-
-
+        */
+        [HttpGet]
+        public IActionResult GetTest()
+        {
+            var test =
+                _dataService.GetTitleAkas().First();
+            return Ok(test);
+        }
 
 
     }

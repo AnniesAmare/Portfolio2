@@ -2,6 +2,7 @@
 using DataLayer.DatabaseModel;
 
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer
 {
@@ -14,6 +15,18 @@ namespace DataLayer
 
             return db.TitleBasics.ToList();
         }
+
+        public IList<TitleAkas> GetTitleAkas()
+        {
+            using var db = new PortfolioDBContext();
+            var titleAka = db.TitleAkas
+                .ToList();
+                
+            return titleAka;
+        }
+
+
+
 
         /*
         public TitleBasics GetTitleBasics(int id)
