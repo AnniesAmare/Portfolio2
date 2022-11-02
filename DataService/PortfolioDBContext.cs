@@ -29,9 +29,10 @@ namespace DataLayer
 
             //TileBasics mapping
             modelBuilder.Entity<TitleBasics>().ToTable("title_basics");
+            modelBuilder.Entity<TitleBasics>().HasKey(x => new { x.TConst }).HasName("title_basics_pkey");
             modelBuilder.Entity<TitleBasics>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitleBasics>().Property(x => x.TitleType).HasColumnName("titletype");
-            modelBuilder.Entity<TitleBasics>().Property(x => x.TitleType).HasColumnName("primarytitle");
+            modelBuilder.Entity<TitleBasics>().Property(x => x.PrimaryTitle).HasColumnName("primarytitle");
 
         }
 

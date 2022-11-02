@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using DataLayer;
+using DataLayer.DatabaseModel;
 using Microsoft.AspNetCore.Mvc;
-using DataLayer.IDataService;
-using System.Reflection.Emit;
+using WebServer.Model;
 
 namespace WebServer.Controllers
 {
@@ -13,29 +14,23 @@ namespace WebServer.Controllers
         private readonly LinkGenerator _generator;
         private readonly IMapper _mapper;
 
-    }
+        public TitleBasicsController(IDataService dataService, LinkGenerator generator, IMapper mapper)
+        {
+            _dataService = dataService;
+            _generator = generator;
+            _mapper = mapper;
+        }
 
-    public TitleBasicsController(IDataService dataService, LinkGenerator generator, IMapper mapper)
-    {
-        _dataService = dataService;
-        _generator = generator;
-        _mapper = mapper;
-    }
-
-    [HttpGet]
-    public IActionResult GetTitleBasics()
-    {
-        var titlebasics =
-        _dataService.GetTitleBasics().Select(x => CreateTitleBasicsModel(x));
-        return Ok(titlebasics);
-    }
+        [HttpGet]
+        public IActionResult GetTitleBasics()
+        {
+            var titlebasics =
+                _dataService.GetTitleBasics().First();
+            return Ok(titlebasics);
+        }
 
 
-    private TitleBasicsModel CreateTitleBasicsModel(TitleBasics titlebasics)
-    {
-        //maps a Category-object to a CategoryModel.
-        var model = _mapper.Map<TitleBasicsModel>(titlebasics);
-        model.Url = _generator.GetUriByName(HttpContext, nameof(GetTitleBasics), new { TitleBasics.TConst});
-        return model;
+
+
     }
 }
