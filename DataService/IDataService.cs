@@ -1,12 +1,15 @@
-﻿using System;
+﻿using DataLayer.DatabaseModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataService
+namespace DataLayer
 {
     public interface IDataService
     {
+        IList<TitleBasics> GetTitleBasics();
+        //TitleBasics GetTitleBasics(int id);
     }
 }

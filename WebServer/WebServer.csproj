@@ -7,12 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Model\Profiles\" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <ProjectReference Include="..\DataService\DataLayer.csproj" />
   </ItemGroup>
 
 </Project>

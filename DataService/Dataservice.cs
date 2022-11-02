@@ -1,15 +1,26 @@
 ﻿
+using DataLayer.DatabaseModel;
+
 using System.Collections.Generic;
 
-namespace DataService
+namespace DataLayer
 {
     public class DataService : IDataService 
     {
-        public TitleBasics? GetTitleBasics(int id)
+
+        public IList<TitleBasics> GetTitleBasics()
         {
             using var db = new PortfolioDBContext();
 
-            return db.Categories.Find(id);
+            return db.TitleBasic.ToList();
         }
+
+        /*
+        public TitleBasics GetTitleBasics(int id)
+        {
+            using var db = new PortfolioDBContext();
+
+            return db.TitleBasic.Find(id);
+        }*/
     }
 }
