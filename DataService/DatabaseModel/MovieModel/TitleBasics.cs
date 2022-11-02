@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataService.DatabaseModel
+namespace DataLayer.DatabaseModel
 {
-    internal class TitleBasics
+    public class TitleBasics
     {
+        public int TConst { get; set; }
+        public string TitleType { get; set; }
+        public string? PrimaryTitle { get; set; }
     }
 }
