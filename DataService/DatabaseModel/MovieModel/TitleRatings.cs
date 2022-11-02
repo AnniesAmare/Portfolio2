@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataService.DatabaseModel
 {
-    internal class TitleRatings
+    public class TitleRatings
     {
     }
 }

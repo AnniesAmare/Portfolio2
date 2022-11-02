@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataService.DatabaseModel
 {
-    internal class OmdbData
+    public class OmdbData
     {
     }
 }
