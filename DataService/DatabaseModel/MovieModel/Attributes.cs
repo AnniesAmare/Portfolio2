@@ -8,5 +8,9 @@ namespace DataLayer.DatabaseModel
 {
     public class Attributes
     {
+        public string TConst { get; set; }
+        public TitleBasics TitleBasics { get; set; }
+        public int Ordering { get; set; }
+        public string Attribute { get; set; }
     }
 }
