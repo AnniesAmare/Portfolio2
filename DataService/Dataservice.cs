@@ -1,6 +1,9 @@
-﻿namespace DataService
+﻿
+using System.Collections.Generic;
+
+namespace DataService
 {
-    public class DataService
+    public class DataService : IDataService 
     {
 
     }

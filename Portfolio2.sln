@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portfolio2.Tests", "Portfolio2.Tests\Portfolio2.Tests.csproj", "{D9C32630-C460-48A5-9B98-E80D2CACD1F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portfolio2.Tests", "Portfolio2.Tests\Portfolio2.Tests.csproj", "{D9C32630-C460-48A5-9B98-E80D2CACD1F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataService", "DataService\DataService.csproj", "{41D46C91-0FCA-479A-A1D6-2B5233882087}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataService\DataLayer.csproj", "{41D46C91-0FCA-479A-A1D6-2B5233882087}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer", "WebServer\WebServer.csproj", "{BC39A4D3-F62B-4673-B9E6-A9F6214C4361}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebServer", "WebServer\WebServer.csproj", "{BC39A4D3-F62B-4673-B9E6-A9F6214C4361}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
