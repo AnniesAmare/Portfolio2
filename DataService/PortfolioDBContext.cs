@@ -16,7 +16,23 @@ namespace DataLayer
         const string ConnectionString = "host=cit.ruc.dk;db=cit01;uid=cit01;pwd=0j4p2QVvDDgm";
 
         public DbSet<TitleBasics> TitleBasics { get; set; }
-        public DbSet<TitleBasics> Attributes { get; set; }
+
+
+        //TITLE AKAS
+        public DbSet<Attributes> Attributes { get; set; }
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<Types> Types { get; set; }
+        public DbSet<TitleAkas> TitleAkas { get; set; }
+
+        //USER FRAMEWORK
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserRating> UserRatings { get; set; }
+        public DbSet<UserSearch> UserSearches { get; set; }
+        public DbSet<BookmarkTitle> BookmarksTitles { get; set; }
+        public DbSet<BookmarkName> BookmarksNames { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
