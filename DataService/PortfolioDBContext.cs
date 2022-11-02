@@ -25,8 +25,8 @@ public class PortfolioDBContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        //example
-        //modelBuilder.Entity<Category>().ToTable("categories");
+        //TileBasics mapping
+        modelBuilder.Entity<TitleBasics>().ToTable("categories");
         //modelBuilder.Entity<Category>().Property(x => x.Id).HasColumnName("categoryid");
 
     }
