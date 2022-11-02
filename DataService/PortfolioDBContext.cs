@@ -16,6 +16,7 @@ namespace DataLayer
         const string ConnectionString = "host=cit.ruc.dk;db=cit01;uid=cit01;pwd=0j4p2QVvDDgm";
 
         public DbSet<TitleBasics> TitleBasics { get; set; }
+        public DbSet<TitleBasics> Attributes { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
