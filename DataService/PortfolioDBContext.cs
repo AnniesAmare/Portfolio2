@@ -76,6 +76,13 @@ namespace DataLayer
             //ATTRIBUTES MAPPING
             modelBuilder.Entity<Attributes>().ToTable("attributes");
             modelBuilder.Entity<Attributes>().HasKey(x => new { x.TConst, x.Ordering }).HasName("attributes_pkey");
+            /*
+            modelBuilder.Entity<Attributes>()
+                .HasOne<TitleAkas>()
+                .WithOne(Attributes)
+                .HasForeignKey(x => new { x.TConst, x.Ordering })
+                .HasConstraintName("attributes_tconst_ordering_fkey");
+            */
             modelBuilder.Entity<Attributes>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Attributes>().Property(x => x.Ordering).HasColumnName("ordering");
             modelBuilder.Entity<Attributes>().Property(x => x.Attribute).HasColumnName("attributes");

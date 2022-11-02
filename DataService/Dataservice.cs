@@ -20,6 +20,7 @@ namespace DataLayer
         {
             using var db = new PortfolioDBContext();
             var titleAka = db.TitleAkas
+                //.Include(x => x.Attributes)
                 .ToList();
                 
             return titleAka;
