@@ -21,6 +21,7 @@ namespace DataLayer
         public DbSet<TitleEpisode> TitleEpisodes { get; set; }
         public DbSet<TitleRatings> TitleRatings { get; set; }
         public DbSet<Genres> Genres { get; set; }
+        public DbSet<OmdbData> OmdbDatas { get; set; }
 
         //TITLE AKAS
         public DbSet<Attributes> Attributes { get; set; }
@@ -87,6 +88,13 @@ namespace DataLayer
             modelBuilder.Entity<Genres>().HasKey(x => new { x.TConst }).HasName("genre_pkey");
             modelBuilder.Entity<Genres>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Genres>().Property(x => x.Genre).HasColumnName("genre");
+
+            //OMDB_DATA
+            modelBuilder.Entity<OmdbData>().ToTable("omdb_data");
+            modelBuilder.Entity<OmdbData>().HasKey(x => new { x.TConst }).HasName("omdb_data_pkey");
+            modelBuilder.Entity<OmdbData>().Property(x => x.TConst).HasColumnName("tconst");
+            modelBuilder.Entity<OmdbData>().Property(x => x.Poster).HasColumnName("poster");
+            modelBuilder.Entity<OmdbData>().Property(x => x.Plot).HasColumnName("plot");
 
             //NAMEBASICS MAPPING
             modelBuilder.Entity<NameBasics>().ToTable("name_basics");

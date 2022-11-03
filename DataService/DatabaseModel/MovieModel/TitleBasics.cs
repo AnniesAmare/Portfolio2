@@ -20,5 +20,6 @@ namespace DataLayer.DatabaseModel
         public IList<TitleEpisode>? TitleEpisode { get; set; }
         public TitleRatings? TitleRatings { get; set; }
         public IList<Genres>? Genres { get; set; }
+        public OmdbData? OmdbData { get; set; }
     }
 }
