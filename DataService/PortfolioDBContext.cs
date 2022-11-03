@@ -15,10 +15,10 @@ namespace DataLayer
         //ruc server 
         const string ConnectionString = "host=cit.ruc.dk;db=cit01;uid=cit01;pwd=0j4p2QVvDDgm";
 
-        //MOVIE MODEL
+        /* MOVIE MODEL */
         //TITLEBASICS
         public DbSet<TitleBasics> TitleBasics { get; set; }
-
+        public DbSet<TitleEpisode> TitleEpisodes { get; set; }
 
         //TITLE AKAS
         public DbSet<Attributes> Attributes { get; set; }
@@ -26,7 +26,7 @@ namespace DataLayer
         public DbSet<Types> Types { get; set; }
         public DbSet<TitleAkas> TitleAkas { get; set; }
 
-        //USER FRAMEWORK
+        /* USER FRAMEWORK */
         public DbSet<User> Users { get; set; }
         public DbSet<UserRating> UserRatings { get; set; }
         public DbSet<UserSearch> UserSearches { get; set; }
@@ -64,6 +64,14 @@ namespace DataLayer
             modelBuilder.Entity<TitleBasics>().Property(x => x.StartYear).HasColumnName("startyear");
             modelBuilder.Entity<TitleBasics>().Property(x => x.EndYear).HasColumnName("endyear");
             modelBuilder.Entity<TitleBasics>().Property(x => x.RuntimeMinutes   ).HasColumnName("runtimeminutes");
+
+            //TITLE_EPISODE MAPPING
+            modelBuilder.Entity<TitleEpisode>().ToTable("title_episode");
+            modelBuilder.Entity<TitleBasics>().HasKey(x => new { x.TConst }).HasName("title_episode_pkey");
+            modelBuilder.Entity<TitleEpisode>().Property(x => x.TConst).HasColumnName("tconst");
+            modelBuilder.Entity<TitleEpisode>().Property(x => x.ParentTConst).HasColumnName("parenttconst");
+            modelBuilder.Entity<TitleEpisode>().Property(x => x.SeasonNumber).HasColumnName("seasonnumber");
+            modelBuilder.Entity<TitleEpisode>().Property(x => x.EpisodeNumber).HasColumnName("episodenumber");
 
             //NAMEBASICS MAPPING
             modelBuilder.Entity<NameBasics>().ToTable("name_basics");

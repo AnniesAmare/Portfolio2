@@ -8,5 +8,10 @@ namespace DataLayer.DatabaseModel
 {
     public class TitleEpisode
     {
+        public string TConst { get; set; }
+        public TitleBasics TitleBasics { get; set; }
+        public string ParentTConst { get; set; }
+        public int SeasonNumber { get; set; }
+        public int EpisodeNumber { get; set; }
     }
 }
