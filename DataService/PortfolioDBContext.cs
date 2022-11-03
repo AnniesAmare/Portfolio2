@@ -20,6 +20,7 @@ namespace DataLayer
         public DbSet<TitleBasics> TitleBasics { get; set; }
         public DbSet<TitleEpisode> TitleEpisodes { get; set; }
         public DbSet<TitleRatings> TitleRatings { get; set; }
+        public DbSet<Genres> Genres { get; set; }
 
         //TITLE AKAS
         public DbSet<Attributes> Attributes { get; set; }
@@ -80,6 +81,12 @@ namespace DataLayer
             modelBuilder.Entity<TitleRatings>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitleRatings>().Property(x => x.AverageRating).HasColumnName("averagerating");
             modelBuilder.Entity<TitleRatings>().Property(x => x.NumVotes).HasColumnName("numvotes");
+
+            //GENRES
+            modelBuilder.Entity<Genres>().ToTable("genre");
+            modelBuilder.Entity<Genres>().HasKey(x => new { x.TConst }).HasName("genre_pkey");
+            modelBuilder.Entity<Genres>().Property(x => x.TConst).HasColumnName("tconst");
+            modelBuilder.Entity<Genres>().Property(x => x.Genre).HasColumnName("genre");
 
             //NAMEBASICS MAPPING
             modelBuilder.Entity<NameBasics>().ToTable("name_basics");

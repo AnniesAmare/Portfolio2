@@ -10,8 +10,11 @@ namespace DataLayer.DatabaseModel
     {
         public string? TConst { get; set; }
         public TitleBasics? TitleBasics { get; set; }
-        public string? AverageRating { get; set; }
-        public string? NumVotes { get; set; }
+
+        //note that this take a dot not comma.
+        //Not sure if that work in conversion for the numeric datatype
+        public decimal? AverageRating { get; set; } 
+        public int? NumVotes { get; set; }
 
     }
 }
