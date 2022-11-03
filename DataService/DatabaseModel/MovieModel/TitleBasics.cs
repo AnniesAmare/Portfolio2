@@ -15,5 +15,6 @@ namespace DataLayer.DatabaseModel
         public bool IsAdult { get; set; }
         public string? StartYear { get; set; }
         public string? EndYear { get; set; }
+        public int RuntimeMinutes { get; set; }
     }
 }

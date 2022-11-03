@@ -15,6 +15,8 @@ namespace DataLayer
         //ruc server 
         const string ConnectionString = "host=cit.ruc.dk;db=cit01;uid=cit01;pwd=0j4p2QVvDDgm";
 
+        //MOVIE MODEL
+        //TITLEBASICS
         public DbSet<TitleBasics> TitleBasics { get; set; }
 
 
@@ -50,13 +52,18 @@ namespace DataLayer
             modelBuilder.Entity<X>().Property(x => x.PROPERTYNAME).HasColumnName("COLUMNNAME");
             */
 
-
+            /* MOVIE MODEL */
             //TITLEBASICS MAPPING
             modelBuilder.Entity<TitleBasics>().ToTable("title_basics");
             modelBuilder.Entity<TitleBasics>().HasKey(x => new { x.TConst }).HasName("title_basics_pkey");
             modelBuilder.Entity<TitleBasics>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitleBasics>().Property(x => x.TitleType).HasColumnName("titletype");
             modelBuilder.Entity<TitleBasics>().Property(x => x.PrimaryTitle).HasColumnName("primarytitle");
+            modelBuilder.Entity<TitleBasics>().Property(x => x.OriginalTitle).HasColumnName("originaltitle");
+            modelBuilder.Entity<TitleBasics>().Property(x => x.IsAdult).HasColumnName("isadult");
+            modelBuilder.Entity<TitleBasics>().Property(x => x.StartYear).HasColumnName("startyear");
+            modelBuilder.Entity<TitleBasics>().Property(x => x.EndYear).HasColumnName("endyear");
+            modelBuilder.Entity<TitleBasics>().Property(x => x.RuntimeMinutes   ).HasColumnName("runtimeminutes");
 
             //NAMEBASICS MAPPING
             modelBuilder.Entity<NameBasics>().ToTable("name_basics");
