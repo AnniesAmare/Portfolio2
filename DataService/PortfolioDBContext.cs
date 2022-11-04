@@ -161,7 +161,10 @@ namespace DataLayer
             modelBuilder.Entity<Characters>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<Characters>().Property(x => x.Character).HasColumnName("characters");
 
+
+            
             /* TITLE AKAS & DEPENDENCIES */
+            
             //TITLEAKAS
             modelBuilder.Entity<TitleAkas>().ToTable("title_akas");
             modelBuilder.Entity<TitleAkas>().HasKey(x => new { x.TConst, x.Ordering }).HasName("title_akas_pkey");
@@ -174,6 +177,8 @@ namespace DataLayer
             //ATTRIBUTES MAPPING
             modelBuilder.Entity<Attributes>().ToTable("attributes");
             modelBuilder.Entity<Attributes>().HasKey(x => new { x.TConst, x.Ordering }).HasName("attributes_pkey");
+            
+            
             /*
             modelBuilder.Entity<Attributes>()
                 .HasOne<TitleAkas>()
@@ -181,6 +186,8 @@ namespace DataLayer
                 .HasForeignKey(x => new { x.TConst, x.Ordering })
                 .HasConstraintName("attributes_tconst_ordering_fkey");
             */
+
+            
             modelBuilder.Entity<Attributes>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Attributes>().Property(x => x.Ordering).HasColumnName("ordering");
             modelBuilder.Entity<Attributes>().Property(x => x.Attribute).HasColumnName("attributes");
@@ -198,6 +205,8 @@ namespace DataLayer
             modelBuilder.Entity<Types>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Types>().Property(x => x.Ordering).HasColumnName("ordering");
             modelBuilder.Entity<Types>().Property(x => x.Type).HasColumnName("types");
+
+            
 
             /* USER FRAMEWORK */
             //USERS

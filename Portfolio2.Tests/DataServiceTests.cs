@@ -1,6 +1,6 @@
 namespace Portfolio2.Tests
 {
-    public class UnitTest1
+    public class DataServiceTests
     {
         [Fact]
         public void Test1()
