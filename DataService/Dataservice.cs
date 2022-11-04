@@ -16,22 +16,28 @@ namespace DataLayer
             return db.TitleBasics.ToList();
         }
 
-        /*
+        
         public IList<NameBasics> GetNameBasics()
         {
             using var db = new PortfolioDBContext();
-
             return db.NameBasics.ToList();
         }
-        */
+        
         public IList<TitleAkas> GetTitleAkas()
         {
             using var db = new PortfolioDBContext();
-            var titleAka = db
-                .TitleAkas
+
+            var titleAkasList = db.TitleAkas
                 .ToList();
-                
-            return titleAka;
+            
+            /*
+            foreach (var ta in titleAkasList)
+            {
+                ta.Attributes = db.Attributes.FirstOrDefault(x => x.TConst == ta.TConst && x.Ordering == ta.Ordering);
+            }
+            */
+
+            return titleAkasList;
         }
 
 
