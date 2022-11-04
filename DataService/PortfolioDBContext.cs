@@ -25,8 +25,15 @@ namespace DataLayer
         public DbSet<OmdbData> OmdbDatas { get; set; }
         public DbSet<Wi> Wis { get; set; }
 
+        //KNOWN_FOR
+        public DbSet<KnownFor> KnownFors { get; set; }
+
+        //TITLE_PRINCIPALS
+        public DbSet<TitlePrincipals> TitlePrincipals { get; set; }
+
         //NAMEBASICS
         public DbSet<NameBasics> NameBasics { get; set; }
+        public DbSet<Professions> Professions { get; set; }
 
         //TITLE AKAS
         public DbSet<Attributes> Attributes { get; set; }
@@ -110,12 +117,6 @@ namespace DataLayer
             modelBuilder.Entity<Wi>().Property(x => x.Field).HasColumnName("field");
             modelBuilder.Entity<Wi>().Property(x => x.Lexeme).HasColumnName("lexeme");
 
-            //KNOWN_FOR
-            modelBuilder.Entity<KnownFor>().ToTable("known_for");
-            modelBuilder.Entity<KnownFor>().HasKey(x => new { x.TConst, x.NConst }).HasName("known_for_pkey");
-            modelBuilder.Entity<KnownFor>().Property(x => x.TConst).HasColumnName("tconst");
-            modelBuilder.Entity<KnownFor>().Property(x => x.NConst).HasColumnName("nconst");
-
             /* NAMEBASICS & DEPENDENCIES */
             //NAMEBASICS MAPPING
             modelBuilder.Entity<NameBasics>().ToTable("name_basics");
@@ -125,6 +126,26 @@ namespace DataLayer
             modelBuilder.Entity<NameBasics>().Property(x => x.BirthYear).HasColumnName("birthyear");
             modelBuilder.Entity<NameBasics>().Property(x => x.DeathYear).HasColumnName("deathyear");
             modelBuilder.Entity<NameBasics>().Property(x => x.AVGNameRating).HasColumnName("avg_name_rating");
+
+            //PROFESSIONS
+            modelBuilder.Entity<Professions>().ToTable("professions");
+            modelBuilder.Entity<Professions>().HasKey(x => new { x.NConst }).HasName("professions_pkey");
+            modelBuilder.Entity<Professions>().Property(x => x.NConst).HasColumnName("nconst");
+            modelBuilder.Entity<Professions>().Property(x => x.Profession).HasColumnName("profession");
+
+            /* INBETWEEN TITLE_ AND NAME_BASICS */
+            //KNOWN_FOR
+            modelBuilder.Entity<KnownFor>().ToTable("known_for");
+            modelBuilder.Entity<KnownFor>().HasKey(x => new { x.TConst, x.NConst }).HasName("known_for_pkey");
+            modelBuilder.Entity<KnownFor>().Property(x => x.TConst).HasColumnName("tconst");
+            modelBuilder.Entity<KnownFor>().Property(x => x.NConst).HasColumnName("nconst");
+
+            //TITLE_PRINCIPALS
+            modelBuilder.Entity<TitlePrincipals>().ToTable("title_principals");
+            modelBuilder.Entity<TitlePrincipals>().HasKey(x => new { x.TConst, x.NConst }).HasName("title_principals_pkey");
+            modelBuilder.Entity<TitlePrincipals>().Property(x => x.TConst).HasColumnName("tconst");
+            modelBuilder.Entity<TitlePrincipals>().Property(x => x.NConst).HasColumnName("nconst");
+            modelBuilder.Entity<TitlePrincipals>().Property(x => x.Category).HasColumnName("category");
 
             /* TITLE AKAS & DEPENDENCIES */
             //TITLEAKAS

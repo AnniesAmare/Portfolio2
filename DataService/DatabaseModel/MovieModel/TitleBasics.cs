@@ -25,5 +25,6 @@ namespace DataLayer.DatabaseModel
         public IList<Wi>? Wi { get; set; }
         public IList<KnownFor>? KnownFor { get; set; }
         public IList<TitleAkas>? TitleAkas { get; set; }
+        public IList<TitlePrincipals>? TitlePrincipals { get; set; }
     }
 }

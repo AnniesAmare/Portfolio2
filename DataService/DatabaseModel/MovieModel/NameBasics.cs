@@ -14,5 +14,7 @@ namespace DataLayer.DatabaseModel
         public string? DeathYear { get; set; }
         public string? AVGNameRating { get; set; }
         public IList<KnownFor>? KnownFor { get; set; }
+        public IList<TitlePrincipals>? TitlePrincipals { get; set; }
+        public IList<Professions>? Professions { get; set; }
     }
 }
