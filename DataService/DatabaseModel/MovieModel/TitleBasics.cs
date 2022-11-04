@@ -19,9 +19,11 @@ namespace DataLayer.DatabaseModel
         public int RuntimeMinutes { get; set; }
 
         public IList<TitleEpisode>? TitleEpisode { get; set; }
-        public TitleRatings? TitleRatings { get; set; }
+        public TitleRatings TitleRatings { get; set; }
         public IList<Genres>? Genres { get; set; }
-        public OmdbData? OmdbData { get; set; }
+        public OmdbData? OmdbData { get; set; } 
         public IList<Wi>? Wi { get; set; }
+        public IList<KnownFor>? KnownFor { get; set; }
+        public IList<TitleAkas>? TitleAkas { get; set; }
     }
 }

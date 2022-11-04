@@ -111,6 +111,10 @@ namespace DataLayer
             modelBuilder.Entity<Wi>().Property(x => x.Lexeme).HasColumnName("lexeme");
 
             //KNOWN_FOR
+            modelBuilder.Entity<KnownFor>().ToTable("known_for");
+            modelBuilder.Entity<KnownFor>().HasKey(x => new { x.TConst, x.NConst }).HasName("known_for_pkey");
+            modelBuilder.Entity<KnownFor>().Property(x => x.TConst).HasColumnName("tconst");
+            modelBuilder.Entity<KnownFor>().Property(x => x.NConst).HasColumnName("nconst");
 
             /* NAMEBASICS & DEPENDENCIES */
             //NAMEBASICS MAPPING
