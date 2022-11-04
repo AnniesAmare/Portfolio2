@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer.DatabaseModel
+namespace DataLayer.DatabaseModel.MovieModel
 {
-    public class TitleEpisode
+    public class Wi
     {
         public string TConst { get; set; }
         public TitleBasics TitleBasics { get; set; }
-        public string ParentTConst { get; set; }
-        public int SeasonNumber { get; set; }
-        public int EpisodeNumber { get; set; }
+        public string Word { get; set; }
+        public string Field { get; set; }
+        public string Lexeme { get; set; }
     }
 }

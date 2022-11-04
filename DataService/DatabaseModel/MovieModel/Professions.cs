@@ -8,5 +8,10 @@ namespace DataLayer.DatabaseModel
 {
     public class Professions
     {
+        public string NConst { get; set; }
+        public NameBasics NameBasics { get; set; }
+        public string Profession { get; set; }
+
+
     }
 }
