@@ -25,6 +25,9 @@ namespace DataLayer
         public DbSet<OmdbData> OmdbDatas { get; set; }
         public DbSet<Wi> Wis { get; set; }
 
+        //NAMEBASICS
+        public DbSet<NameBasics> NameBasics { get; set; }
+
         //TITLE AKAS
         public DbSet<Attributes> Attributes { get; set; }
         public DbSet<Languages> Languages { get; set; }
@@ -57,7 +60,8 @@ namespace DataLayer
             modelBuilder.Entity<X>().Property(x => x.PROPERTYNAME).HasColumnName("COLUMNNAME");
             */
 
-            /* MOVIE MODEL */
+            // MOVIE MODEL 
+            /* TITLEBASICS & DEPENDENCIES*/
             //TITLEBASICS MAPPING
             modelBuilder.Entity<TitleBasics>().ToTable("title_basics");
             modelBuilder.Entity<TitleBasics>().HasKey(x => new { x.TConst }).HasName("title_basics_pkey");
@@ -98,7 +102,7 @@ namespace DataLayer
             modelBuilder.Entity<OmdbData>().Property(x => x.Poster).HasColumnName("poster");
             modelBuilder.Entity<OmdbData>().Property(x => x.Plot).HasColumnName("plot");
 
-            //Wi
+            //WI
             modelBuilder.Entity<Wi>().ToTable("wi");
             modelBuilder.Entity<Wi>().HasKey(x => new { x.TConst }).HasName("wi_pkey");
             modelBuilder.Entity<Wi>().Property(x => x.TConst).HasColumnName("tconst");
@@ -106,10 +110,17 @@ namespace DataLayer
             modelBuilder.Entity<Wi>().Property(x => x.Field).HasColumnName("field");
             modelBuilder.Entity<Wi>().Property(x => x.Lexeme).HasColumnName("lexeme");
 
+            //KNOWN_FOR
+
+            /* NAMEBASICS & DEPENDENCIES */
             //NAMEBASICS MAPPING
             modelBuilder.Entity<NameBasics>().ToTable("name_basics");
             modelBuilder.Entity<NameBasics>().HasKey(x => new { x.NConst }).HasName("name_basics_pkey");
-
+            modelBuilder.Entity<NameBasics>().Property(x => x.NConst).HasColumnName("nconst");
+            modelBuilder.Entity<NameBasics>().Property(x => x.PrimaryName).HasColumnName("primaryname");
+            modelBuilder.Entity<NameBasics>().Property(x => x.BirthYear).HasColumnName("birthyear");
+            modelBuilder.Entity<NameBasics>().Property(x => x.DeathYear).HasColumnName("deathyear");
+            modelBuilder.Entity<NameBasics>().Property(x => x.AVGNameRating).HasColumnName("avg_name_rating");
 
             /* TITLE AKAS & DEPENDENCIES */
             //TITLEAKAS
