@@ -16,6 +16,14 @@ namespace DataLayer
             return db.TitleBasics.ToList();
         }
 
+        /*
+        public IList<NameBasics> GetNameBasics()
+        {
+            using var db = new PortfolioDBContext();
+
+            return db.NameBasics.ToList();
+        }
+        */
         public IList<TitleAkas> GetTitleAkas()
         {
             using var db = new PortfolioDBContext();

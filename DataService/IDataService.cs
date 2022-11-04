@@ -10,7 +10,7 @@ namespace DataLayer
     public interface IDataService
     {
         IList<TitleBasics> GetTitleBasics();
-        //TitleBasics GetTitleBasics(int id);
+        //IList<NameBasics> GetNameBasics();
         IList<TitleAkas> GetTitleAkas();
 
     }

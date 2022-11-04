@@ -13,7 +13,7 @@ namespace DataLayer.DatabaseModel
 
         //note that this take a dot not comma.
         //Not sure if that work in conversion for the numeric datatype
-        public decimal? AverageRating { get; set; } 
+        public float? AverageRating { get; set; } 
         public int? NumVotes { get; set; }
 
     }

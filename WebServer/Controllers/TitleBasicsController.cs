@@ -41,8 +41,17 @@ namespace WebServer.Controllers
             return Ok(test);
         }
         
-        
 
+        /*
+        
+        [HttpGet]
+        public IActionResult GetTest()
+        {
+            var test =
+                _dataService.GetNameBasics().First();
+            return Ok(test);
+        }
+        */
 
     }
 }

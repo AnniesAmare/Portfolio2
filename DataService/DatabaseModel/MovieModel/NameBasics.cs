@@ -12,7 +12,7 @@ namespace DataLayer.DatabaseModel
         public string? PrimaryName { get; set; }
         public string? BirthYear { get; set; }
         public string? DeathYear { get; set; }
-        public string? AVGNameRating { get; set; }
+        public float? AVGNameRating { get; set; }
         public IList<KnownFor>? KnownFor { get; set; }
         public IList<TitlePrincipals>? TitlePrincipals { get; set; }
         public IList<Professions>? Professions { get; set; }
