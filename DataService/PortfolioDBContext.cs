@@ -29,7 +29,7 @@ namespace DataLayer
         public DbSet<KnownFor> KnownFors { get; set; }
         public DbSet<TitlePrincipals> TitlePrincipals { get; set; }
         public DbSet<Jobs> Jobs { get; set; }
-
+        public DbSet<Characters> Characters { get; set; }
 
         //NAMEBASICS
         public DbSet<NameBasics> NameBasics { get; set; }
@@ -153,6 +153,13 @@ namespace DataLayer
             modelBuilder.Entity<Jobs>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Jobs>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<Jobs>().Property(x => x.Job).HasColumnName("job");
+
+            //Characters
+            modelBuilder.Entity<Characters>().ToTable("characters");
+            modelBuilder.Entity<Characters>().HasKey(x => new { x.TConst, x.NConst }).HasName("characters_pkey");
+            modelBuilder.Entity<Characters>().Property(x => x.TConst).HasColumnName("tconst");
+            modelBuilder.Entity<Characters>().Property(x => x.NConst).HasColumnName("nconst");
+            modelBuilder.Entity<Characters>().Property(x => x.Character).HasColumnName("characters");
 
             /* TITLE AKAS & DEPENDENCIES */
             //TITLEAKAS

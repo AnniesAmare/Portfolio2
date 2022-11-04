@@ -27,5 +27,6 @@ namespace DataLayer.DatabaseModel
         public IList<TitleAkas>? TitleAkas { get; set; }
         public IList<TitlePrincipals>? TitlePrincipals { get; set; }
         public IList<Jobs>? Jobs { get; set; }
+        public IList<Characters>? Characters { get; set; }
     }
 }
