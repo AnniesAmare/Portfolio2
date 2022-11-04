@@ -76,13 +76,10 @@ namespace DataLayer
             //ATTRIBUTES MAPPING
             modelBuilder.Entity<Attributes>().ToTable("attributes");
             modelBuilder.Entity<Attributes>().HasKey(x => new { x.TConst, x.Ordering }).HasName("attributes_pkey");
-            /*
             modelBuilder.Entity<Attributes>()
-                .HasOne<TitleAkas>()
-                .WithOne(Attributes)
-                .HasForeignKey(x => new { x.TConst, x.Ordering })
-                .HasConstraintName("attributes_tconst_ordering_fkey");
-            */
+                .HasOne(x => x.TitleAkas)
+                .WithOne(x => x.Attributes)
+                .HasForeignKey<TitleAkas>(x => new { x.TConst, x.Ordering });
             modelBuilder.Entity<Attributes>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Attributes>().Property(x => x.Ordering).HasColumnName("ordering");
             modelBuilder.Entity<Attributes>().Property(x => x.Attribute).HasColumnName("attributes");
@@ -90,6 +87,10 @@ namespace DataLayer
             //LANGUAGES MAPPING
             modelBuilder.Entity<Languages>().ToTable("language");
             modelBuilder.Entity<Languages>().HasKey(x => new { x.TConst, x.Ordering }).HasName("languages_pkey");
+            modelBuilder.Entity<Languages>()
+                .HasOne(x => x.TitleAkas)
+                .WithOne(x => x.Languages)
+                .HasForeignKey<TitleAkas>(x => new { x.TConst, x.Ordering });
             modelBuilder.Entity<Languages>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Languages>().Property(x => x.Ordering).HasColumnName("ordering");
             modelBuilder.Entity<Languages>().Property(x => x.Language).HasColumnName("language");
@@ -97,6 +98,10 @@ namespace DataLayer
             //ATTRIBUTES MAPPING
             modelBuilder.Entity<Types>().ToTable("types");
             modelBuilder.Entity<Types>().HasKey(x => new { x.TConst, x.Ordering }).HasName("types_pkey");
+            modelBuilder.Entity<Types>()
+                .HasOne(x => x.TitleAkas)
+                .WithOne(x => x.Types)
+                .HasForeignKey<TitleAkas>(x => new { x.TConst, x.Ordering });
             modelBuilder.Entity<Types>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Types>().Property(x => x.Ordering).HasColumnName("ordering");
             modelBuilder.Entity<Types>().Property(x => x.Type).HasColumnName("types");

@@ -19,8 +19,8 @@ namespace DataLayer
         public IList<TitleAkas> GetTitleAkas()
         {
             using var db = new PortfolioDBContext();
-            var titleAka = db.TitleAkas
-                //.Include(x => x.Attributes)
+            var titleAka = db
+                .TitleAkas
                 .ToList();
                 
             return titleAka;

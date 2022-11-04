@@ -29,6 +29,7 @@ namespace WebServer.Controllers
             return Ok(titlebasics);
         }
         */
+        
         [HttpGet]
         public IActionResult GetTest()
         {
@@ -36,6 +37,7 @@ namespace WebServer.Controllers
                 _dataService.GetTitleAkas().First();
             return Ok(test);
         }
+        
 
 
     }
