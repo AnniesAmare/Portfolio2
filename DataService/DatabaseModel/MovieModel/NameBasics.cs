@@ -16,5 +16,6 @@ namespace DataLayer.DatabaseModel
         public IList<KnownFor>? KnownFor { get; set; }
         public IList<TitlePrincipals>? TitlePrincipals { get; set; }
         public IList<Professions>? Professions { get; set; }
+        public IList<Jobs>? Jobs { get; set; }
     }
 }

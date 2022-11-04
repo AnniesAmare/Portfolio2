@@ -25,11 +25,11 @@ namespace DataLayer
         public DbSet<OmdbData> OmdbDatas { get; set; }
         public DbSet<Wi> Wis { get; set; }
 
-        //KNOWN_FOR
+        //INBETWEEN TITLE_ AND NAME_BASICS
         public DbSet<KnownFor> KnownFors { get; set; }
-
-        //TITLE_PRINCIPALS
         public DbSet<TitlePrincipals> TitlePrincipals { get; set; }
+        public DbSet<Jobs> Jobs { get; set; }
+
 
         //NAMEBASICS
         public DbSet<NameBasics> NameBasics { get; set; }
@@ -146,6 +146,13 @@ namespace DataLayer
             modelBuilder.Entity<TitlePrincipals>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitlePrincipals>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<TitlePrincipals>().Property(x => x.Category).HasColumnName("category");
+
+            //JOBS
+            modelBuilder.Entity<Jobs>().ToTable("jobs");
+            modelBuilder.Entity<Jobs>().HasKey(x => new { x.TConst, x.NConst }).HasName("jobs_pkey");
+            modelBuilder.Entity<Jobs>().Property(x => x.TConst).HasColumnName("tconst");
+            modelBuilder.Entity<Jobs>().Property(x => x.NConst).HasColumnName("nconst");
+            modelBuilder.Entity<Jobs>().Property(x => x.Job).HasColumnName("job");
 
             /* TITLE AKAS & DEPENDENCIES */
             //TITLEAKAS
