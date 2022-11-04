@@ -83,7 +83,7 @@ namespace DataLayer
 
             //TITLE_EPISODE MAPPING
             modelBuilder.Entity<TitleEpisode>().ToTable("title_episode");
-            modelBuilder.Entity<TitleBasics>().HasKey(x => new { x.TConst }).HasName("title_episode_pkey");
+            modelBuilder.Entity<TitleEpisode>().HasKey(x => new { x.TConst }).HasName("title_episode_pkey");
             modelBuilder.Entity<TitleEpisode>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitleEpisode>().Property(x => x.ParentTConst).HasColumnName("parenttconst");
             modelBuilder.Entity<TitleEpisode>().Property(x => x.SeasonNumber).HasColumnName("seasonnumber");
@@ -92,6 +92,10 @@ namespace DataLayer
             //TITLE_RATINGS
             modelBuilder.Entity<TitleRatings>().ToTable("title_ratings");
             modelBuilder.Entity<TitleRatings>().HasKey(x => new { x.TConst }).HasName("title_ratings_pkey");
+            modelBuilder.Entity<TitleRatings>()
+              .HasOne(x => x.TitleBasics)
+              .WithOne(x => x.TitleRatings)
+              .HasForeignKey<TitleRatings>(x => new { x.TConst});
             modelBuilder.Entity<TitleRatings>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitleRatings>().Property(x => x.AverageRating).HasColumnName("averagerating");
             modelBuilder.Entity<TitleRatings>().Property(x => x.NumVotes).HasColumnName("numvotes");
@@ -105,6 +109,10 @@ namespace DataLayer
             //OMDB_DATA
             modelBuilder.Entity<OmdbData>().ToTable("omdb_data");
             modelBuilder.Entity<OmdbData>().HasKey(x => new { x.TConst }).HasName("omdb_data_pkey");
+            modelBuilder.Entity<OmdbData>()
+              .HasOne(x => x.TitleBasics)
+              .WithOne(x => x.OmdbData)
+              .HasForeignKey<OmdbData>(x => new { x.TConst});
             modelBuilder.Entity<OmdbData>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<OmdbData>().Property(x => x.Poster).HasColumnName("poster");
             modelBuilder.Entity<OmdbData>().Property(x => x.Plot).HasColumnName("plot");

@@ -16,12 +16,12 @@ namespace DataLayer.DatabaseModel
         public bool IsAdult { get; set; }
         public string? StartYear { get; set; }
         public string? EndYear { get; set; }
-        public int RuntimeMinutes { get; set; }
+        public int? RuntimeMinutes { get; set; }
 
         public IList<TitleEpisode>? TitleEpisode { get; set; }
-        public IList<TitleRatings>? TitleRatings { get; set; }
+        public TitleRatings? TitleRatings { get; set; }
         public IList<Genres>? Genres { get; set; }
-        public IList<OmdbData>? OmdbData { get; set; } 
+        public OmdbData OmdbData { get; set; } 
         public IList<Wi>? Wi { get; set; }
         public IList<KnownFor>? KnownFor { get; set; }
         public IList<TitleAkas>? TitleAkas { get; set; }
