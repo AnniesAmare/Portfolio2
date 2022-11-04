@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataLayer.DatabaseModel;
+using DataLayer.DatabaseModel.MovieModel;
 
 namespace DataLayer
 {
@@ -22,6 +23,7 @@ namespace DataLayer
         public DbSet<TitleRatings> TitleRatings { get; set; }
         public DbSet<Genres> Genres { get; set; }
         public DbSet<OmdbData> OmdbDatas { get; set; }
+        public DbSet<Wi> Wis { get; set; }
 
         //TITLE AKAS
         public DbSet<Attributes> Attributes { get; set; }
@@ -95,6 +97,14 @@ namespace DataLayer
             modelBuilder.Entity<OmdbData>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<OmdbData>().Property(x => x.Poster).HasColumnName("poster");
             modelBuilder.Entity<OmdbData>().Property(x => x.Plot).HasColumnName("plot");
+
+            //Wi
+            modelBuilder.Entity<Wi>().ToTable("wi");
+            modelBuilder.Entity<Wi>().HasKey(x => new { x.TConst }).HasName("wi_pkey");
+            modelBuilder.Entity<Wi>().Property(x => x.TConst).HasColumnName("tconst");
+            modelBuilder.Entity<Wi>().Property(x => x.Word).HasColumnName("word");
+            modelBuilder.Entity<Wi>().Property(x => x.Field).HasColumnName("field");
+            modelBuilder.Entity<Wi>().Property(x => x.Lexeme).HasColumnName("lexeme");
 
             //NAMEBASICS MAPPING
             modelBuilder.Entity<NameBasics>().ToTable("name_basics");

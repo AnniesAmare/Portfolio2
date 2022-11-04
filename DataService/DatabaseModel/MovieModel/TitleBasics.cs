@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLayer.DatabaseModel.MovieModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,5 +22,6 @@ namespace DataLayer.DatabaseModel
         public TitleRatings? TitleRatings { get; set; }
         public IList<Genres>? Genres { get; set; }
         public OmdbData? OmdbData { get; set; }
+        public IList<Wi>? Wi { get; set; }
     }
 }
