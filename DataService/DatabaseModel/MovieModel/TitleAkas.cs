@@ -15,9 +15,9 @@ namespace DataLayer.DatabaseModel
         public string? Region { get; set; }
         public bool? IsOriginalTitle { get; set; }
 
-        //public Languages? Languages { get; set; }
-        //public Types? Types { get; set; }
-        //public Attributes? Attributes { get; set; }
+        public Languages? Languages { get; set; }
+        public Types? Types { get; set; }
+        public Attributes? Attributes { get; set; }
 
     }
 }
