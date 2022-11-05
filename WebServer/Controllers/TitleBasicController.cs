@@ -35,7 +35,7 @@ namespace WebServer.Controllers
         public IActionResult GetTest()
         {
             var test =
-                _dataService.GetTitleAkas().First();
+                _dataService.GetTitleAkas();
             return Ok(test);
         }
 

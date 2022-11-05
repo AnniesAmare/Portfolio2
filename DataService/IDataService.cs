@@ -1,4 +1,5 @@
 ﻿using DataLayer.DatabaseModel;
+using DataLayer.DataTransferModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace DataLayer
         IList<TitleBasic> GetTitleBasics();
         //IList<NameBasics> GetNameBasics();
         IList<TitleAka> GetTitleAkas();
-
+        SpecificTitle GetSpecificTitle(string TConst);
     }
 }

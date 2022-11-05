@@ -2,7 +2,9 @@
 using DataLayer.DatabaseModel;
 
 using System.Collections.Generic;
+using DataLayer.DataTransferModel;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace DataLayer
 {
@@ -26,18 +28,78 @@ namespace DataLayer
         public IList<TitleAka> GetTitleAkas()
         {
             using var db = new PortfolioDBContext();
-
-            var titleAkasList = db.TitleAkas
+            var titleAkaList = db
+                .TitleAkas
+                .Where(x => x.Ordering == 13)
+                .Take(1)
                 .ToList();
             
-            /*
-            foreach (var ta in titleAkasList)
-            {
-                ta.Attributes = db.Attributes.FirstOrDefault(x => x.TConst == ta.TConst && x.Ordering == ta.Ordering);
-            }
-            */
+            return titleAkaList;
+        }
 
-            return titleAkasList;
+        public SpecificTitle GetSpecificTitle(string TConst)
+        {
+            using var db = new PortfolioDBContext();
+            var title = db.TitleBasics.FirstOrDefault(x => x.TConst == TConst);
+            if (title == null) return null;
+
+            SpecificTitle specificTitle = new SpecificTitle
+            {
+                TConst = title.TConst,
+                Title = title.PrimaryTitle,
+                Runtime = title.RuntimeMinutes,
+                Year = title.StartYear,
+                ActorList = GetActorsForSpecificTitle(TConst),
+                DirectorList = GetDirectorsForSpecificTitle(TConst)
+            };
+
+            return specificTitle;
+        }
+
+        private IList<ActorListElement> GetActorsForSpecificTitle(string TConst)
+        {
+            /*
+            var actors = new List<ActorListElement>();
+            using var db = new PortfolioDBContext();
+            var characterList = db.Characters
+                //.Include(x => x.NameBasic)
+                .Where(x => x.TConst == TConst);
+            
+            if(characterList == null) return actors;
+
+            foreach (var character in characterList)
+            {
+                ActorListElement actor = new ActorListElement
+                {
+                    NConst = character.NConst,
+                    //Name = character.NameBasic.PrimaryName,
+                    Character = character.TCharacter
+                };
+                actors.Add(actor);
+            }
+            return actors;
+            */
+            return null;
+        }
+
+        private IList<DirectorListElement> GetDirectorsForSpecificTitle(string TConst)
+        {
+            var directors = new List<DirectorListElement>();
+            using var db = new PortfolioDBContext();
+
+            foreach (var director in db
+                         .TitlePrincipals
+                         .Where(x => x.TConst == TConst)
+                         .Where(x => x.Category == "director"))
+            {
+                DirectorListElement directorElement = new DirectorListElement
+                {
+                    NConst = director.NameBasic.NConst
+                };
+                directors.Add(directorElement);
+            }
+
+            return directors;
         }
 
 

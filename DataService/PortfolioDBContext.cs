@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataLayer.DatabaseModel;
 using DataLayer.DatabaseModel.MovieModel;
+using Microsoft.Extensions.Logging;
 
 namespace DataLayer
 {
@@ -59,7 +60,7 @@ namespace DataLayer
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            //optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
             optionsBuilder.UseNpgsql(ConnectionString);
         }
 
@@ -86,6 +87,7 @@ namespace DataLayer
             modelBuilder.Entity<TitleBasic>().Property(x => x.StartYear).HasColumnName("startyear");
             modelBuilder.Entity<TitleBasic>().Property(x => x.EndYear).HasColumnName("endyear");
             modelBuilder.Entity<TitleBasic>().Property(x => x.RuntimeMinutes   ).HasColumnName("runtimeminutes");
+            modelBuilder.Entity<TitleBasic>().Property(x => x.IsTvShow).HasColumnName("istvshow");
 
             //TITLE_EPISODE MAPPING
             modelBuilder.Entity<TitleEpisode>().ToTable("title_episode");
