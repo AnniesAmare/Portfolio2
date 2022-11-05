@@ -9,9 +9,9 @@ namespace DataLayer
 {
     public interface IDataService
     {
-        IList<TitleBasics> GetTitleBasics();
+        IList<TitleBasic> GetTitleBasics();
         //IList<NameBasics> GetNameBasics();
-        IList<TitleAkas> GetTitleAkas();
+        IList<TitleAka> GetTitleAkas();
 
     }
 }

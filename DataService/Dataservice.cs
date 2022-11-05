@@ -9,7 +9,7 @@ namespace DataLayer
     public class DataService : IDataService 
     {
 
-        public IList<TitleBasics> GetTitleBasics()
+        public IList<TitleBasic> GetTitleBasics()
         {
             using var db = new PortfolioDBContext();
 
@@ -17,14 +17,14 @@ namespace DataLayer
         }
 
         /*
-        public IList<NameBasics> GetNameBasics()
+        public IList<NameBasic> GetNameBasics()
         {
             using var db = new PortfolioDBContext();
 
             return db.NameBasics.ToList();
         }
         */
-        public IList<TitleAkas> GetTitleAkas()
+        public IList<TitleAka> GetTitleAkas()
         {
             using var db = new PortfolioDBContext();
             var titleAka = db
@@ -38,7 +38,7 @@ namespace DataLayer
 
 
         /*
-        public TitleBasics GetTitleBasics(int id)
+        public TitleBasic GetTitleBasics(int id)
         {
             using var db = new PortfolioDBContext();
 

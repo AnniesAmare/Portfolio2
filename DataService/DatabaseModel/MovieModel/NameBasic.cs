@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.DatabaseModel
 {
-    public class NameBasics
+    public class NameBasic
     {
         public string? NConst { get; set; }
         public string? PrimaryName { get; set; }
@@ -14,9 +14,9 @@ namespace DataLayer.DatabaseModel
         public string? DeathYear { get; set; }
         public float? AVGNameRating { get; set; }
         public IList<KnownFor>? KnownFor { get; set; }
-        public IList<TitlePrincipals>? TitlePrincipals { get; set; }
-        public IList<Professions>? Professions { get; set; }
-        public IList<Jobs>? Jobs { get; set; }
-        public IList<Characters>? Characters { get; set; }
+        public IList<TitlePrincipal>? TitlePrincipal { get; set; }
+        public IList<Profession>? Profession { get; set; }
+        public IList<Job>? Job { get; set; }
+        public IList<Character>? Character { get; set; }
     }
 }
