@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DataLayer.DatabaseModel
 {
-    public class Professions
+    public class Profession
     {
         public string NConst { get; set; }
-        public NameBasics NameBasics { get; set; }
-        public string Profession { get; set; }
+        public NameBasic NameBasic { get; set; }
+        public string TProfession { get; set; }
 
 
     }

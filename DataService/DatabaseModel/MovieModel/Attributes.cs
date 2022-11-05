@@ -12,7 +12,7 @@ namespace DataLayer.DatabaseModel
         public int Ordering { get; set; }
         public string Attribute { get; set; }
 
-        public string TitleAkasTConst { get; set; }
-        public TitleAkas? TitleAkas { get; set; }
+        public string TitleAkaTConst { get; set; }
+        public TitleAka? TitleAka { get; set; }
     }
 }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DataLayer.DatabaseModel
 {
-    public class TitleRatings
+    public class TitleRating
     {
         public string? TConst { get; set; }
-        public TitleBasics? TitleBasics { get; set; }
+        public TitleBasic? TitleBasic { get; set; }
 
         //note that this take a dot not comma.
         //Not sure if that work in conversion for the numeric datatype

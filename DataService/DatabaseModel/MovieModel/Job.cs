@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace DataLayer.DatabaseModel
 {
-    public class BookmarkName
+    public class Job
     {
-        public string Username { get; set; }
-        public User User { get; set; }
+        public string TConst { get; set; }
+        public TitleBasic TitleBasic { get; set; }
         public string NConst { get; set; }
         public NameBasic NameBasic { get; set; }
-        public string Annotation { get; set; }
-
-
+        public string TJob { get; set; }
     }
 }
