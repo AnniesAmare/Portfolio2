@@ -77,7 +77,7 @@ namespace DataLayer
             /* TITLEBASICS & DEPENDENCIES*/
             //TITLEBASICS MAPPING
             modelBuilder.Entity<TitleBasic>().ToTable("title_basic");
-            modelBuilder.Entity<TitleBasic>().HasKey(x => new { x.TConst }).HasName("title_basics_pkey");
+            modelBuilder.Entity<TitleBasic>().HasKey(x => new { x.TConst }).HasName("title_basic_pkey");
             modelBuilder.Entity<TitleBasic>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitleBasic>().Property(x => x.TitleType).HasColumnName("titletype");
             modelBuilder.Entity<TitleBasic>().Property(x => x.PrimaryTitle).HasColumnName("primarytitle");
@@ -97,7 +97,7 @@ namespace DataLayer
 
             //TITLE_RATINGS
             modelBuilder.Entity<TitleRating>().ToTable("title_rating");
-            modelBuilder.Entity<TitleRating>().HasKey(x => new { x.TConst }).HasName("title_ratings_pkey");
+            modelBuilder.Entity<TitleRating>().HasKey(x => new { x.TConst }).HasName("title_rating_pkey");
             modelBuilder.Entity<TitleRating>()
               .HasOne(x => x.TitleBasic)
               .WithOne(x => x.TitleRating)
@@ -134,7 +134,7 @@ namespace DataLayer
             /* NAMEBASICS & DEPENDENCIES */
             //NAMEBASICS MAPPING
             modelBuilder.Entity<NameBasic>().ToTable("name_basic");
-            modelBuilder.Entity<NameBasic>().HasKey(x => new { x.NConst }).HasName("name_basics_pkey");
+            modelBuilder.Entity<NameBasic>().HasKey(x => new { x.NConst }).HasName("name_basic_pkey");
             modelBuilder.Entity<NameBasic>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<NameBasic>().Property(x => x.PrimaryName).HasColumnName("primaryname");
             modelBuilder.Entity<NameBasic>().Property(x => x.BirthYear).HasColumnName("birthyear");
@@ -143,7 +143,7 @@ namespace DataLayer
 
             //PROFESSIONS
             modelBuilder.Entity<Profession>().ToTable("profession");
-            modelBuilder.Entity<Profession>().HasKey(x => new { x.NConst }).HasName("professions_pkey");
+            modelBuilder.Entity<Profession>().HasKey(x => new { x.NConst }).HasName("profession_pkey");
             modelBuilder.Entity<Profession>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<Profession>().Property(x => x.TProfession).HasColumnName("profession");
 
@@ -156,21 +156,21 @@ namespace DataLayer
 
             //TITLE_PRINCIPALS
             modelBuilder.Entity<TitlePrincipal>().ToTable("title_principal");
-            modelBuilder.Entity<TitlePrincipal>().HasKey(x => new { x.TConst, x.NConst }).HasName("title_principals_pkey");
+            modelBuilder.Entity<TitlePrincipal>().HasKey(x => new { x.TConst, x.NConst }).HasName("title_principal_pkey");
             modelBuilder.Entity<TitlePrincipal>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitlePrincipal>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<TitlePrincipal>().Property(x => x.Category).HasColumnName("category");
 
             //JOBS
             modelBuilder.Entity<Job>().ToTable("job");
-            modelBuilder.Entity<Job>().HasKey(x => new { x.TConst, x.NConst }).HasName("jobs_pkey");
+            modelBuilder.Entity<Job>().HasKey(x => new { x.TConst, x.NConst }).HasName("job_pkey");
             modelBuilder.Entity<Job>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Job>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<Job>().Property(x => x.TJob).HasColumnName("job");
 
             //Characters
             modelBuilder.Entity<Character>().ToTable("character");
-            modelBuilder.Entity<Character>().HasKey(x => new { x.TConst, x.NConst }).HasName("characters_pkey");
+            modelBuilder.Entity<Character>().HasKey(x => new { x.TConst, x.NConst }).HasName("character_pkey");
             modelBuilder.Entity<Character>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Character>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<Character>().Property(x => x.TCharacter).HasColumnName("characters");
@@ -178,7 +178,7 @@ namespace DataLayer
             /* TITLE AKAS & DEPENDENCIES */
             //TITLEAKAS
             modelBuilder.Entity<TitleAka>().ToTable("title_aka");
-            modelBuilder.Entity<TitleAka>().HasKey(x => new { x.TConst, x.Ordering }).HasName("title_akas_pkey");
+            modelBuilder.Entity<TitleAka>().HasKey(x => new { x.TConst, x.Ordering }).HasName("title_aka_pkey");
             modelBuilder.Entity<TitleAka>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitleAka>().Property(x => x.Ordering).HasColumnName("ordering");
             modelBuilder.Entity<TitleAka>().Property(x => x.Title).HasColumnName("title");
@@ -198,7 +198,7 @@ namespace DataLayer
 
             //LANGUAGES MAPPING
             modelBuilder.Entity<Language>().ToTable("language");
-            modelBuilder.Entity<Language>().HasKey(x => new { x.TConst, x.Ordering }).HasName("languages_pkey");
+            modelBuilder.Entity<Language>().HasKey(x => new { x.TConst, x.Ordering }).HasName("language_pkey");
             modelBuilder.Entity<Language>()
                 .HasOne(x => x.TitleAka)
                 .WithOne(x => x.Language)
@@ -209,7 +209,7 @@ namespace DataLayer
 
             //ATTRIBUTES MAPPING
             modelBuilder.Entity<TType>().ToTable("type");
-            modelBuilder.Entity<TType>().HasKey(x => new { x.TConst, x.Ordering }).HasName("types_pkey");
+            modelBuilder.Entity<TType>().HasKey(x => new { x.TConst, x.Ordering }).HasName("type_pkey");
             modelBuilder.Entity<TType>()
                 .HasOne(x => x.TitleAka)
                 .WithOne(x => x.TType)
