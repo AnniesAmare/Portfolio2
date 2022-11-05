@@ -44,7 +44,7 @@ namespace DataLayer
         //TITLE AKAS
         public DbSet<Attributes> Attributes { get; set; }
         public DbSet<Language> Languages { get; set; }
-        public DbSet<Type> Types { get; set; }
+        public DbSet<TType> Types { get; set; }
         public DbSet<TitleAka> TitleAkas { get; set; }
 
         /* USER FRAMEWORK */
