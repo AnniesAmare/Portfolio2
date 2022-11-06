@@ -12,7 +12,7 @@ namespace DataLayer
     {
         IList<TitleBasic> GetTitleBasics();
         //IList<NameBasics> GetNameBasics();
-        IList<TitleAka> GetTitleAkas();
-        SpecificTitle GetSpecificTitle(string TConst);
+        SpecificTitle GetSpecificTitleByName(string name);
+        SpecificTitle GetSpecificTitle(string tConst);
     }
 }

@@ -34,15 +34,12 @@ namespace WebServer.Controllers
         [HttpGet("name/{search}")]
         public IActionResult GetProductsByName(string search)
         {
-            /*
-            var product = _dataService.GetProductByName(search);
-            if (product.Count == 0)
+            var specificTitle = _dataService.GetSpecificTitleByName(search);
+            if (specificTitle == null)
             {
-                return NotFound(product);
+                return NotFound();
             }
-            return Ok(product);
-            */
-            return Ok();
+            return Ok(specificTitle);
         }
 
 
