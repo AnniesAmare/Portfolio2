@@ -30,14 +30,7 @@ namespace WebServer.Controllers
             return Ok(titlebasics);
         }
         */
-        
-        [HttpGet]
-        public IActionResult GetTest()
-        {
-            var test =
-                _dataService.GetTitleAkas();
-            return Ok(test);
-        }
+
 
         /*
         [HttpGet]

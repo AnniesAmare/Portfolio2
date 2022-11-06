@@ -5,112 +5,110 @@ using System.Collections.Generic;
 using DataLayer.DataTransferModel;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace DataLayer
 {
     public class DataService : IDataService 
     {
-
         public IList<TitleBasic> GetTitleBasics()
         {
             using var db = new PortfolioDBContext();
-
             return db.TitleBasics.ToList();
         }
 
-        /*
-        public IList<NameBasic> GetNameBasics()
+        public SpecificTitle GetSpecificTitleByName(string name)
         {
             using var db = new PortfolioDBContext();
-            return db.NameBasics.ToList();
-        }
-        */
-        public IList<TitleAka> GetTitleAkas()
-        {
-            using var db = new PortfolioDBContext();
-            var titleAkaList = db
-                .TitleAkas
-                .Where(x => x.Ordering == 13)
-                .Take(1)
-                .ToList();
-            
-            return titleAkaList;
-        }
-
-        public SpecificTitle GetSpecificTitle(string TConst)
-        {
-            using var db = new PortfolioDBContext();
-            var title = db.TitleBasics.FirstOrDefault(x => x.TConst == TConst);
+            var title = db.TitleBasics
+                .Include(x => x.TitleRating)
+                .Select(x => new SpecificTitle
+                {
+                    TConst = x.TConst,
+                    Title = x.PrimaryTitle,
+                    Runtime = x.RuntimeMinutes,
+                    Year = x.StartYear,
+                    Rating = x.TitleRating.AverageRating
+                })
+                .FirstOrDefault(x => x.Title == name);
             if (title == null) return null;
+            var tConst = title.TConst;
+            var inputTConst = string.Concat(tConst.Where(c => !char.IsWhiteSpace(c)));
 
-            SpecificTitle specificTitle = new SpecificTitle
-            {
-                TConst = title.TConst,
-                Title = title.PrimaryTitle,
-                Runtime = title.RuntimeMinutes,
-                Year = title.StartYear,
-                ActorList = GetActorsForSpecificTitle(TConst),
-                DirectorList = GetDirectorsForSpecificTitle(TConst)
-            };
+            title.ActorList = GetActorsForSpecificTitle(inputTConst);
+            title.DirectorList = GetDirectorsForSpecificTitle(inputTConst);
+            title.Genre = GetGenreForSpecificTitle(inputTConst);
 
-            return specificTitle;
+            return title;
         }
 
-        private IList<ActorListElement> GetActorsForSpecificTitle(string TConst)
+        public SpecificTitle GetSpecificTitle(string tConst)
         {
-            /*
-            var actors = new List<ActorListElement>();
             using var db = new PortfolioDBContext();
-            var characterList = db.Characters
-                //.Include(x => x.NameBasic)
-                .Where(x => x.TConst == TConst);
-            
-            if(characterList == null) return actors;
-
-            foreach (var character in characterList)
-            {
-                ActorListElement actor = new ActorListElement
+            var inputTConst = string.Concat(tConst.Where(c => !char.IsWhiteSpace(c)));
+            var title = db.TitleBasics
+                .Include(x => x.TitleRating)
+                .Select(x => new SpecificTitle
                 {
-                    NConst = character.NConst,
-                    //Name = character.NameBasic.PrimaryName,
-                    Character = character.TCharacter
-                };
-                actors.Add(actor);
-            }
+                    TConst = x.TConst,
+                    Title = x.PrimaryTitle,
+                    Runtime = x.RuntimeMinutes,
+                    Year = x.StartYear,
+                    Rating = x.TitleRating.AverageRating
+                })
+                .FirstOrDefault(x => x.TConst == tConst);
+            if (title == null) return null;
+            title.ActorList = GetActorsForSpecificTitle(inputTConst);
+            title.DirectorList = GetDirectorsForSpecificTitle(inputTConst);
+            title.Genre = GetGenreForSpecificTitle(inputTConst);
+
+            return title;
+        }
+
+        //Helper functions
+
+        private IList<ActorListElement> GetActorsForSpecificTitle(string tConst)
+        {
+            using var db = new PortfolioDBContext();
+            var actors = db.Characters
+                .Include(x => x.NameBasic)
+                .Where(x => x.TConst == tConst)
+                .OrderBy(x => x.NameBasic.PrimaryName)
+                .Select(x => new ActorListElement
+                {
+                    NConst = x.NConst,
+                    Name = x.NameBasic.PrimaryName,
+                    Character = x.TCharacter
+                })
+                .ToList();
+
             return actors;
-            */
-            return null;
         }
 
-        private IList<DirectorListElement> GetDirectorsForSpecificTitle(string TConst)
+        private IList<DirectorListElement> GetDirectorsForSpecificTitle(string tConst)
         {
-            var directors = new List<DirectorListElement>();
             using var db = new PortfolioDBContext();
-
-            foreach (var director in db
-                         .TitlePrincipals
-                         .Where(x => x.TConst == TConst)
-                         .Where(x => x.Category == "director"))
-            {
-                DirectorListElement directorElement = new DirectorListElement
+            var directors = db.TitlePrincipals
+                .Include(x => x.NameBasic)
+                .Where(x => x.TConst == tConst)
+                .Where(x => x.Category == "director")
+                .OrderBy(x => x.NameBasic.PrimaryName)
+                .Select(x => new DirectorListElement()
                 {
-                    NConst = director.NameBasic.NConst
-                };
-                directors.Add(directorElement);
-            }
+                    NConst = x.NConst,
+                    Name = x.NameBasic.PrimaryName
+                })
+                .ToList();
 
             return directors;
         }
 
-
-
-
-        /*
-        public TitleBasic GetTitleBasics(int id)
+        private IList<string> GetGenreForSpecificTitle(string tConst)
         {
             using var db = new PortfolioDBContext();
+            var genres = db.Genres.Where(x => x.TConst == tConst).Select(x => x.TGenre).ToList();
+            return genres;
+        }
 
-            return db.TitleBasics.Find(id);
-        }*/
     }
 }
