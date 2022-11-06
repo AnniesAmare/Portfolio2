@@ -159,6 +159,14 @@ namespace DataLayer
             modelBuilder.Entity<KnownFor>().HasKey(x => new { x.TConst, x.NConst }).HasName("known_for_pkey");
             modelBuilder.Entity<KnownFor>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<KnownFor>().Property(x => x.NConst).HasColumnName("nconst");
+            modelBuilder.Entity<KnownFor>()
+                .HasOne(x => x.NameBasic)
+                .WithMany(x => x.KnownFor)
+                .HasForeignKey(x => x.NConst);
+            modelBuilder.Entity<KnownFor>()
+                .HasOne(x => x.TitleBasic)
+                .WithMany(x => x.KnownFor)
+                .HasForeignKey(x => x.TConst);
 
             //TITLE_PRINCIPALS
             modelBuilder.Entity<TitlePrincipal>().ToTable("title_principal");
