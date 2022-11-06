@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using DataLayer;
+using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebServer.Controllers
 {
-    [Route("api/name")]
+    [Route("api/person")]
     [ApiController]
     public class SpecificNameController : ControllerBase
     {
@@ -20,33 +21,27 @@ namespace WebServer.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetProductsById(int id)
+        public IActionResult GetPersonById(string id)
         {
-            /*
-            var product = _dataService.GetProduct(id);
-
-            if (product == null)
+            var specificPerson = _dataService.GetSpecificPerson(id);
+            if (specificPerson == null)
             {
                 return NotFound();
             }
-            return Ok(product);
-            */
-            return Ok();
+            return Ok(specificPerson);
         }
 
         [HttpGet("name/{search}")]
-        public IActionResult GetProductsByName(string search)
+        public IActionResult GetPersonByName(string search)
         {
-            /*
-            var product = _dataService.GetProductByName(search);
-            if (product.Count == 0)
+            var specificPerson = _dataService.GetSpecificPersonByName(search);
+            if (specificPerson == null)
             {
-                return NotFound(product);
+                return NotFound();
             }
-            return Ok(product);
-            */
-            return Ok();
+            return Ok(specificPerson);
         }
+
 
 
 

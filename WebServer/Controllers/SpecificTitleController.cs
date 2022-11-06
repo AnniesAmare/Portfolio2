@@ -32,7 +32,7 @@ namespace WebServer.Controllers
         }
 
         [HttpGet("name/{search}")]
-        public IActionResult GetProductsByName(string search)
+        public IActionResult GetTitleByName(string search)
         {
             var specificTitle = _dataService.GetSpecificTitleByName(search);
             if (specificTitle == null)
