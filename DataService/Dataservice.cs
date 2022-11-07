@@ -1,15 +1,10 @@
-﻿
-using DataLayer.DatabaseModel;
-
-using System.Collections.Generic;
+﻿using DataLayer.DatabaseModel;
 using DataLayer.DataTransferModel;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
-using System.Runtime.CompilerServices;
 
 namespace DataLayer
 {
-    public class DataService : IDataService 
+    public class DataService : IDataService
     {
         public IList<TitleBasic> GetTitleBasics()
         {
@@ -20,10 +15,6 @@ namespace DataLayer
 
         //SPECIFIC TITLE COMMANDS
         public SpecificTitle GetSpecificTitleByName(string name)
-=========
-        /*
-        public IList<NameBasic> GetNameBasics()
->>>>>>>>> Temporary merge branch 2
         {
             using var db = new PortfolioDBContext();
             var title = db.TitleBasics
@@ -43,17 +34,12 @@ namespace DataLayer
 
             title.ActorList = GetActorsForSpecificTitle(inputTConst);
             title.DirectorList = GetDirectorsForSpecificTitle(inputTConst);
+            title.Genre = GetGenreForSpecificTitle(inputTConst);
 
-        public SpecificTitle GetSpecificTitle(string tConst)
             return title;
         }
-<<<<<<<<< Temporary merge branch 1
-        
-        public IList<TitleAkas> GetTitleAkas()
-=========
-        */
-        public IList<TitleAka> GetTitleAkas()
->>>>>>>>> Temporary merge branch 2
+
+        public SpecificTitle GetSpecificTitle(string tConst)
         {
             using var db = new PortfolioDBContext();
             var inputTConst = tConst.RemoveSpaces();
@@ -158,7 +144,7 @@ namespace DataLayer
                 })
                 .FirstOrDefault(x => x.NConst == nConst);
             if (person == null) return null;
-            
+
 
             person.ProfessionList = GetProfessionsForSpecificPerson(inputNConst);
             person.KnownForList = GetKnownForListForSpecificPerson(inputNConst);
@@ -187,6 +173,6 @@ namespace DataLayer
                 .Distinct().ToList();
             return knownForList;
         }
-        
+
     }
 }
