@@ -8,13 +8,13 @@ namespace WebServer.Controllers
 {
     [Route("api/person")]
     [ApiController]
-    public class SpecificNameController : ControllerBase
+    public class SpecificPersonController : ControllerBase
     {
         private IDataService _dataService;
         private readonly LinkGenerator _generator;
         private readonly IMapper _mapper;
 
-        public SpecificNameController(IDataService dataService, LinkGenerator generator, IMapper mapper)
+        public SpecificPersonController(IDataService dataService, LinkGenerator generator, IMapper mapper)
         {
             _dataService = dataService;
             _generator = generator;
@@ -29,7 +29,7 @@ namespace WebServer.Controllers
             {
                 return NotFound();
             }
-            var specificPersonModel = createSpecificPersonModel(specificPerson);
+            var specificPersonModel = CreateSpecificPersonModel(specificPerson);
             return Ok(specificPersonModel);
         }
 
@@ -41,10 +41,11 @@ namespace WebServer.Controllers
             {
                 return NotFound();
             }
-            return Ok(specificPerson);
+            var specificPersonModel = CreateSpecificPersonModel(specificPerson);
+            return Ok(specificPersonModel);
         }
 
-        public SpecificPersonModel createSpecificPersonModel(SpecificPerson person)
+        public SpecificPersonModel CreateSpecificPersonModel(SpecificPerson person)
         {
             var model = _mapper.Map<SpecificPersonModel>(person);
             var knownForList = new List<TitleListElementModel>();

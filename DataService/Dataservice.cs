@@ -77,7 +77,7 @@ namespace DataLayer
                 .OrderBy(x => x.NameBasic.PrimaryName)
                 .Select(x => new ActorListElement
                 {
-                    NConst = x.NConst,
+                    NConst = x.NConst.RemoveSpaces(),
                     Name = x.NameBasic.PrimaryName,
                     Character = x.TCharacter
                 })
@@ -96,7 +96,7 @@ namespace DataLayer
                 .OrderBy(x => x.NameBasic.PrimaryName)
                 .Select(x => new DirectorListElement()
                 {
-                    NConst = x.NConst,
+                    NConst = x.NConst.RemoveSpaces(),
                     Name = x.NameBasic.PrimaryName
                 })
                 .ToList();

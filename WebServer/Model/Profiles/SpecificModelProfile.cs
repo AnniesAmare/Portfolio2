@@ -8,7 +8,8 @@ namespace WebServer.Model.Profiles
         public SpecificModelProfile()
         {
             CreateMap<SpecificPerson, SpecificPersonModel>();
-
+            
+            CreateMap<SpecificTitle, SpecificTitleModel>();
         }
     }
 }

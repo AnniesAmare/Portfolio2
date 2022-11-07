@@ -30,7 +30,8 @@ namespace WebServer.Controllers
             {
                 return NotFound();
             }
-            return Ok(specificTitle);
+            var specificTitleModel = CreateSpecificTitleModel(specificTitle);
+            return Ok(specificTitleModel);
         }
 
         [HttpGet("name/{search}")]
@@ -41,7 +42,52 @@ namespace WebServer.Controllers
             {
                 return NotFound();
             }
-            return Ok(specificTitle);
+            var specificTitleModel = CreateSpecificTitleModel(specificTitle);
+            return Ok(specificTitleModel);
+        }
+
+
+        public SpecificTitleModel CreateSpecificTitleModel(SpecificTitle title)
+        {
+            var model = _mapper.Map<SpecificTitleModel>(title);
+            var directorList = new List<DirectorListElementModel>();
+            var actorList = new List<ActorListElementModel>();
+
+            model.DirectorListWithUrl = getDirectorListElementModels(title);
+            model.ActorListWithUrl = getActorListElementModels(title);
+
+            return model;
+        }
+
+        private List<DirectorListElementModel> getDirectorListElementModels(SpecificTitle title)
+        {
+            var directorList = new List<DirectorListElementModel>();
+            foreach (var director in title.DirectorList)
+            {
+                var newDirector = new DirectorListElementModel
+                {
+                    Name = director.Name,
+                    Url = _generator.GetUriByName(HttpContext, nameof(SpecificPersonController.GetPersonById), new { id = director.NConst })
+                };
+                directorList.Add(newDirector);
+            }
+            return directorList;
+        }
+
+        private List<ActorListElementModel> getActorListElementModels(SpecificTitle title)
+        {
+            var actorList = new List<ActorListElementModel>();
+            foreach (var actor in title.ActorList)
+            {
+                var newActor = new ActorListElementModel
+                {
+                    Name = actor.Name,
+                    Character = actor.Character,
+                    Url = _generator.GetUriByName(HttpContext, nameof(SpecificPersonController.GetPersonById), new { id = actor.NConst })
+                };
+                actorList.Add(newActor);
+            }
+            return actorList;
         }
 
     }
