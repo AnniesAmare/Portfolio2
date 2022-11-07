@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using DataLayer;
+using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Mvc;
+using NpgsqlTypes;
+using WebServer.Model;
 
 namespace WebServer.Controllers
 {
@@ -19,7 +22,7 @@ namespace WebServer.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = nameof(GetTitleById))]
         public IActionResult GetTitleById(string id)
         {
             
@@ -41,9 +44,6 @@ namespace WebServer.Controllers
             }
             return Ok(specificTitle);
         }
-
-
-
 
     }
 }
