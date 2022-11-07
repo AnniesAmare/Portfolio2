@@ -83,7 +83,7 @@ namespace WebServer.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddSeconds(30),
+                expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
