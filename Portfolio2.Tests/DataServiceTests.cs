@@ -1,11 +1,67 @@
+using DataLayer.DataTransferModel;
+using System.Linq;
+
 namespace Portfolio2.Tests
 {
     public class DataServiceTests
     {
         [Fact]
-        public void Test1()
+        public void GetSpecificTitleReturnsCompleteRecordOnValidTConst()
         {
+            var service = new DataService();
+            var specificTitle = service.GetSpecificTitle("tt0052520");
+            Assert.Equal("The Twilight Zone", specificTitle.Title);
+            Assert.Equal(53, specificTitle.DirectorList.Count);
+            Assert.Contains("Abner Biberman", specificTitle.DirectorList.First().Name);
+            Assert.Equal(30, specificTitle.ActorList.Count);
+            Assert.Contains("Burgess Meredith", specificTitle.ActorList.First().Name);
+            Assert.Contains("Horror", specificTitle.Genre.Last());
+        }
+
+        [Fact]
+        public void GetSpecificTitleReturnsCompleteRecordOnValidName()
+        {
+            var service = new DataService();
+            var specificTitle = service.GetSpecificTitleByName("Latchkey");
+            Assert.Contains("tt0401571", specificTitle.TConst);
+            Assert.Equal(1, specificTitle.DirectorList.Count);
+            Assert.Contains("Sean Olson", specificTitle.DirectorList.First().Name);
+            Assert.Equal(4, specificTitle.ActorList.Count);
+            Assert.Contains("Andrew Michaelson", specificTitle.ActorList.First().Name);
+            Assert.Contains("Thriller", specificTitle.Genre.Last());
+        }
+
+
+
+        [Fact]
+        public void GetSpecificPersonReturnsCompleteRecordOnValidNConst()
+        {
+            var service = new DataService();
+            var specificPerson = service.GetSpecificPerson("nm0424060");
+            Assert.Equal("Scarlett Johansson", specificPerson.Name);
+            Assert.Equal(3, specificPerson.ProfessionList.Count);
+            Assert.True(specificPerson.ProfessionList.Contains("actress"));
+            Assert.Equal(3, specificPerson.KnownForList.Count);
+            Assert.Contains("Lost in Translation", specificPerson.KnownForList.First().Title);
 
         }
+
+
+        [Fact]
+        public void GetSpecificPersonReturnsCompleteRecordOnValidName()
+        {
+            var service = new DataService();
+            var specificPerson = service.GetSpecificPersonByName("Scarlett Johansson");
+            Assert.Contains("nm0424060", specificPerson.NConst);
+            Assert.Equal(3, specificPerson.ProfessionList.Count);
+            Assert.True(specificPerson.ProfessionList.Contains("actress"));
+            Assert.Equal(3, specificPerson.KnownForList.Count);
+            Assert.Contains("Lost in Translation", specificPerson.KnownForList.First().Title);
+        }
+
+
+
+
+
     }
 }

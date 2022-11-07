@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataLayer.DatabaseModel;
 using DataLayer.DatabaseModel.MovieModel;
+using Microsoft.Extensions.Logging;
 
 namespace DataLayer
 {
@@ -17,10 +18,10 @@ namespace DataLayer
         //const string ConnectionString = "host=cit.ruc.dk;db=cit01;uid=cit01;pwd=0j4p2QVvDDgm";
 
         //siemje
-        const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=postgres";
+        //const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=postgres";
 
         //Atru
-        //const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=Bqm33etj";
+        const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=Bqm33etj";
 
         /* MOVIE MODEL */
         //TITLEBASICS
@@ -59,7 +60,7 @@ namespace DataLayer
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            //optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
             optionsBuilder.UseNpgsql(ConnectionString);
         }
 
@@ -86,6 +87,7 @@ namespace DataLayer
             modelBuilder.Entity<TitleBasic>().Property(x => x.StartYear).HasColumnName("startyear");
             modelBuilder.Entity<TitleBasic>().Property(x => x.EndYear).HasColumnName("endyear");
             modelBuilder.Entity<TitleBasic>().Property(x => x.RuntimeMinutes   ).HasColumnName("runtimeminutes");
+            modelBuilder.Entity<TitleBasic>().Property(x => x.IsTvShow).HasColumnName("istvshow");
 
             //TITLE_EPISODE MAPPING
             modelBuilder.Entity<TitleEpisode>().ToTable("title_episode");
@@ -101,7 +103,7 @@ namespace DataLayer
             modelBuilder.Entity<TitleRating>()
               .HasOne(x => x.TitleBasic)
               .WithOne(x => x.TitleRating)
-              .HasForeignKey<TitleRating>(x => new { x.TConst});
+              .HasForeignKey<TitleRating>(x =>  x.TConst);
             modelBuilder.Entity<TitleRating>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitleRating>().Property(x => x.AverageRating).HasColumnName("averagerating");
             modelBuilder.Entity<TitleRating>().Property(x => x.NumVotes).HasColumnName("numvotes");
@@ -109,6 +111,10 @@ namespace DataLayer
             //GENRES
             modelBuilder.Entity<Genre>().ToTable("genre");
             modelBuilder.Entity<Genre>().HasKey(x => new { x.TConst }).HasName("genre_pkey");
+            modelBuilder.Entity<Genre>()
+                .HasOne(x => x.TitleBasic)
+                .WithMany(x => x.Genre)
+                .HasForeignKey(x => x.TConst);
             modelBuilder.Entity<Genre>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Genre>().Property(x => x.TGenre).HasColumnName("genre");
 
@@ -153,10 +159,26 @@ namespace DataLayer
             modelBuilder.Entity<KnownFor>().HasKey(x => new { x.TConst, x.NConst }).HasName("known_for_pkey");
             modelBuilder.Entity<KnownFor>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<KnownFor>().Property(x => x.NConst).HasColumnName("nconst");
+            modelBuilder.Entity<KnownFor>()
+                .HasOne(x => x.NameBasic)
+                .WithMany(x => x.KnownFor)
+                .HasForeignKey(x => x.NConst);
+            modelBuilder.Entity<KnownFor>()
+                .HasOne(x => x.TitleBasic)
+                .WithMany(x => x.KnownFor)
+                .HasForeignKey(x => x.TConst);
 
             //TITLE_PRINCIPALS
             modelBuilder.Entity<TitlePrincipal>().ToTable("title_principal");
             modelBuilder.Entity<TitlePrincipal>().HasKey(x => new { x.TConst, x.NConst }).HasName("title_principal_pkey");
+            modelBuilder.Entity<TitlePrincipal>()
+                .HasOne(x => x.NameBasic)
+                .WithMany(x => x.TitlePrincipal)
+                .HasForeignKey(x => x.NConst);
+            modelBuilder.Entity<TitlePrincipal>()
+                .HasOne(x => x.TitleBasic)
+                .WithMany(x => x.TitlePrincipal)
+                .HasForeignKey(x => x.TConst);
             modelBuilder.Entity<TitlePrincipal>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitlePrincipal>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<TitlePrincipal>().Property(x => x.Category).HasColumnName("category");
@@ -171,9 +193,18 @@ namespace DataLayer
             //Characters
             modelBuilder.Entity<Character>().ToTable("character");
             modelBuilder.Entity<Character>().HasKey(x => new { x.TConst, x.NConst }).HasName("character_pkey");
+            modelBuilder.Entity<Character>()
+                .HasOne(x => x.NameBasic)
+                .WithMany(x => x.Character)
+                .HasForeignKey(x => x.NConst);
+            modelBuilder.Entity<Character>()
+                .HasOne(x => x.TitleBasic)
+                .WithMany(x => x.Character)
+                .HasForeignKey(x => x.TConst);
             modelBuilder.Entity<Character>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<Character>().Property(x => x.NConst).HasColumnName("nconst");
-            modelBuilder.Entity<Character>().Property(x => x.TCharacter).HasColumnName("characters");
+            modelBuilder.Entity<Character>().Property(x => x.TCharacter).HasColumnName("character");
+
 
             /* TITLE AKAS & DEPENDENCIES */
             //TITLEAKAS
