@@ -11,7 +11,7 @@ namespace DataLayer.DatabaseModel
         public string Username { get; set; }
         public User User { get; set; }
         public string TConst { get; set; }
-        public TitleBasics TitleBasics { get; set; }
+        public TitleBasic TitleBasic { get; set; }
         public DateOnly Date { get; set; }
         public string Content { get; set; }
         public bool IsSpoiler { get; set; }

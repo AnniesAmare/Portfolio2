@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace DataLayer.DatabaseModel
 {
-    public class TitlePrincipals
+    public class TitlePrincipal
     {
         public string TConst { get; set; }
-        public TitleBasics TitleBasics { get; set; }
+        public TitleBasic TitleBasic { get; set; }
         public string NConst { get; set; }
-        public NameBasics NameBasics { get; set; }
+        public NameBasic NameBasic { get; set; }
         public string Category { get; set; }
     }
 }

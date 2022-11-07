@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace DataLayer.DatabaseModel
 {
-    public class Jobs
+    public class Language
     {
         public string TConst { get; set; }
-        public TitleBasics TitleBasics { get; set; }
-        public string NConst { get; set; }
-        public NameBasics NameBasics { get; set; }
-        public string Job { get; set; }
+        public int Ordering { get; set; }
+        public string TLanguage { get; set; }
+
+
+        public TitleAka? TitleAka { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Model
 {
-    public class CreateTitleBasicsModel
+    public class CreateTitleBasicModel
     {
     }
 }
