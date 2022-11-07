@@ -21,6 +21,19 @@ namespace DataLayer
         SpecificPerson GetSpecificPersonByName(string name);
         SpecificPerson GetSpecificPerson(string nConst);
 
+        //USER COMMANDS
+        bool UserExists(string username);
 
+        User CreateUser(string username, string password, string salt, string email, string birthyear);
+
+        User GetUser(string username);
+
+        /*
+        IList<Category> GetCategories();
+        Category? GetCategory(int id);
+        Category CreateCategory(string name, string description);
+        bool UpdateCategory(int id, string name, string description);
+        bool DeleteCategory(int id); 
+        */
     }
 }

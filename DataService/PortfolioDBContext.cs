@@ -255,6 +255,7 @@ namespace DataLayer
             modelBuilder.Entity<User>().HasKey(x => new { x.Username }).HasName("users_pkey");
             modelBuilder.Entity<User>().Property(x => x.Username).HasColumnName("username");
             modelBuilder.Entity<User>().Property(x => x.Password).HasColumnName("password");
+            modelBuilder.Entity<User>().Property(x => x.Salt).HasColumnName("salt");
             modelBuilder.Entity<User>().Property(x => x.BirthYear).HasColumnName("birthyear");
             modelBuilder.Entity<User>().Property(x => x.Email).HasColumnName("email");
 

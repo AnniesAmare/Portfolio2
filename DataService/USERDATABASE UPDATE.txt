@@ -1,0 +1,20 @@
+﻿-- DATABASE UPDATE
+
+DROP FUNCTION IF EXISTS create_user;
+
+ALTER TABLE users ADD salt TEXT;
+
+CREATE OR REPLACE FUNCTION create_user(given_username varchar(20), given_password VARCHAR, given_salt TEXT, given_birthyear char(4), given_email TEXT)
+RETURNS TABLE (
+	username TEXT,
+	password varchar,
+	salt TEXT,
+	birthyear TEXT,
+	email TEXT
+	)
+LANGUAGE sql as
+$$
+		INSERT INTO users (username, password, salt, birthyear, email)
+		VALUES (given_username, given_password, given_salt, given_birthyear, given_email);	
+		SELECT * FROM users WHERE username = given_username;	
+$$;
