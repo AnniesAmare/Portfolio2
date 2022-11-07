@@ -152,6 +152,7 @@ namespace DataLayer
             return person;
         }
 
+        //Helper functions
         private IList<string> GetProfessionsForSpecificPerson(string nConst)
         {
             using var db = new PortfolioDBContext();
