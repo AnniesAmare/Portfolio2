@@ -25,7 +25,6 @@ namespace WebServer.Controllers
         [HttpGet("{id}", Name = nameof(GetTitleById))]
         public IActionResult GetTitleById(string id)
         {
-            
             var specificTitle = _dataService.GetSpecificTitle(id);
             if (specificTitle == null)
             {

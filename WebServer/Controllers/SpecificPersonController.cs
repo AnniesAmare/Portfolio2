@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using AutoMapper;
+﻿using AutoMapper;
 using DataLayer;
 using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +21,7 @@ namespace WebServer.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = nameof(GetPersonById))]
         public IActionResult GetPersonById(string id)
         {
             var specificPerson = _dataService.GetSpecificPerson(id);
@@ -55,7 +54,7 @@ namespace WebServer.Controllers
                 var newTitle = new TitleListElementModel
                 {
                     Title = title.Title,
-                    //Url = _generator.GetUriByName(HttpContext, nameof(GetTitleById), new { title.TConst })
+                    Url = _generator.GetUriByName(HttpContext, nameof(SpecificTitleController.GetTitleById), new { id = title.TConst })
                 };
                 knownForList.Add(newTitle);
             }
