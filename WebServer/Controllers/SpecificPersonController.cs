@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Collections.Immutable;
+using AutoMapper;
 using DataLayer;
 using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Mvc;
+using WebServer.Model;
 
 namespace WebServer.Controllers
 {
@@ -28,7 +30,8 @@ namespace WebServer.Controllers
             {
                 return NotFound();
             }
-            return Ok(specificPerson);
+            var specificPersonModel = createSpecificPersonModel(specificPerson);
+            return Ok(specificPersonModel);
         }
 
         [HttpGet("name/{search}")]
@@ -42,8 +45,24 @@ namespace WebServer.Controllers
             return Ok(specificPerson);
         }
 
+        public SpecificPersonModel createSpecificPersonModel(SpecificPerson person)
+        {
+            var model = _mapper.Map<SpecificPersonModel>(person);
+            var knownForList = new List<TitleListElementModel>();
+            
+            foreach (var title in person.KnownForList)
+            {
+                var newTitle = new TitleListElementModel
+                {
+                    Title = title.Title,
+                    //Url = _generator.GetUriByName(HttpContext, nameof(GetTitleById), new { title.TConst })
+                };
+                knownForList.Add(newTitle);
+            }
+            model.KnownForListWithUrl = knownForList;
 
-
+            return model;
+        }
 
 
     }
