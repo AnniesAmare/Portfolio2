@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using DataLayer;
+using DataLayer.DataServiceInterfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +18,7 @@ builder.Services.AddSingleton<IDataService, DataService>();
 //DATASERVICES
 builder.Services.AddSingleton<IDataserviceSpecificPerson, DataserviceSpecificPerson>();
 builder.Services.AddSingleton<IDataserviceSpecificTitle, DataserviceSpecificTitle>();
+builder.Services.AddSingleton<IDataserviceUsers, DataserviceUsers>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<Hashing>();

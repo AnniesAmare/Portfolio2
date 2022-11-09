@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using AutoMapper;
 using DataLayer;
+using DataLayer.DataServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -15,15 +16,15 @@ namespace WebServer.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private IDataService _dataService;
+        private IDataserviceUsers _dataServiceUsers;
         private readonly LinkGenerator _generator;
         private readonly IMapper _mapper;
         private readonly Hashing _hashing;
         private readonly IConfiguration _configuration;
 
-        public UsersController(IDataService dataService, LinkGenerator generator, IMapper mapper, Hashing hashing, IConfiguration configuration)
+        public UsersController(IDataserviceUsers dataServiceUsers, LinkGenerator generator, IMapper mapper, Hashing hashing, IConfiguration configuration)
         {
-            _dataService = dataService;
+            _dataServiceUsers = dataServiceUsers;
             _generator = generator;
             _mapper = mapper;
             _hashing = hashing;
@@ -37,7 +38,7 @@ namespace WebServer.Controllers
             try
             {
                 var usernameValue = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
-                var user = _dataService.GetUser(username);
+                var user = _dataServiceUsers.GetUser(username);
                 if (user == null)
                 {
                     return NotFound();
@@ -62,18 +63,18 @@ namespace WebServer.Controllers
         [HttpPost("register")]
         public IActionResult Register(UserModel model)
         {
-            if (_dataService.UserExists(model.Username)) return BadRequest();
+            if (_dataServiceUsers.UserExists(model.Username)) return BadRequest();
             if (string.IsNullOrEmpty(model.Password)) return BadRequest();
             var hashResult = _hashing.Hash(model.Password);
 
-            _dataService.CreateUser(model.Username, hashResult.hash, hashResult.salt, model.Email, model.Birthyear);
+            _dataServiceUsers.CreateUser(model.Username, hashResult.hash, hashResult.salt, model.Email, model.Birthyear);
             return Ok();
         }
 
         [HttpPost("login")]
         public IActionResult Login(UserLoginModel model)
         {
-            var user = _dataService.GetUser(model.Username);
+            var user = _dataServiceUsers.GetUser(model.Username);
             if (user == null) return BadRequest();
             if (!_hashing.Verify(model.Password, user.Password, user.Salt)) BadRequest();
 
