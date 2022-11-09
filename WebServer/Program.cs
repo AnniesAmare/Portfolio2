@@ -13,6 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IDataService, DataService>();
+
+//DATASERVICES
+builder.Services.AddSingleton<IDataserviceSpecificPerson, DataserviceSpecificPerson>();
+builder.Services.AddSingleton<IDataserviceSpecificTitle, DataserviceSpecificTitle>();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<Hashing>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
