@@ -1,0 +1,13 @@
+﻿--add isMovie boolean
+ALTER TABLE title_basic
+ADD COLUMN isMovie BOOLEAN DEFAULT FALSE;
+
+UPDATE title_basic
+SET isMovie = True WHERE titletype = 'tvMovie' OR titletype = 'movie';
+
+--add isEpisode boolean
+ALTER TABLE title_basic
+ADD COLUMN isEpisode BOOLEAN DEFAULT FALSE;
+
+UPDATE title_basic
+SET isEpisode = True WHERE titletype = 'tvEpisode'; 
