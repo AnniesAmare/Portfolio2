@@ -294,6 +294,10 @@ namespace DataLayer
                 .HasOne(x => x.User)
                 .WithMany(x => x.BookmarkName)
                 .HasForeignKey(x => x.Username);
+            modelBuilder.Entity<BookmarkName>()
+                .HasOne(x => x.NameBasic)
+                .WithMany(x => x.BookmarkName)
+                .HasForeignKey(x => x.NConst);
 
             //BOOKMARK TITLE
             modelBuilder.Entity<BookmarkTitle>().ToTable("bookmark_title");
@@ -305,7 +309,11 @@ namespace DataLayer
                 .HasOne(x => x.User)
                 .WithMany(x => x.BookmarkTitle)
                 .HasForeignKey(x => x.Username);
-            
+            modelBuilder.Entity<BookmarkTitle>()
+                .HasOne(x => x.TitleBasic)
+                .WithMany(x => x.BookmarkTitle)
+                .HasForeignKey(x => x.TConst);
+
             //REVIEW
             modelBuilder.Entity<Review>().ToTable("review");
             modelBuilder.Entity<Review>().HasKey(x => new { x.Username }).HasName("review_pkey");

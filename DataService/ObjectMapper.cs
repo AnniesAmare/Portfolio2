@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataLayer.DataTransferModel.Profiles;
 
 namespace DataLayer
 {
@@ -15,7 +16,7 @@ namespace DataLayer
             {
                 // This line ensures that internal properties are also mapped over.
                 cfg.ShouldMapProperty = p => p.GetMethod.IsPublic || p.GetMethod.IsAssembly;
-                //cfg.AddProfile<OrderProfile>();
+                cfg.AddProfile<BookmarkProfile>();
 
             });
             var mapper = config.CreateMapper();
