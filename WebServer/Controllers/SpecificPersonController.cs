@@ -10,13 +10,13 @@ namespace WebServer.Controllers
     [ApiController]
     public class SpecificPersonController : ControllerBase
     {
-        private IDataService _dataService;
+        private IDataserviceSpecificPerson _dataServiceSpecificPerson;
         private readonly LinkGenerator _generator;
         private readonly IMapper _mapper;
 
-        public SpecificPersonController(IDataService dataService, LinkGenerator generator, IMapper mapper)
+        public SpecificPersonController(IDataserviceSpecificPerson dataServiceSpecificPerson, LinkGenerator generator, IMapper mapper)
         {
-            _dataService = dataService;
+            _dataServiceSpecificPerson = dataServiceSpecificPerson;
             _generator = generator;
             _mapper = mapper;
         }
@@ -24,7 +24,7 @@ namespace WebServer.Controllers
         [HttpGet("{id}", Name = nameof(GetPersonById))]
         public IActionResult GetPersonById(string id)
         {
-            var specificPerson = _dataService.GetSpecificPerson(id);
+            var specificPerson = _dataServiceSpecificPerson.GetSpecificPerson(id);
             if (specificPerson == null)
             {
                 return NotFound();
@@ -36,7 +36,7 @@ namespace WebServer.Controllers
         [HttpGet("name/{search}")]
         public IActionResult GetPersonByName(string search)
         {
-            var specificPerson = _dataService.GetSpecificPersonByName(search);
+            var specificPerson = _dataServiceSpecificPerson.GetSpecificPersonByName(search);
             if (specificPerson == null)
             {
                 return NotFound();
