@@ -305,7 +305,7 @@ namespace DataLayer
                 .HasOne(x => x.User)
                 .WithMany(x => x.BookmarkTitle)
                 .HasForeignKey(x => x.Username);
-
+            
             //REVIEW
             modelBuilder.Entity<Review>().ToTable("review");
             modelBuilder.Entity<Review>().HasKey(x => new { x.Username }).HasName("review_pkey");
@@ -314,6 +314,10 @@ namespace DataLayer
             modelBuilder.Entity<Review>().Property(x => x.Date).HasColumnName("date");
             modelBuilder.Entity<Review>().Property(x => x.Content).HasColumnName("review_content");
             modelBuilder.Entity<Review>().Property(x => x.IsSpoiler).HasColumnName("isspoiler");
+            modelBuilder.Entity<Review>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.Review)
+                .HasForeignKey(x => x.Username);
 
         }
 
