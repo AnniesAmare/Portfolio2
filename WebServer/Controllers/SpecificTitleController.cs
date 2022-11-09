@@ -11,13 +11,13 @@ namespace WebServer.Controllers
     [ApiController]
     public class SpecificTitleController : ControllerBase
     {
-        private IDataService _dataService;
+        private IDataserviceSpecificTitle _dataServiceSpecificTitle;
         private readonly LinkGenerator _generator;
         private readonly IMapper _mapper;
 
-        public SpecificTitleController(IDataService dataService, LinkGenerator generator, IMapper mapper)
+        public SpecificTitleController(IDataserviceSpecificTitle dataServiceSpecificTitle, LinkGenerator generator, IMapper mapper)
         {
-            _dataService = dataService;
+            _dataServiceSpecificTitle = dataServiceSpecificTitle;
             _generator = generator;
             _mapper = mapper;
         }
@@ -25,7 +25,7 @@ namespace WebServer.Controllers
         [HttpGet("{id}", Name = nameof(GetTitleById))]
         public IActionResult GetTitleById(string id)
         {
-            var specificTitle = _dataService.GetSpecificTitle(id);
+            var specificTitle = _dataServiceSpecificTitle.GetSpecificTitle(id);
             if (specificTitle == null)
             {
                 return NotFound();
@@ -37,7 +37,7 @@ namespace WebServer.Controllers
         [HttpGet("name/{search}")]
         public IActionResult GetTitleByName(string search)
         {
-            var specificTitle = _dataService.GetSpecificTitleByName(search);
+            var specificTitle = _dataServiceSpecificTitle.GetSpecificTitleByName(search);
             if (specificTitle == null)
             {
                 return NotFound();
