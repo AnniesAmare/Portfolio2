@@ -41,6 +41,20 @@ namespace DataLayer
             return user;
         }
 
+        public bool UpdateUser(string username, string email, string birthyear)
+        {
+            using var db = new PortfolioDBContext();
+            var user = db.Users.Find(username);
+            if (user != null)
+            {
+                if (!email.IsNull()) user.Email = email;
+                if (!birthyear.IsNull()) user.BirthYear = birthyear;
+                db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
         public bool DeleteUser(string username)
         {
             using var db = new PortfolioDBContext();

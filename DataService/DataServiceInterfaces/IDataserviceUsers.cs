@@ -12,10 +12,12 @@ namespace DataLayer.DataServiceInterfaces
         //USER COMMANDS
         bool UserExists(string username);
 
-        User CreateUser(string username, string password, string salt, string email, string birthyear);
+        User? CreateUser(string username, string password, string salt, string email, string birthyear);
 
-        User GetUser(string username);
+        User? GetUser(string username);
 
         bool DeleteUser(string username);
+
+        bool UpdateUser(string username, string email, string birthyear);
     }
 }
