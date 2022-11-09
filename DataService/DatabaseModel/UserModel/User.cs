@@ -13,5 +13,11 @@ namespace DataLayer.DatabaseModel
         public string? Salt { get; set; }
         public string? BirthYear { get; set; }
         public string? Email { get; set; }
+
+        public IList<BookmarkName> BookmarkName { get; set; }
+        public IList<BookmarkTitle> BookmarkTitle { get; set; }
+        public IList<UserRating> UserRating { get; set; }
+        public IList<UserSearch> UserSearch { get; set; }
+        public IList<Review> Review { get; set; }
     }
 }

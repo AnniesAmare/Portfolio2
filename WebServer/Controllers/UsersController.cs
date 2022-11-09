@@ -36,6 +36,7 @@ namespace WebServer.Controllers
         {
             try
             {
+                var usernameValue = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
                 var user = _dataService.GetUser(username);
                 if (user == null)
                 {
@@ -46,7 +47,8 @@ namespace WebServer.Controllers
                 {
                     Username = user.Username,
                     Email = user.Email,
-                    Birthyear = user.BirthYear
+                    Birthyear = user.BirthYear,
+                    Password = "Cannot show password"
                 };
                 return Ok(userModel);
             }

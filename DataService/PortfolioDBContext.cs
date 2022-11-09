@@ -266,6 +266,10 @@ namespace DataLayer
             modelBuilder.Entity<UserRating>().Property(x => x.Date).HasColumnName("date");
             modelBuilder.Entity<UserRating>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<UserRating>().Property(x => x.Rating).HasColumnName("rating");
+            modelBuilder.Entity<UserRating>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.UserRating)
+                .HasForeignKey(x => x.Username);
 
             //USER SEARCH
             modelBuilder.Entity<UserSearch>().ToTable("user_search");
