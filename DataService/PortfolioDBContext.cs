@@ -279,6 +279,10 @@ namespace DataLayer
             modelBuilder.Entity<UserSearch>().Property(x => x.Date).HasColumnName("date");
             modelBuilder.Entity<UserSearch>().Property(x => x.Content).HasColumnName("search_content");
             modelBuilder.Entity<UserSearch>().Property(x => x.Category).HasColumnName("search_category");
+            modelBuilder.Entity<UserSearch>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.UserSearch)
+                .HasForeignKey(x => x.Username);
 
             //BOOKMARK NAME
             modelBuilder.Entity<BookmarkName>().ToTable("bookmark_name");
@@ -286,6 +290,10 @@ namespace DataLayer
             modelBuilder.Entity<BookmarkName>().Property(x => x.Username).HasColumnName("username");
             modelBuilder.Entity<BookmarkName>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<BookmarkName>().Property(x => x.Annotation).HasColumnName("annotation");
+            modelBuilder.Entity<BookmarkName>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.BookmarkName)
+                .HasForeignKey(x => x.Username);
 
             //BOOKMARK TITLE
             modelBuilder.Entity<BookmarkTitle>().ToTable("bookmark_title");
@@ -293,6 +301,10 @@ namespace DataLayer
             modelBuilder.Entity<BookmarkTitle>().Property(x => x.Username).HasColumnName("username");
             modelBuilder.Entity<BookmarkTitle>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<BookmarkTitle>().Property(x => x.Annotation).HasColumnName("annotation");
+            modelBuilder.Entity<BookmarkTitle>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.BookmarkTitle)
+                .HasForeignKey(x => x.Username);
 
             //REVIEW
             modelBuilder.Entity<Review>().ToTable("review");

@@ -15,5 +15,7 @@ namespace DataLayer.DataServiceInterfaces
         User CreateUser(string username, string password, string salt, string email, string birthyear);
 
         User GetUser(string username);
+
+        bool DeleteUser(string username);
     }
 }

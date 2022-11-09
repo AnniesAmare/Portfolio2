@@ -31,13 +31,13 @@ namespace WebServer.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("{username}", Name = nameof(GetUser))]
+        [HttpGet]
         [Authorize]
-        public IActionResult GetUser(string username)
+        public IActionResult GetUser()
         {
             try
             {
-                var usernameValue = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                var username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
                 var user = _dataServiceUsers.GetUser(username);
                 if (user == null)
                 {
@@ -48,8 +48,7 @@ namespace WebServer.Controllers
                 {
                     Username = user.Username,
                     Email = user.Email,
-                    Birthyear = user.BirthYear,
-                    Password = "Cannot show password"
+                    Birthyear = user.BirthYear
                 };
                 return Ok(userModel);
             }
@@ -59,15 +58,25 @@ namespace WebServer.Controllers
             }
         }
 
-        //api/users?action=register (possibility) 
         [HttpPost("register")]
-        public IActionResult Register(UserModel model)
+        public IActionResult Register(UserRegisterModel registerModel)
         {
-            if (_dataServiceUsers.UserExists(model.Username)) return BadRequest();
-            if (string.IsNullOrEmpty(model.Password)) return BadRequest();
-            var hashResult = _hashing.Hash(model.Password);
+            //none of the input values must be empty or null
+            if (registerModel.Username.IsNull()) return BadRequest();
+            if (registerModel.Password.IsNull()) return BadRequest();
+            if (registerModel.Email.IsNull()) return BadRequest();
+            if (registerModel.Birthyear.IsNull()) return BadRequest();
 
-            _dataServiceUsers.CreateUser(model.Username, hashResult.hash, hashResult.salt, model.Email, model.Birthyear);
+            //username must be unique
+            if (_dataServiceUsers.UserExists(registerModel.Username)) return BadRequest();
+
+            //password must have a minimum length of 8.
+            const int minimumPasswordLength = 8;
+            if (registerModel.Password.Length < minimumPasswordLength) return BadRequest();
+            
+            //password is hashed
+            var hashResult = _hashing.Hash(registerModel.Password);
+            var user = _dataServiceUsers.CreateUser(registerModel.Username, hashResult.hash, hashResult.salt, registerModel.Email, registerModel.Birthyear);
             return Ok();
         }
 
@@ -94,6 +103,26 @@ namespace WebServer.Controllers
             return Ok(new {user.Username, token = jwt});
         }
 
+        [HttpDelete("delete")]
+        [Authorize]
+        public IActionResult DeleteUser()
+        {
+            try
+            {
+                var username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                var deleted = _dataServiceUsers.DeleteUser(username);
+                if (!deleted)
+                {
+                    return NotFound();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return Unauthorized();
+            }
+
+        }
 
     }
 }

@@ -13,13 +13,16 @@ namespace DataLayer
         //USER COMMANDS
         public bool UserExists(string username)
         {
-            return false;
+            using var db = new PortfolioDBContext();
+            if (GetUser(username) == null) return false;
+            return true;
         }
 
         public User GetUser(string username)
         {
             using var db = new PortfolioDBContext();
-            return db.Users.FirstOrDefault(x => x.Username == username);
+            var user = db.Users.FirstOrDefault(x => x.Username == username);
+            return user;
         }
 
         public User CreateUser(string username, string password, string salt, string email, string birthyear)
@@ -38,5 +41,17 @@ namespace DataLayer
             return user;
         }
 
+        public bool DeleteUser(string username)
+        {
+            using var db = new PortfolioDBContext();
+            var user = GetUser(username);
+            if (user != null)
+            {
+                db.Users.Remove(user);
+                db.SaveChanges();
+                return true;
+            } 
+            return false;
+        }
     }
 }

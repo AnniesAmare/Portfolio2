@@ -1,11 +1,12 @@
 ﻿namespace WebServer.Model
 {
-    public class UserModel
+    public class UserRegisterModel
     {
         public string? Username { get; set; }
         public string? Email { get; set; }
         public string? Birthyear { get; set; }
-        
-        //include bookmarks and ratings
+        public string? Password { get; set; }
+
     }
+
 }
