@@ -13,7 +13,7 @@ using WebServer.Services;
 
 namespace WebServer.Controllers
 {
-    [Route("api/users")]
+    [Route("api/user")]
     [ApiController]
     public class UsersController : ControllerBase
     {
