@@ -15,7 +15,7 @@ namespace WebServer.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private IDataserviceUsers _dataServiceUsers;
         private readonly LinkGenerator _generator;
@@ -23,7 +23,7 @@ namespace WebServer.Controllers
         private readonly Hashing _hashing;
         private readonly IConfiguration _configuration;
 
-        public UsersController(IDataserviceUsers dataServiceUsers, LinkGenerator generator, IMapper mapper, Hashing hashing, IConfiguration configuration)
+        public UserController(IDataserviceUsers dataServiceUsers, LinkGenerator generator, IMapper mapper, Hashing hashing, IConfiguration configuration)
         {
             _dataServiceUsers = dataServiceUsers;
             _generator = generator;
