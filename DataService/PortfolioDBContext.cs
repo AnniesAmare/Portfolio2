@@ -49,12 +49,12 @@ namespace DataLayer
         public DbSet<TitleAka> TitleAkas { get; set; }
 
         /* USER FRAMEWORK */
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserRating> UserRatings { get; set; }
-        public DbSet<UserSearch> UserSearches { get; set; }
-        public DbSet<BookmarkTitle> BookmarksTitles { get; set; }
-        public DbSet<BookmarkName> BookmarksNames { get; set; }
-        public DbSet<Review> Reviews { get; set; }
+        public DbSet<User>? Users { get; set; }
+        public DbSet<UserRating>? UserRatings { get; set; }
+        public DbSet<UserSearch>? UserSearches { get; set; }
+        public DbSet<BookmarkTitle>? BookmarksTitles { get; set; }
+        public DbSet<BookmarkName>? BookmarksNames { get; set; }
+        public DbSet<Review>? Reviews { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
