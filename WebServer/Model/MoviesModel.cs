@@ -1,4 +1,4 @@
-﻿namespace WebServer.Model.Profiles
+﻿namespace WebServer.Model
 {
     public class MoviesModel
     {
