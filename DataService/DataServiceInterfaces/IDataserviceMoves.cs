@@ -1,4 +1,5 @@
-﻿using DataLayer.DataTransferModel;
+﻿using DataLayer.DatabaseModel;
+using DataLayer.DataTransferModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace DataLayer
 {
-    public class IDataserviceMovies
+    public interface IDataserviceMovies
     {
-        IList<Titles> GetMovies;
+        IList<Titles> GetMovies();
     }
 }

@@ -1,4 +1,6 @@
-﻿using DataLayer.DataTransferModel;
+﻿using DataLayer.DatabaseModel;
+using DataLayer.DataTransferModel;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,11 +30,13 @@ namespace DataLayer
                 .Take(100).ToList();
             if (movies == null) return null;
 
+            
             foreach(var movie in movies)
             {
                 var inputTConst = movie?.TConst?.RemoveSpaces();
                 movie.TConst = inputTConst;
             }
+            
             return movies;
         }
 
