@@ -2,7 +2,7 @@
 
 namespace WebServer.Model
 {
-    public class TvShowModel
+    public class TvShowsModel
     {
         public string? TConst { get; set; }
         public string? Type { get; set; }

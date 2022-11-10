@@ -9,6 +9,7 @@ namespace WebServer.Model.Profiles
        public TitlesModelProfile()
         {
             CreateMap<Titles, MoviesModel>();
+            CreateMap<Titles, TvShowsModel>();
 
         }
     }
