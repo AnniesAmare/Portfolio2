@@ -22,9 +22,9 @@ namespace DataLayer
                     IsTvShow = x.IsTvShow,
                     IsEpisode = x.IsEpisode,
                     IsMovie = x.IsMovie
-                   
+
                 })
-                .Where(x => x.IsMovie)
+                .Where(x => x.IsMovie == true)
                 .Take(100).ToList();
             if (movies == null) return null;
 
@@ -32,7 +32,7 @@ namespace DataLayer
             {
                 var inputTConst = movie?.TConst?.RemoveSpaces();
                 movie.TConst = inputTConst;
-            }      
+            }
             return movies;
         }
 
