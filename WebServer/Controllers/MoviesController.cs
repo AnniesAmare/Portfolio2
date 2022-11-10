@@ -31,10 +31,25 @@ namespace WebServer.Controllers
                 return NotFound();
             }
 
+            var moviesModel = CreateMoviesModel(movies);
+
+
+            return Ok(moviesModel);
+        }
+
+        public IList<MoviesModel> CreateMoviesModel(IList<Titles> movies)
+        {
             //var moviesModel = _mapper.Map<MoviesModel>(movies);
 
+            var moviesModel = new List<MoviesModel>();
 
-            return Ok(movies);
+            foreach (var movie in movies)
+            {
+                var movieModelElement = _mapper.Map<MoviesModel>(movie);
+                moviesModel.Add(movieModelElement);
+            }
+
+            return moviesModel;
         }
     }
 }
