@@ -85,40 +85,58 @@ namespace DataLayer
 
             //var seasonList = new List<TvShowListElement>();
 
-            var seasonList = db.TitleEpisodes
+            var tvShowContentList = db.TitleEpisodes
                 .Where(x => x.ParentTConst == parenTConst)
-                .OrderBy(x => x.ParentTConst)
+                .OrderBy(x => x.SeasonNumber)
                 .Select(x => new TvShowListElement
                 {
                     Season = x.SeasonNumber
                 })
                 .Distinct().ToList();
 
-            if (seasonList == null) return null;
+            foreach(var element in tvShowContentList)
+            {
+                element.Episodes = GetEpisodeListElements(parenTConst);
+                
+            }
 
-            return seasonList;
+
+            if (tvShowContentList == null) return null;
+
+            return tvShowContentList;
         }
 
-        
 
-        //public IList<EpisodeListElement> GetEpisodeListElements(IList<Titles> tvShows)
-        //{
-        //    using var db = new PortfolioDBContext();
 
-        //    var episodes = new List<EpisodeListElement>();
+        public IList<EpisodeListElement> GetEpisodeListElements(string parenTConst)
+        {
+            using var db = new PortfolioDBContext();
 
-        //    foreach (var tvShow in tvShows) {
+            var episodes = db.TitleEpisodes
+              .Where(x => x.ParentTConst == parenTConst)
+              .OrderBy(x => x.EpisodeNumber)
+              .Select(x => new EpisodeListElement
+              {
+                  TConst = x.TConst,
+                  Episode = x.EpisodeNumber
+              })
+              .ToList();
 
-        //        var seasons = db.TitleEpisodes
-        //            .Where(x => x.ParentTConst == tvShow.TConst)
-        //            .Select(x => new TvShowListElement 
-        //            { 
-        //                Season = x.SeasonNumber
-        //            })
-        //            .Distinct();
-        //        }
-        //    return episodes;
-        //}
+
+
+            //foreach (var episode in episodes)
+            //{
+            //    var epNames = db.TitleBasics.Select(x = episod)
+
+
+            //   .Where(x => x.TConst = episode.TConst);
+
+
+            //}
+
+
+            return episodes;
+        }
 
 
         //Helper method hijacked from DataserviceSpecificTitle
