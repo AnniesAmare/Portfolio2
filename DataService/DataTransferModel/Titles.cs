@@ -9,9 +9,9 @@ namespace DataLayer.DataTransferModel
     public class Titles
     {
         public string? TConst { get; set; }
-        public string? TitleType { get; set; }
-        public string? PrimaryTitle { get; set; }
-        public string? StartYear { get; set; }
+        public string? Type { get; set; }
+        public string? Title { get; set; }
+        public string? AiringDate { get; set; }
         public bool IsTvShow { get; set; }
         public bool IsEpisode { get; set; }
         public bool IsMovie { get; set; }
