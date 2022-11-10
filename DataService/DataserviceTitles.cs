@@ -62,7 +62,7 @@ namespace DataLayer
 
                 })
                 .Where(x => x.IsTvShow == true)
-                .Take(5).ToList();
+                .Take(20).ToList();
             if (tvShows == null) return null;
 
 
@@ -72,11 +72,53 @@ namespace DataLayer
                 tvShow.TConst = inputTConst;
 
                 tvShow.DirectorList = GetDirectorsForSpecificTitle(inputTConst);
+                tvShow.TvShowContentList = GetTvShowListElements(inputTConst);
             }
 
             return tvShows;
 
         }
+
+        
+        public IList<TvShowListElement> GetTvShowListElements(string parenTConst) {
+            using var db = new PortfolioDBContext();
+
+            //var seasonList = new List<TvShowListElement>();
+
+            var seasonList = db.TitleEpisodes
+                .Where(x => x.ParentTConst == parenTConst)
+                .OrderBy(x => x.ParentTConst)
+                .Select(x => new TvShowListElement
+                {
+                    Season = x.SeasonNumber
+                })
+                .Distinct().ToList();
+
+            if (seasonList == null) return null;
+
+            return seasonList;
+        }
+
+        
+
+        //public IList<EpisodeListElement> GetEpisodeListElements(IList<Titles> tvShows)
+        //{
+        //    using var db = new PortfolioDBContext();
+
+        //    var episodes = new List<EpisodeListElement>();
+
+        //    foreach (var tvShow in tvShows) {
+
+        //        var seasons = db.TitleEpisodes
+        //            .Where(x => x.ParentTConst == tvShow.TConst)
+        //            .Select(x => new TvShowListElement 
+        //            { 
+        //                Season = x.SeasonNumber
+        //            })
+        //            .Distinct();
+        //        }
+        //    return episodes;
+        //}
 
 
         //Helper method hijacked from DataserviceSpecificTitle

@@ -8,7 +8,7 @@ namespace DataLayer.DataTransferModel
 {
     public class TvShowListElement
     {
-        public int Season { get; set; }
+        public int? Season { get; set; }
         public IList<EpisodeListElement> Episodes { get; set; }
     }
 }

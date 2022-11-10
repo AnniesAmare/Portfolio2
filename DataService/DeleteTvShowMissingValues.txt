@@ -1,0 +1,2 @@
+﻿DELETE FROM title_episode
+WHERE seasonnumber IS NULL
