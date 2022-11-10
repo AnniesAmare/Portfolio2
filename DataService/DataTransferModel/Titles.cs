@@ -13,6 +13,11 @@ namespace DataLayer.DataTransferModel
         public string? PrimaryTitle { get; set; }
         public string? StartYear { get; set; }
         public bool IsTvShow { get; set; }
+        public bool IsEpisode { get; set; }
+        public bool IsMovie { get; set; }
 
     }
 }
+
+
+//distinct() or take(25) -query limitation
