@@ -11,5 +11,6 @@ namespace DataLayer
     public interface IDataserviceTitles
     {
         IList<Titles> GetMovies();
+        IList<Titles> GetTvShows();
     }
 }
