@@ -44,8 +44,42 @@ namespace DataLayer
             return movies;
         }
 
+        public IList<Titles> GetTvShows() {
 
-        //Method hijacked from DataserviceSpecificTitle
+            using var db = new PortfolioDBContext();
+
+            var tvShows = db.TitleBasics
+                .Select(x => new Titles
+                {
+                    TConst = x.TConst,
+                    Type = x.TitleType,
+                    Name = x.PrimaryTitle,
+                    AiringDate = x.StartYear,
+                    Rating = x.TitleRating.AverageRating,
+                    IsTvShow = x.IsTvShow,
+                    IsEpisode = x.IsEpisode,
+                    IsMovie = x.IsMovie
+
+                })
+                .Where(x => x.IsTvShow == true)
+                .Take(5).ToList();
+            if (tvShows == null) return null;
+
+
+            foreach (var tvShow in tvShows)
+            {
+                var inputTConst = tvShow?.TConst?.RemoveSpaces();
+                tvShow.TConst = inputTConst;
+
+                tvShow.DirectorList = GetDirectorsForSpecificTitle(inputTConst);
+            }
+
+            return tvShows;
+
+        }
+
+
+        //Helper method hijacked from DataserviceSpecificTitle
         private IList<DirectorListElement> GetDirectorsForSpecificTitle(string tConst)
         {
             using var db = new PortfolioDBContext();
