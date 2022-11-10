@@ -10,7 +10,7 @@ namespace DataLayer.DataTransferModel
     {
         public string? TConst { get; set; }
         public string? Type { get; set; }
-        public string? Title { get; set; }
+        public string? Name { get; set; }
         public string? AiringDate { get; set; }
         public bool IsTvShow { get; set; }
         public bool IsEpisode { get; set; }

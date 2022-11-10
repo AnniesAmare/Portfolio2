@@ -10,6 +10,7 @@ namespace WebServer.Model.Profiles
             CreateMap<SpecificPerson, SpecificPersonModel>();
             
             CreateMap<SpecificTitle, SpecificTitleModel>();
+
         }
     }
 }

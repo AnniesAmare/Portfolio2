@@ -20,6 +20,7 @@ namespace DataLayer
                 {
                     TConst = x.TConst,
                     Type = x.TitleType,
+                    Name = x.PrimaryTitle,
                     AiringDate = x.StartYear,
                     IsTvShow = x.IsTvShow,
                     IsEpisode = x.IsEpisode,

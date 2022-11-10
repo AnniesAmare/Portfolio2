@@ -2,6 +2,8 @@
 using DataLayer;
 using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using WebServer.Model;
 
 namespace WebServer.Controllers
 {
@@ -28,6 +30,8 @@ namespace WebServer.Controllers
             {
                 return NotFound();
             }
+
+            //var moviesModel = _mapper.Map<MoviesModel>(movies);
 
 
             return Ok(movies);
