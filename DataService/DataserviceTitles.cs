@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace DataLayer
 {
-    public class DataserviceMovies : IDataserviceMovies
+    public class DataserviceTitles : IDataserviceTitles
     {
         public IList<Titles> GetMovies() {
             using var db = new PortfolioDBContext();

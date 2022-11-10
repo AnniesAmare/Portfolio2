@@ -11,13 +11,13 @@ namespace WebServer.Controllers
     [ApiController]
     public class MoviesController : Controller
     {
-        private IDataserviceMovies _dataServiceMovies;
+        private IDataserviceTitles _dataServiceTitles;
         private readonly LinkGenerator _generator;
         private readonly IMapper _mapper;
 
-        public MoviesController(IDataserviceMovies dataServiceMovies, LinkGenerator generator, IMapper mapper)
+        public MoviesController(IDataserviceTitles dataServiceMovies, LinkGenerator generator, IMapper mapper)
         {
-            _dataServiceMovies = dataServiceMovies;
+            _dataServiceTitles = dataServiceMovies;
             _generator = generator;
             _mapper = mapper;
         }
@@ -25,22 +25,17 @@ namespace WebServer.Controllers
         [HttpGet]
         public IActionResult GetMovie()
         {
-            var movies = _dataServiceMovies.GetMovies();
+            var movies = _dataServiceTitles.GetMovies();
             if (movies == null)
             {
                 return NotFound();
             }
-
             var moviesModel = CreateMoviesModel(movies);
-
-
             return Ok(moviesModel);
         }
 
         public IList<MoviesModel> CreateMoviesModel(IList<Titles> movies)
         {
-            //var moviesModel = _mapper.Map<MoviesModel>(movies);
-
             var moviesModel = new List<MoviesModel>();
 
             foreach (var movie in movies)

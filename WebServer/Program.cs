@@ -12,7 +12,7 @@ builder.Services.AddSingleton<IDataService, DataService>();
 //DATASERVICES
 builder.Services.AddSingleton<IDataserviceSpecificPerson, DataserviceSpecificPerson>();
 builder.Services.AddSingleton<IDataserviceSpecificTitle, DataserviceSpecificTitle>();
-builder.Services.AddSingleton<IDataserviceMovies, DataserviceMovies>();
+builder.Services.AddSingleton<IDataserviceTitles, DataserviceTitles>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

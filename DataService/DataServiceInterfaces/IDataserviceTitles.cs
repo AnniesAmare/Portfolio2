@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer
 {
-    public interface IDataserviceMovies
+    public interface IDataserviceTitles
     {
         IList<Titles> GetMovies();
     }
