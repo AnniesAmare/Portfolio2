@@ -88,6 +88,8 @@ namespace DataLayer
             modelBuilder.Entity<TitleBasic>().Property(x => x.EndYear).HasColumnName("endyear");
             modelBuilder.Entity<TitleBasic>().Property(x => x.RuntimeMinutes   ).HasColumnName("runtimeminutes");
             modelBuilder.Entity<TitleBasic>().Property(x => x.IsTvShow).HasColumnName("istvshow");
+            modelBuilder.Entity<TitleBasic>().Property(x => x.IsMovie).HasColumnName("ismovie");
+            modelBuilder.Entity<TitleBasic>().Property(x => x.IsEpisode).HasColumnName("isepisode");
 
             //TITLE_EPISODE MAPPING
             modelBuilder.Entity<TitleEpisode>().ToTable("title_episode");

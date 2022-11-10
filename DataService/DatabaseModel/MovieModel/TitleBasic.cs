@@ -18,6 +18,8 @@ namespace DataLayer.DatabaseModel
         public string? EndYear { get; set; }
         public int? RuntimeMinutes { get; set; }
         public bool IsTvShow { get; set; }
+        public bool IsEpisode { get; set; }
+        public bool IsMovie { get; set; }
 
         public IList<TitleEpisode>? TitleEpisode { get; set; }
         public TitleRating? TitleRating { get; set; }
