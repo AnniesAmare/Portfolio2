@@ -12,6 +12,8 @@ namespace DataLayer.DataTransferModel
         public string? Type { get; set; }
         public string? Name { get; set; }
         public string? AiringDate { get; set; }
+        public IList<DirectorListElement>? DirectorList { get; set; }
+        public float? Rating { get; set; }
         public bool IsTvShow { get; set; }
         public bool IsEpisode { get; set; }
         public bool IsMovie { get; set; }

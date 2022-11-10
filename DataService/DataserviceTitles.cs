@@ -22,6 +22,7 @@ namespace DataLayer
                     Type = x.TitleType,
                     Name = x.PrimaryTitle,
                     AiringDate = x.StartYear,
+                    Rating = x.TitleRating.AverageRating,
                     IsTvShow = x.IsTvShow,
                     IsEpisode = x.IsEpisode,
                     IsMovie = x.IsMovie
@@ -36,10 +37,33 @@ namespace DataLayer
             {
                 var inputTConst = movie?.TConst?.RemoveSpaces();
                 movie.TConst = inputTConst;
+
+                movie.DirectorList = GetDirectorsForSpecificTitle(inputTConst);
             }
             
             return movies;
         }
+
+
+        //Method hijacked from DataserviceSpecificTitle
+        private IList<DirectorListElement> GetDirectorsForSpecificTitle(string tConst)
+        {
+            using var db = new PortfolioDBContext();
+            var directors = db.TitlePrincipals
+                .Include(x => x.NameBasic)
+                .Where(x => x.TConst == tConst)
+                .Where(x => x.Category == "director")
+                .OrderBy(x => x.NameBasic.PrimaryName)
+                .Select(x => new DirectorListElement()
+                {
+                    NConst = x.NConst.RemoveSpaces(),
+                    Name = x.NameBasic.PrimaryName
+                })
+                .ToList();
+
+            return directors;
+        }
+        
 
     }
 }
