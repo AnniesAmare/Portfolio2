@@ -7,7 +7,7 @@ using WebServer.Model;
 
 namespace WebServer.Controllers
 {
-    [Route("api/movies")]
+    [Route("api/titles")]
     [ApiController]
     public class MoviesController : Controller
     {
@@ -22,7 +22,7 @@ namespace WebServer.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("movies")]
         public IActionResult GetMovie()
         {
             var movies = _dataServiceTitles.GetMovies();
