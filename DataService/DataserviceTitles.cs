@@ -29,7 +29,7 @@ namespace DataLayer
 
                 })
                 .Where(x => x.IsMovie == true)
-                .Take(100).ToList();
+                .Take(10).ToList();
             if (movies == null) return null;
 
             
