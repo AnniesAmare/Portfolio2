@@ -10,10 +10,10 @@ namespace DataLayer
 {
     public class DataserviceMovies : IDataserviceMovies
     {
-        public Titles GetMovies() {
+        public IList<Titles> GetMovies() {
             using var db = new PortfolioDBContext();
 
-            var titles = db.TitleBasics
+            var movies = db.TitleBasics
                 .Select(x => new Titles
                 {
                     TConst = x.TConst,
@@ -21,17 +21,19 @@ namespace DataLayer
                     AiringDate = x.StartYear,
                     IsTvShow = x.IsTvShow,
                     IsEpisode = x.IsEpisode,
-                    IsMovie = x.Movie
+                    IsMovie = x.IsMovie
                    
                 })
-                .Take(100);
-            if (titles == null) return null;
+                .Where(x => x.IsMovie)
+                .Take(100).ToList();
+            if (movies == null) return null;
 
-            var inputTConst = titles.TConst.RemoveSpaces();
-         
-
-            return titles;
-
+            foreach(var movie in movies)
+            {
+                var inputTConst = movie?.TConst?.RemoveSpaces();
+                movie.TConst = inputTConst;
+            }      
+            return movies;
         }
 
     }
