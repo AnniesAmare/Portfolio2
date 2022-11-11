@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using DataLayer.DatabaseModel;
 using DataLayer.DataServiceInterfaces;
 using DataLayer.DataTransferModel;
@@ -39,48 +41,111 @@ namespace DataLayer
             return (titleBookmarks, personBookmarks);
         }
 
-        public BookmarkElement createBookmark(string username, string id, string? name)
+        public bool createBookmark(string username, string id, string? name)
         {
             using var db = new PortfolioDBContext();
-            var tConst = db.TitleBasics.Find(id).TConst;
-            var nConst = db.NameBasics.Find(id).NConst;
+            var title = db.TitleBasics.Find(id);
+            var person = db.NameBasics.Find(id);
 
-            if (tConst != null)
+            name = string.IsNullOrEmpty(name) ? "Unnamed" : name;
+
+            if (title != null)
             {
-                var bookmark = new BookmarkTitle
+                var tConst = title.TConst;
+                if (!BookmarkExists(username, tConst))
                 {
-                    Username = username,
-                    TConst = tConst,
-                    Annotation = name
-                };
-                db.BookmarksTitles.Add(bookmark);
-                db.SaveChanges();
-                return ObjectMapper.Mapper.Map<BookmarkElement>(bookmark);
+                    CreateTitleBookmark(username, tConst, name);
+                    return true;
+                }
             }
 
-            if (nConst != null)
+            if (person != null)
             {
-                var bookmark = new BookmarkName
+                var nConst = person.NConst;
+                if (!BookmarkExists(username, nConst))
                 {
-                    Username = username,
-                    NConst = nConst,
-                    Annotation = name
-                };
-                db.BookmarksNames.Add(bookmark);
-                db.SaveChanges();
-                return ObjectMapper.Mapper.Map<BookmarkElement>(bookmark);
+                    CreatePersonBookmark(username, nConst, name);
+                    return true;
+                }
             }
-            return null;
+            return false;
         }
 
-        public BookmarkElement deleteBookmark(string username, string id)
+        public bool deleteBookmark(string username, string id)
         {
-            throw new NotImplementedException();
+            using var db = new PortfolioDBContext();
+            var title = db.TitleBasics.Find(id);
+            var person = db.NameBasics.Find(id);
+
+            if (title != null)
+            {
+                var tConst = title.TConst.RemoveSpaces();
+                if (BookmarkExists(username, tConst))
+                {
+                    var bookmark = db.BookmarksTitles.Where(x => x.Username == username && x.TConst == tConst).FirstOrDefault();
+                    Console.WriteLine(bookmark.Username, bookmark.TConst);
+                    db.BookmarksTitles.Remove(bookmark);
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+
+            if (person != null)
+            {
+                var nConst = person.NConst.RemoveSpaces();
+                if (BookmarkExists(username, nConst))
+                {
+                    var bookmark = db.BookmarksNames.Where(x => x.Username == username && x.NConst == nConst).FirstOrDefault();
+                    db.BookmarksNames.Remove(bookmark);
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+            return false;
         }
 
         public BookmarkElement nameBookmark(string username, string id, string annotation)
         {
             throw new NotImplementedException();
         }
+
+        //helper functions
+        private bool BookmarkExists(string username, string id)
+        {
+            using var db = new PortfolioDBContext();
+            var bookmarkName = db.BookmarksNames.Where(x => x.Username == username && x.NConst == id)!.FirstOrDefault();
+            var bookmarkTitle = db.BookmarksTitles.Where(x => x.Username == username && x.TConst == id)!.FirstOrDefault();
+            if (bookmarkTitle == null && bookmarkName == null) return false;
+            return true;
+        }
+
+        private BookmarkElement CreateTitleBookmark(string username, string tConst, string? name)
+        {
+            using var db = new PortfolioDBContext();
+            var bookmark = new BookmarkTitle
+            {
+                Username = username,
+                TConst = tConst.RemoveSpaces(),
+                Annotation = name
+            };
+            db.BookmarksTitles.Add(bookmark);
+            db.SaveChanges();
+            return ObjectMapper.Mapper.Map<BookmarkElement>(bookmark);
+        }
+
+        private BookmarkElement CreatePersonBookmark(string username, string nConst, string? name)
+        {
+            using var db = new PortfolioDBContext();
+            var bookmark = new BookmarkName
+            {
+                Username = username,
+                NConst = nConst.RemoveSpaces(),
+                Annotation = name
+            };
+            db.BookmarksNames.Add(bookmark);
+            db.SaveChanges();
+            return ObjectMapper.Mapper.Map<BookmarkElement>(bookmark);
+        }
+
     }
 }

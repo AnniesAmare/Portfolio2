@@ -15,9 +15,9 @@ namespace DataLayer.DataServiceInterfaces
         
         (IList<BookmarkListElement> titleBookmarks, IList<BookmarkListElement> personBookmarks) getBookmarks(string username);
 
-        public BookmarkElement createBookmark(string username, string id, string? name);
+        bool createBookmark(string username, string id, string? name);
 
-        BookmarkElement deleteBookmark(string username, string id);
+        bool deleteBookmark(string username, string id);
 
         BookmarkElement nameBookmark(string username, string id, string annotation);
     }

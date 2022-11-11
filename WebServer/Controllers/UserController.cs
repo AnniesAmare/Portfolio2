@@ -93,13 +93,14 @@ namespace WebServer.Controllers
             return Ok(new {user.Username, token = jwt});
         }
 
+
         [HttpPut("update")]
         [Authorize]
         public IActionResult UpdateUser(UserUpdateModel model)
         {
             try
             {
-                var username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                var username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value;
                 var updated = _dataServiceUsers.UpdateUser(username, model.Email, model.Birthyear);
                 if (!updated)
                 {
@@ -136,7 +137,7 @@ namespace WebServer.Controllers
         public string? GenerateJwtToken(string username)
         {
             var claims = new List<Claim>{
-                new Claim(ClaimTypes.Name, username)
+                new Claim(ClaimTypes.Name, username),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Auth:secret").Value));
@@ -149,7 +150,6 @@ namespace WebServer.Controllers
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
         }
-
 
         //if time allows make check-functions for user-stuff, so we confirm the validity of the inputs.
         //email must contain an '@'
