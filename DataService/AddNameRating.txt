@@ -1,0 +1,18 @@
+﻿--Drop column to get correct type
+ALTER TABLE name_basic
+DROP COLUMN avg_name_rating
+
+--CREATE avg_name_rating column
+ALTER TABLE name_basic
+ADD COLUMN avg_name_rating NUMERIC(5,1)
+		
+
+UPDATE name_basic as nb
+SET avg_name_rating = rating.sum_rating
+FROM
+(
+		SELECT nconst, sum(averagerating*numvotes)/sum(numvotes) AS sum_rating
+		FROM title_rating JOIN title_principal USING(tconst) JOIN name_basic USING(nconst)
+		GROUP BY title_principal.nconst, title_principal.category
+) as rating
+Where nb.nconst = rating.nconst;
