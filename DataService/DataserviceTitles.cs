@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -68,15 +69,14 @@ namespace DataLayer
 
             foreach (var tvShow in tvShows)
             {
+                tvShow.TvShowContentList = GetTvShowListElements(tvShow.TConst);
+                
                 var inputTConst = tvShow?.TConst?.RemoveSpaces();
                 tvShow.TConst = inputTConst;
 
-                tvShow.DirectorList = GetDirectorsForSpecificTitle(inputTConst);
-                tvShow.TvShowContentList = GetTvShowListElements(inputTConst);
+                tvShow.DirectorList = GetDirectorsForSpecificTitle(inputTConst);  
             }
-
             return tvShows;
-
         }
 
         
@@ -94,12 +94,11 @@ namespace DataLayer
                 })
                 .Distinct().ToList();
 
-            foreach(var element in tvShowContentList)
+            foreach(var tvShowElement in tvShowContentList)
             {
-                element.Episodes = GetEpisodeListElements(parenTConst);
-                
+                tvShowElement.Episodes 
+                    = GetEpisodeListElements(parenTConst, tvShowElement.Season);   
             }
-
 
             if (tvShowContentList == null) return null;
 
@@ -108,34 +107,41 @@ namespace DataLayer
 
 
 
-        public IList<EpisodeListElement> GetEpisodeListElements(string parenTConst)
+        public IList<EpisodeListElement> GetEpisodeListElements(string parenTConst, int? seasonNum)
+        {
+            using var db = new PortfolioDBContext();            
+            
+            var episodes = db.TitleEpisodes
+                .Where(x => x.ParentTConst == parenTConst)
+                .Where(x => x.SeasonNumber == seasonNum)
+                .OrderBy(x => x.EpisodeNumber)
+                .Select(x => new EpisodeListElement
+                {
+                    TConst = x.TConst,
+                    Episode = x.EpisodeNumber
+                })
+                .ToList();
+
+            foreach (var episode in episodes)
+            {
+                episode.Name = getEpisodeName(episode.TConst);
+            }
+
+            return episodes;
+        }
+
+
+        public string getEpisodeName(string TConst)
         {
             using var db = new PortfolioDBContext();
 
-            var episodes = db.TitleEpisodes
-              .Where(x => x.ParentTConst == parenTConst)
-              .OrderBy(x => x.EpisodeNumber)
-              .Select(x => new EpisodeListElement
-              {
-                  TConst = x.TConst,
-                  Episode = x.EpisodeNumber
-              })
-              .ToList();
+            var name = db.TitleBasics
+                .Where(x => x.TConst == TConst)
+                .Select(x => x.PrimaryTitle).FirstOrDefault();
 
+            if (name == null) return null;
 
-
-            //foreach (var episode in episodes)
-            //{
-            //    var epNames = db.TitleBasics.Select(x = episod)
-
-
-            //   .Where(x => x.TConst = episode.TConst);
-
-
-            //}
-
-
-            return episodes;
+            return name;
         }
 
 
