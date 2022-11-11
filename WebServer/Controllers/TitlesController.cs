@@ -76,9 +76,9 @@ namespace WebServer.Controllers
         }
 
         [HttpGet("tvshows/{id}", Name = nameof(GetTvShowsById))]
-        public IActionResult GetTvShowsById(string tConst)
+        public IActionResult GetTvShowsById(string id)
         {
-            var tvShow = GetTvShowsById(tConst);
+            var tvShow = GetTvShowsById(id);
 
             if (tvShow == null)
             {
@@ -89,6 +89,8 @@ namespace WebServer.Controllers
 
             return Ok(tvShowModelElement);
         }
+
+        
 
         //tt9529308
 

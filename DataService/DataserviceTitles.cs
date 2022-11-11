@@ -84,8 +84,9 @@ namespace DataLayer
 
             using var db = new PortfolioDBContext();
 
+            //var tConst = TConst?.RemoveSpaces();
+
             var tvShow = db.TitleBasics
-                .Where(x => x.TConst == TConst)
                 .Select(x => new Titles
                 {
                     TConst = x.TConst,
@@ -95,14 +96,14 @@ namespace DataLayer
                     Rating = x.TitleRating.AverageRating,
                     IsTvShow = x.IsTvShow
                 })
-                .FirstOrDefault();
+                .FirstOrDefault(x => x.TConst.StartsWith(TConst));
             if (tvShow == null) return null;
-            
-            tvShow.TvShowContentList = GetTvShowListElements(tvShow.TConst);
-            var inputTConst = tvShow?.TConst?.RemoveSpaces();
-            tvShow.TConst = inputTConst;
-            tvShow.DirectorList = GetDirectorsForSpecificTitle(inputTConst);
-            
+
+            //tvShow.TvShowContentList = GetTvShowListElements(tvShow.TConst);
+            //var inputTConst = tvShow?.TConst?.RemoveSpaces();
+            //tvShow.TConst = inputTConst;
+            //tvShow.DirectorList = GetDirectorsForSpecificTitle(tConst);
+
             return tvShow;
         }
 
