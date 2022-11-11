@@ -75,6 +75,22 @@ namespace WebServer.Controllers
             return tvShowsModel;
         }
 
+        [HttpGet("tvshows/{id}", Name = nameof(GetTvShowsById))]
+        public IActionResult GetTvShowsById(string tConst)
+        {
+            var tvShow = GetTvShowsById(tConst);
+
+            if (tvShow == null)
+            {
+                return NotFound();
+            }
+
+            var tvShowModelElement = _mapper.Map<TvShowsModel>(tvShow);
+
+            return Ok(tvShowModelElement);
+        }
+
+        //tt9529308
 
 
 

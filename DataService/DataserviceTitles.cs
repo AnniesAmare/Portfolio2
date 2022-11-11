@@ -79,7 +79,34 @@ namespace DataLayer
             return tvShows;
         }
 
-        
+        public Titles GetTvShowById(string TConst)
+        {
+
+            using var db = new PortfolioDBContext();
+
+            var tvShow = db.TitleBasics
+                .Where(x => x.TConst == TConst)
+                .Select(x => new Titles
+                {
+                    TConst = x.TConst,
+                    Type = x.TitleType,
+                    Name = x.PrimaryTitle,
+                    AiringDate = x.StartYear,
+                    Rating = x.TitleRating.AverageRating,
+                    IsTvShow = x.IsTvShow
+                })
+                .FirstOrDefault();
+            if (tvShow == null) return null;
+            
+            tvShow.TvShowContentList = GetTvShowListElements(tvShow.TConst);
+            var inputTConst = tvShow?.TConst?.RemoveSpaces();
+            tvShow.TConst = inputTConst;
+            tvShow.DirectorList = GetDirectorsForSpecificTitle(inputTConst);
+            
+            return tvShow;
+        }
+
+
         public IList<TvShowListElement> GetTvShowListElements(string parenTConst) {
             using var db = new PortfolioDBContext();
 
