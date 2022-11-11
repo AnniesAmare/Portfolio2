@@ -78,7 +78,7 @@ namespace WebServer.Controllers
         [HttpGet("tvshows/{id}", Name = nameof(GetTvShowsById))]
         public IActionResult GetTvShowsById(string id)
         {
-            var tvShow = GetTvShowsById(id);
+            var tvShow = _dataServiceTitles.GetTvShowsById(id);
 
             if (tvShow == null)
             {
@@ -92,7 +92,6 @@ namespace WebServer.Controllers
 
         
 
-        //tt9529308
 
 
 

@@ -68,23 +68,18 @@ namespace DataLayer
 
 
             foreach (var tvShow in tvShows)
-            {
-                tvShow.TvShowContentList = GetTvShowListElements(tvShow.TConst);
-                
+            {               
                 var inputTConst = tvShow?.TConst?.RemoveSpaces();
-                tvShow.TConst = inputTConst;
-
+                tvShow.TvShowContentList = GetTvShowListElements(inputTConst);
                 tvShow.DirectorList = GetDirectorsForSpecificTitle(inputTConst);  
             }
             return tvShows;
         }
 
-        public Titles GetTvShowById(string TConst)
+        public Titles GetTvShowsById(string TConst)
         {
 
             using var db = new PortfolioDBContext();
-
-            //var tConst = TConst?.RemoveSpaces();
 
             var tvShow = db.TitleBasics
                 .Select(x => new Titles
@@ -96,13 +91,12 @@ namespace DataLayer
                     Rating = x.TitleRating.AverageRating,
                     IsTvShow = x.IsTvShow
                 })
-                .FirstOrDefault(x => x.TConst.StartsWith(TConst));
+                .FirstOrDefault(x => x.TConst == TConst);
             if (tvShow == null) return null;
 
-            //tvShow.TvShowContentList = GetTvShowListElements(tvShow.TConst);
-            //var inputTConst = tvShow?.TConst?.RemoveSpaces();
-            //tvShow.TConst = inputTConst;
-            //tvShow.DirectorList = GetDirectorsForSpecificTitle(tConst);
+            var inputTConst = tvShow?.TConst?.RemoveSpaces();
+            tvShow.DirectorList = GetDirectorsForSpecificTitle(inputTConst);
+            tvShow.TvShowContentList = GetTvShowListElements(inputTConst);
 
             return tvShow;
         }
@@ -110,8 +104,6 @@ namespace DataLayer
 
         public IList<TvShowListElement> GetTvShowListElements(string parenTConst) {
             using var db = new PortfolioDBContext();
-
-            //var seasonList = new List<TvShowListElement>();
 
             var tvShowContentList = db.TitleEpisodes
                 .Where(x => x.ParentTConst == parenTConst)
@@ -152,7 +144,8 @@ namespace DataLayer
 
             foreach (var episode in episodes)
             {
-                episode.Name = getEpisodeName(episode.TConst);
+                var inputTConst = episode.TConst?.RemoveSpaces();
+                episode.Name = getEpisodeName(inputTConst);
             }
 
             return episodes;

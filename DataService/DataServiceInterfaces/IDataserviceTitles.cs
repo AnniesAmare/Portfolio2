@@ -12,6 +12,6 @@ namespace DataLayer
     {
         IList<Titles> GetMovies();
         IList<Titles> GetTvShows();
-        Titles GetTvShowById(string TConst);
+        Titles GetTvShowsById(string TConst);
     }
 }
