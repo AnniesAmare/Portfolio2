@@ -51,20 +51,24 @@ namespace DataLayer
 
             if (title != null)
             {
-                var tConst = title.TConst;
+                var tConst = title.TConst.RemoveSpaces();
                 if (!BookmarkExists(username, tConst))
                 {
-                    CreateTitleBookmark(username, tConst, name);
+                    var bookmark = CreateTitleBookmark(username, tConst, name);
+                    db.BookmarksTitles.Add(bookmark);
+                    db.SaveChanges();
                     return true;
                 }
             }
 
             if (person != null)
             {
-                var nConst = person.NConst;
+                var nConst = person.NConst.RemoveSpaces();
                 if (!BookmarkExists(username, nConst))
                 {
-                    CreatePersonBookmark(username, nConst, name);
+                    var bookmark = CreatePersonBookmark(username, nConst, name);
+                    db.BookmarksNames.Add(bookmark);
+                    db.SaveChanges();
                     return true;
                 }
             }
@@ -106,7 +110,35 @@ namespace DataLayer
 
         public BookmarkElement nameBookmark(string username, string id, string annotation)
         {
-            throw new NotImplementedException();
+            using var db = new PortfolioDBContext();
+            var title = db.TitleBasics.Find(id);
+            var person = db.NameBasics.Find(id);
+
+            if (title != null)
+            {
+                var tConst = title.TConst;
+                if (BookmarkExists(username, tConst))
+                {
+                    var bookmark = db.BookmarksTitles.Find(username, tConst);
+                    bookmark.Annotation = annotation;
+                    db.SaveChanges();
+                    return ObjectMapper.Mapper.Map<BookmarkElement>(bookmark); ;
+                }
+            }
+
+            if (person != null)
+            {
+                var nConst = person.NConst.RemoveSpaces();
+                if (BookmarkExists(username, nConst))
+                {
+                    var bookmark = db.BookmarksNames.Find(username, nConst);
+                    bookmark.Annotation = annotation;
+                    db.SaveChanges();
+                    return ObjectMapper.Mapper.Map<BookmarkElement>(bookmark);
+                }
+            }
+
+            return null;
         }
 
         //helper functions
@@ -119,32 +151,26 @@ namespace DataLayer
             return true;
         }
 
-        private BookmarkElement CreateTitleBookmark(string username, string tConst, string? name)
+        private BookmarkTitle CreateTitleBookmark(string username, string tConst, string? name)
         {
-            using var db = new PortfolioDBContext();
             var bookmark = new BookmarkTitle
             {
                 Username = username,
                 TConst = tConst.RemoveSpaces(),
                 Annotation = name
             };
-            db.BookmarksTitles.Add(bookmark);
-            db.SaveChanges();
-            return ObjectMapper.Mapper.Map<BookmarkElement>(bookmark);
+            return bookmark;
         }
 
-        private BookmarkElement CreatePersonBookmark(string username, string nConst, string? name)
+        private BookmarkName CreatePersonBookmark(string username, string nConst, string? name)
         {
-            using var db = new PortfolioDBContext();
             var bookmark = new BookmarkName
             {
                 Username = username,
                 NConst = nConst.RemoveSpaces(),
                 Annotation = name
             };
-            db.BookmarksNames.Add(bookmark);
-            db.SaveChanges();
-            return ObjectMapper.Mapper.Map<BookmarkElement>(bookmark);
+            return bookmark;
         }
 
     }

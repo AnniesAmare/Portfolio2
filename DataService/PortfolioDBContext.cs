@@ -286,7 +286,7 @@ namespace DataLayer
 
             //BOOKMARK NAME
             modelBuilder.Entity<BookmarkName>().ToTable("bookmark_name");
-            modelBuilder.Entity<BookmarkName>().HasKey(x => new { x.Username }).HasName("bookmark_name_pkey");
+            modelBuilder.Entity<BookmarkName>().HasKey(x => new { x.Username, x.NConst }).HasName("bookmark_name_pkey");
             modelBuilder.Entity<BookmarkName>().Property(x => x.Username).HasColumnName("username");
             modelBuilder.Entity<BookmarkName>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<BookmarkName>().Property(x => x.Annotation).HasColumnName("annotation");
@@ -301,7 +301,7 @@ namespace DataLayer
 
             //BOOKMARK TITLE
             modelBuilder.Entity<BookmarkTitle>().ToTable("bookmark_title");
-            modelBuilder.Entity<BookmarkTitle>().HasKey(x => new { x.Username }).HasName("bookmark_title_pkey");
+            modelBuilder.Entity<BookmarkTitle>().HasKey(x => new { x.Username, x.TConst }).HasName("bookmark_title_pkey");
             modelBuilder.Entity<BookmarkTitle>().Property(x => x.Username).HasColumnName("username");
             modelBuilder.Entity<BookmarkTitle>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<BookmarkTitle>().Property(x => x.Annotation).HasColumnName("annotation");

@@ -82,15 +82,15 @@ namespace WebServer.Controllers
             }
         }
 
-        [HttpPut("rename/{id}/{name?}", Name = nameof(RenameBookmark))]
+        [HttpPut("rename/{id}/{name}", Name = nameof(RenameBookmark))]
         [Authorize]
-        public IActionResult RenameBookmark(string id, string? name)
+        public IActionResult RenameBookmark(string id, string name)
         {
             try
             {
                 var username = GetUsername();
-                var created = _dataServiceBookmarks.createBookmark(username, id, name);
-                if (!created) return BadRequest();
+                var bookmark = _dataServiceBookmarks.nameBookmark(username, id, name);
+                if (bookmark == null) return NotFound();
                 return Ok();
             }
             catch
