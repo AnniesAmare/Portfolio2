@@ -30,7 +30,8 @@ namespace DataLayer
                 })
                 .Where(x => x.isActor == true)
                 .OrderBy(x => x.Popularity)
-                .Take(15).ToList();
+                .Take(15)
+                .ToList();
             if (actors == null) return null;
 
             foreach (var actor in actors) {
@@ -44,10 +45,10 @@ namespace DataLayer
                 actor.KnownForMovies = GetKnownForMovies(inputTConst);
                 actor.KnownForTvShows = GetKnownForTvShows(inputTConst);
 
-                //replace empty values with meta message
+                //replace empty/null values
                 if (inputBirthYear == "") { actor.BirthYear = "No registered birth date"; }
                 if (inputDeathYear == "") { actor.DeathYear = "No registered death date"; }
-         
+
             }
 
 
