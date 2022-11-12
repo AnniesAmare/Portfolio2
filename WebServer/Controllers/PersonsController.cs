@@ -42,7 +42,7 @@ namespace WebServer.Controllers
 
             foreach (var person in persons)
             {
-                var model = _mapper.Map<PersonsModel>(persons);
+                var model = _mapper.Map<PersonsModel>(person);
 
                 //make moviesListWithUrl
                 foreach (var movie in person.KnownForMovies)
@@ -50,11 +50,14 @@ namespace WebServer.Controllers
                     var newTitle = new TitleListElementModel
                     {
                         Title = movie.Title,
-                        Url = _generator.GetUriByName(HttpContext, 
-                        nameof(SpecificTitleController.GetTitleById), 
+                        Url = _generator.GetUriByName(HttpContext,
+                        nameof(SpecificTitleController.GetTitleById),
                         new { id = movie.TConst })
 
                     };
+                    //if (newTitle != null) { knownForMoviesList.Add(newTitle); }
+                    //else { knownForTvShowsList.Add(null); }
+
                     knownForMoviesList.Add(newTitle);
                 }
 

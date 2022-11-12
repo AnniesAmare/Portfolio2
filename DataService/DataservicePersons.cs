@@ -46,30 +46,6 @@ namespace DataLayer
         }
 
         //Helper functions 
-        public Boolean isActor(string NConst)
-        {
-            using var db = new PortfolioDBContext();
-
-            var professions = db.Professions
-                .Where(x => x.NConst == NConst)
-                .Select(x => new Profession
-                {
-                    NConst = x.NConst,
-                    TProfession = x.TProfession
-                });
-
-            foreach (var profession in professions)
-            {
-                if(profession.TProfession == "actor" || profession.TProfession == "actress")
-                {
-                    return true;
-                }
-            }
-                
-            return false;
-        }
-
-
         public IList<TitleListElement> GetKnownForMovies(string nConst)
         {
             DataserviceSpecificPerson anInstance = new DataserviceSpecificPerson();
