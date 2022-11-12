@@ -25,10 +25,13 @@ namespace DataLayer
                     BirthYear = x.BirthYear,
                     DeathYear = x.DeathYear,
                     Popularity = x.AVGNameRating,
-                    isActor = isActor(x.NConst)
+                    isActor = isActor(x.NConst),
+                    KnownForMovies = GetKnownForMovies(x.NConst),
+                    KnownForTvShows = GetKnownForTvShows(x.NConst)
 
                 })
                 .Where(x => x.isActor == true)
+                .OrderBy(x => x.Popularity)
                 .Take(10).ToList();
             if (actors == null) return null;
 
@@ -61,9 +64,38 @@ namespace DataLayer
         }
 
 
-        //public List<TitleListElement> GetKnownForMovies()
-        //{
+        public IList<TitleListElement> GetKnownForMovies(string nConst)
+        {
+            DataserviceSpecificPerson anInstance = new DataserviceSpecificPerson();
+            var knownForTitles = anInstance.GetKnownForListForSpecificPerson(nConst);
+            IList<TitleListElement> knownForMovies = new List<TitleListElement>();
+            foreach (var knownForTitle in knownForTitles)
+            {
+                if (knownForTitle.IsMovie == true)
+                {
+                    knownForMovies.Add(knownForTitle);
+                }
+            }
 
-        //}
+            return knownForMovies;
+
+        }
+
+        public IList<TitleListElement> GetKnownForTvShows(string nConst)
+        {
+            DataserviceSpecificPerson anInstance = new DataserviceSpecificPerson();
+            var knownForTitles = anInstance.GetKnownForListForSpecificPerson(nConst);
+            IList<TitleListElement> knownForTvShows = new List<TitleListElement>();
+            foreach (var knownForTitle in knownForTitles)
+            {
+                if (knownForTitle.IsTvShow == true)
+                {
+                    knownForTvShows.Add(knownForTitle);
+                }
+            }
+
+            return knownForTvShows;
+
+        }
     }
 }

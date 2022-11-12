@@ -17,8 +17,8 @@ namespace DataLayer.DataTransferModel
         //public string? Profession { get; set; }
         public Boolean isActor { get; set; }
 
-        public List<TitleListElement>? KnowsForMovies { get; set; }
-        public List<TitleListElement>? KnowsForTvShows { get; set; }
+        public IList<TitleListElement>? KnownForMovies { get; set; }
+        public IList<TitleListElement>? KnownForTvShows { get; set; }
 
     }
 }
