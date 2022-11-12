@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLayer.DataTransferModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,7 @@ namespace DataLayer
     public interface IDataservicePersons
     {
 
-        //public IList<> GetActors()
-        //{
-
-        //}
+        public IList<Persons> GetActors();
+        
     }
 }
