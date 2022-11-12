@@ -148,6 +148,7 @@ namespace DataLayer
             modelBuilder.Entity<NameBasic>().Property(x => x.BirthYear).HasColumnName("birthyear");
             modelBuilder.Entity<NameBasic>().Property(x => x.DeathYear).HasColumnName("deathyear");
             modelBuilder.Entity<NameBasic>().Property(x => x.AVGNameRating).HasColumnName("avg_name_rating");
+            modelBuilder.Entity<NameBasic>().Property(x => x.IsActor).HasColumnName("isactor");
 
             //PROFESSIONS
             modelBuilder.Entity<Profession>().ToTable("profession");

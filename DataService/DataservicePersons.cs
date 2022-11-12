@@ -25,15 +25,21 @@ namespace DataLayer
                     BirthYear = x.BirthYear,
                     DeathYear = x.DeathYear,
                     Popularity = x.AVGNameRating,
-                    isActor = isActor(x.NConst),
-                    KnownForMovies = GetKnownForMovies(x.NConst),
-                    KnownForTvShows = GetKnownForTvShows(x.NConst)
-
+                    isActor = x.IsActor,
                 })
                 .Where(x => x.isActor == true)
                 .OrderBy(x => x.Popularity)
                 .Take(10).ToList();
             if (actors == null) return null;
+
+            foreach (var actor in actors) {
+                var inputTConst = actor.NConst?.RemoveSpaces();
+                actor.NConst = inputTConst;
+
+                actor.KnownForMovies = GetKnownForMovies(inputTConst);
+                actor.KnownForTvShows = GetKnownForTvShows(inputTConst);
+            }
+
 
             return actors;
 

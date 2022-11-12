@@ -13,6 +13,7 @@ namespace DataLayer.DatabaseModel
         public string? BirthYear { get; set; }
         public string? DeathYear { get; set; }
         public float? AVGNameRating { get; set; }
+        public bool IsActor { get; set; }
         public IList<KnownFor>? KnownFor { get; set; }
         public IList<TitlePrincipal>? TitlePrincipal { get; set; }
         public IList<Profession>? Profession { get; set; }
