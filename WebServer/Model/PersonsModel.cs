@@ -4,7 +4,6 @@ namespace WebServer.Model
 {
     public class PersonsModel
     {
-        public string? NConst { get; set; }
         public string? Name { get; set; }
         public string? BirthYear { get; set; }
         public string? DeathYear { get; set; }

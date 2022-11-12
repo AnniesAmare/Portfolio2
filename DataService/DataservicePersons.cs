@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace DataLayer
                 })
                 .Where(x => x.isActor == true)
                 .OrderBy(x => x.Popularity)
-                .Take(10).ToList();
+                .Take(15).ToList();
             if (actors == null) return null;
 
             foreach (var actor in actors) {
@@ -68,6 +69,8 @@ namespace DataLayer
                 }
             }
 
+            if (knownForMovies == null) return null;
+
             return knownForMovies;
 
         }
@@ -84,6 +87,8 @@ namespace DataLayer
                     knownForTvShows.Add(knownForTitle);
                 }
             }
+
+            if (knownForTvShows == null) return null;
 
             return knownForTvShows;
 
