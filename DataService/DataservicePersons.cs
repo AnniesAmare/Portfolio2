@@ -33,11 +33,20 @@ namespace DataLayer
             if (actors == null) return null;
 
             foreach (var actor in actors) {
+                //remove spaces
                 var inputTConst = actor.NConst?.RemoveSpaces();
-                actor.NConst = inputTConst;
+                var inputBirthYear = actor.BirthYear?.RemoveSpaces();
+                var inputDeathYear = actor.BirthYear?.RemoveSpaces();
 
+                //get knownforLists
+                actor.NConst = inputTConst;
                 actor.KnownForMovies = GetKnownForMovies(inputTConst);
                 actor.KnownForTvShows = GetKnownForTvShows(inputTConst);
+
+                //replace empty values with meta message
+                if (inputBirthYear == "") { actor.BirthYear = "No registered birth date"; }
+                if (inputDeathYear == "") { actor.DeathYear = "No registered death date"; }
+         
             }
 
 

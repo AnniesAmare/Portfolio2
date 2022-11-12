@@ -55,10 +55,7 @@ namespace WebServer.Controllers
                         new { id = movie.TConst })
 
                     };
-                    //if (newTitle != null) { knownForMoviesList.Add(newTitle); }
-                    //else { knownForTvShowsList.Add(null); }
-
-                    knownForMoviesList.Add(newTitle);
+                   knownForMoviesList.Add(newTitle);
                 }
 
                 //make tvShowListWithUrl
