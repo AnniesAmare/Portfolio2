@@ -23,4 +23,3 @@ namespace DataLayer.DataTransferModel
 }
 
 
-//distinct() or take(25) -query limitation

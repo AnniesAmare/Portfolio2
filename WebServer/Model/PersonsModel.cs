@@ -10,7 +10,7 @@ namespace WebServer.Model
         public string? DeathYear { get; set; }
         public float? Popularity { get; set; }
 
-        public IList<Titles>? KnowsForMovies { get; set; }
-        public IList<Titles>? KnowsForTvShows { get; set; }
+        public IList<TitleListElementModel>? KnownForMovies { get; set; }
+        public IList<TitleListElementModel>? KnownForTvShows { get; set; }
     }
 }

@@ -14,7 +14,6 @@ namespace DataLayer.DataTransferModel
         public string? BirthYear { get; set; }
         public string? DeathYear { get; set; }
         public float? Popularity { get; set; }
-        //public string? Profession { get; set; }
         public Boolean isActor { get; set; }
 
         public IList<TitleListElement>? KnownForMovies { get; set; }
