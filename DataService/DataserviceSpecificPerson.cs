@@ -64,7 +64,7 @@ namespace DataLayer
             return professions;
         }
 
-        private IList<TitleListElement> GetKnownForListForSpecificPerson(string nConst)
+        public IList<TitleListElement> GetKnownForListForSpecificPerson(string nConst)
         {
             using var db = new PortfolioDBContext();
             var knownForList = db.KnownFors
@@ -73,7 +73,9 @@ namespace DataLayer
                 .Select(x => new TitleListElement
                 {
                     TConst = x.TitleBasic.TConst.RemoveSpaces(),
-                    Title = x.TitleBasic.PrimaryTitle
+                    Title = x.TitleBasic.PrimaryTitle,
+                    IsTvShow = x.TitleBasic.IsTvShow,
+                    IsMovie = x.TitleBasic.IsMovie
                 })
                 .Distinct().ToList();
             return knownForList;

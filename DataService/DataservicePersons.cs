@@ -36,6 +36,7 @@ namespace DataLayer
 
         }
 
+        //Helper functions 
         public bool isActor(string NConst)
         {
             using var db = new PortfolioDBContext();
@@ -56,8 +57,13 @@ namespace DataLayer
                 }
             }
                 
-
             return false;
         }
+
+
+        //public List<TitleListElement> GetKnownForMovies()
+        //{
+
+        //}
     }
 }
