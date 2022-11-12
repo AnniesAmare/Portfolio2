@@ -40,7 +40,7 @@ namespace DataLayer
         }
 
         //Helper functions 
-        public bool isActor(string NConst)
+        public Boolean isActor(string NConst)
         {
             using var db = new PortfolioDBContext();
 

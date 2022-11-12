@@ -1,0 +1,12 @@
+﻿--isActor boolean
+ALTER TABLE name_basic
+ADD COLUMN isActor BOOLEAN DEFAULT FALSE;
+
+UPDATE name_basic as nb
+SET isActor = True
+FROM
+(
+	SELECT nconst, profession from profession
+	WHERE profession like 'actor' OR profession like 'actress'
+) as actor
+WHERE nb.nconst = actor.nconst;
