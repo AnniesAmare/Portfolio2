@@ -16,6 +16,8 @@ namespace WebServer.Controllers
         private readonly LinkGenerator _generator;
         private readonly IMapper _mapper;
 
+        private const int MaxPageSize = 30;
+
         public TitlesController(IDataserviceTitles dataServiceMovies, LinkGenerator generator, IMapper mapper)
         {
             _dataServiceTitles = dataServiceMovies;
@@ -24,16 +26,19 @@ namespace WebServer.Controllers
         }
 
         //MOVIES 
-        [HttpGet("movies")]
-        public IActionResult GetMovie()
+        [HttpGet("movies", Name = nameof(GetMovies))]
+        public IActionResult GetMovies(int page = 0, int pageSize = 20)
         {
-            var movies = _dataServiceTitles.GetMovies();
+            var movies = _dataServiceTitles.GetMovies(page, pageSize);
             if (movies == null)
             {
                 return NotFound();
             }
             var moviesModel = CreateMoviesModel(movies);
-            return Ok(moviesModel);
+
+            var total = _dataServiceTitles.GetNumberOfMovies();
+
+            return Ok(PagingForMovies(page, pageSize, total, moviesModel));
         }
 
         public IList<MoviesModel> CreateMoviesModel(IList<Titles> movies)
@@ -75,10 +80,10 @@ namespace WebServer.Controllers
             return tvShowsModel;
         }
 
-        [HttpGet("tvshows/{id}", Name = nameof(GetTvShowsById))]
-        public IActionResult GetTvShowsById(string id)
+        [HttpGet("tvshows/{id}", Name = nameof(GetTvShowById))]
+        public IActionResult GetTvShowById(string id)
         {
-            var tvShow = _dataServiceTitles.GetTvShowsById(id);
+            var tvShow = _dataServiceTitles.GetTvShowById(id);
 
             if (tvShow == null)
             {
@@ -90,8 +95,48 @@ namespace WebServer.Controllers
             return Ok(tvShowModelElement);
         }
 
-        
 
+        //PAGING 
+
+        private string? CreateMoviesLink(int page, int pageSize)
+        {
+            return _generator.GetUriByName(
+                HttpContext,
+                nameof(GetMovies), new { page, pageSize });
+        }
+
+        private object PagingForMovies<T>(int page, int pageSize, int total, IEnumerable<T> items)
+        {
+            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
+
+            var pages = (int)Math.Ceiling((double)total / (double)pageSize);
+
+            var first = total > 0
+                ? CreateMoviesLink(0, pageSize)
+                : null;
+
+            var prev = page > 0
+                ? CreateMoviesLink(page - 1, pageSize)
+                : null;
+
+            var current = CreateMoviesLink(page, pageSize);
+
+            var next = page < pages - 1
+                ? CreateMoviesLink(page + 1, pageSize)
+                : null;
+
+            var result = new
+            {
+                first,
+                prev,
+                next,
+                current,
+                total,
+                pages,
+                items
+            };
+            return result;
+        }
 
 
 

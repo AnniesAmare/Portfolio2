@@ -33,7 +33,7 @@ namespace WebServer.Controllers
             }
             var ActorsModel = CreatePersonsModel(Actors);
 
-            var total = _dataServicePersons.GetNumberOfActors(page,pageSize);
+            var total = _dataServicePersons.GetNumberOfActors();
 
             return Ok(PagingForActors(page,pageSize,total,ActorsModel));
         }
@@ -100,14 +100,7 @@ namespace WebServer.Controllers
         {
             pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
 
-            //if (pageSize > MaxPageSize)
-            //{
-            //    pageSize = MaxPageSize;
-            //}
-
             var pages = (int)Math.Ceiling((double)total / (double)pageSize);
-
-            Console.WriteLine(pages + "loookie hereeee");
                       
             var first = total > 0
                 ? CreateActorsLink(0, pageSize)

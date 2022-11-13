@@ -58,7 +58,7 @@ namespace DataLayer
         }
 
         //Helper functions 
-        public int GetNumberOfActors(int page, int pageSize)
+        public int GetNumberOfActors()
         {
             using var db = new PortfolioDBContext();
              

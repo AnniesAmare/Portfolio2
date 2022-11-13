@@ -13,7 +13,7 @@ namespace DataLayer
 {
     public class DataserviceTitles : IDataserviceTitles
     {
-        public IList<Titles> GetMovies() {
+        public IList<Titles> GetMovies(int page, int pageSize) {
             using var db = new PortfolioDBContext();
 
             var movies = db.TitleBasics
@@ -30,7 +30,9 @@ namespace DataLayer
 
                 })
                 .Where(x => x.IsMovie == true)
-                .Take(10).ToList();
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToList();
             if (movies == null) return null;
 
             
@@ -76,7 +78,7 @@ namespace DataLayer
             return tvShows;
         }
 
-        public Titles GetTvShowsById(string TConst)
+        public Titles GetTvShowById(string TConst)
         {
 
             using var db = new PortfolioDBContext();
@@ -101,7 +103,15 @@ namespace DataLayer
             return tvShow;
         }
 
+        //Helper functions
+        public int GetNumberOfMovies()
+        {
+            using var db = new PortfolioDBContext();
 
+            return db.TitleBasics
+                .Select(x => new Titles{ IsMovie = x.IsMovie })
+                .Where(x => x.IsMovie == true).Count();
+        }
         public IList<TvShowListElement> GetTvShowListElements(string parenTConst) {
             using var db = new PortfolioDBContext();
 

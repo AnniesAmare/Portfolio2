@@ -10,8 +10,9 @@ namespace DataLayer
 {
     public interface IDataserviceTitles
     {
-        IList<Titles> GetMovies();
+        IList<Titles> GetMovies(int page, int pageSize);
         IList<Titles> GetTvShows();
-        Titles GetTvShowsById(string TConst);
+        Titles GetTvShowById(string TConst);
+        public int GetNumberOfMovies();
     }
 }
