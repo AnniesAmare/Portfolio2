@@ -20,7 +20,6 @@ namespace DataLayer
                 .Select(x => new Titles
                 {
                     TConst = x.TConst,
-                    Type = x.TitleType,
                     Name = x.PrimaryTitle,
                     AiringDate = x.StartYear,
                     Rating = x.TitleRating.AverageRating,

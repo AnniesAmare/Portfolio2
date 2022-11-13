@@ -48,6 +48,10 @@ namespace WebServer.Controllers
             foreach (var movie in movies)
             {
                 var movieModelElement = _mapper.Map<MoviesModel>(movie);
+                movieModelElement.Url = _generator.GetUriByName(HttpContext,
+                        nameof(SpecificTitleController.GetTitleById),
+                        new { id = movie.TConst });
+
                 moviesModel.Add(movieModelElement);
             }
 
