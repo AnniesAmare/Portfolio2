@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataLayer.DatabaseModel;
 using DataLayer.DatabaseModel.MovieModel;
+using DataLayer.DatabaseModel.SearchModel;
 using Microsoft.Extensions.Logging;
 
 namespace DataLayer
@@ -56,6 +57,9 @@ namespace DataLayer
         public DbSet<BookmarkName>? BookmarksNames { get; set; }
         public DbSet<Review>? Reviews { get; set; }
 
+        /* SEARCH FRAMEWORK */
+        public DbSet<PersonSearch> PersonSearches { get; set; }
+        public DbSet<TitleSearch> TitleSearches { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -86,7 +90,7 @@ namespace DataLayer
             modelBuilder.Entity<TitleBasic>().Property(x => x.IsAdult).HasColumnName("isadult");
             modelBuilder.Entity<TitleBasic>().Property(x => x.StartYear).HasColumnName("startyear");
             modelBuilder.Entity<TitleBasic>().Property(x => x.EndYear).HasColumnName("endyear");
-            modelBuilder.Entity<TitleBasic>().Property(x => x.RuntimeMinutes   ).HasColumnName("runtimeminutes");
+            modelBuilder.Entity<TitleBasic>().Property(x => x.RuntimeMinutes).HasColumnName("runtimeminutes");
             modelBuilder.Entity<TitleBasic>().Property(x => x.IsTvShow).HasColumnName("istvshow");
             modelBuilder.Entity<TitleBasic>().Property(x => x.IsMovie).HasColumnName("ismovie");
             modelBuilder.Entity<TitleBasic>().Property(x => x.IsEpisode).HasColumnName("isepisode");
@@ -105,7 +109,7 @@ namespace DataLayer
             modelBuilder.Entity<TitleRating>()
               .HasOne(x => x.TitleBasic)
               .WithOne(x => x.TitleRating)
-              .HasForeignKey<TitleRating>(x =>  x.TConst);
+              .HasForeignKey<TitleRating>(x => x.TConst);
             modelBuilder.Entity<TitleRating>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitleRating>().Property(x => x.AverageRating).HasColumnName("averagerating");
             modelBuilder.Entity<TitleRating>().Property(x => x.NumVotes).HasColumnName("numvotes");
@@ -126,7 +130,7 @@ namespace DataLayer
             modelBuilder.Entity<OmdbData>()
               .HasOne(x => x.TitleBasic)
               .WithOne(x => x.OmdbData)
-              .HasForeignKey<OmdbData>(x => new { x.TConst});
+              .HasForeignKey<OmdbData>(x => new { x.TConst });
             modelBuilder.Entity<OmdbData>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<OmdbData>().Property(x => x.Poster).HasColumnName("poster");
             modelBuilder.Entity<OmdbData>().Property(x => x.Plot).HasColumnName("plot");
@@ -330,6 +334,18 @@ namespace DataLayer
                 .WithMany(x => x.Review)
                 .HasForeignKey(x => x.Username);
 
+
+            /* SEARCH FRAMEWORK */
+            //PERSON SEARCH
+            modelBuilder.Entity<PersonSearch>().HasNoKey();
+            modelBuilder.Entity<PersonSearch>().Property(x => x.NConst).HasColumnName("nconst");
+            modelBuilder.Entity<PersonSearch>().Property(x => x.PrimaryName).HasColumnName("primaryname");
+
+            //TITLE SEARCH
+            modelBuilder.Entity<TitleSearch>().HasNoKey();
+            modelBuilder.Entity<TitleSearch>().Property(x => x.TConst).HasColumnName("tconst");
+            modelBuilder.Entity<TitleSearch>().Property(x => x.Rank).HasColumnName("rank");
+            modelBuilder.Entity<TitleSearch>().Property(x => x.PrimaryTitle).HasColumnName("primarytitle");
         }
 
     }

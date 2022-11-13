@@ -13,6 +13,6 @@ namespace DataLayer.DatabaseModel
         public string? TConst { get; set; }
         public TitleBasic? TitleBasic { get; set; }
         public int Rating { get; set; }
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
     }
 }

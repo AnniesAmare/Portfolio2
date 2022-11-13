@@ -59,8 +59,35 @@ namespace Portfolio2.Tests
             Assert.Contains("Lost in Translation", specificPerson.KnownForList.First().Title);
         }
 
+        [Fact]
+        public void GetSearchActorsReturnsActorListAndAddsSearchToUserSearchTable()
+        {
+            var service = new DataserviceSearches();
+            var actorSearch = service.GetSearchResultActors("Tester4000", "scarlett");
+            Assert.Contains("Scarlett", actorSearch.First().PrimaryName);
+            Assert.Equal(13, actorSearch.Count);
 
+            using var db = new PortfolioDBContext();
+            Assert.NotNull(db.UserSearches.Where(x => x.Content == "scarlett").Where(x => x.Username == "Tester4000").FirstOrDefault());
 
+            service.ClearSearchHistory("Tester4000");
+        }
+
+        [Fact]
+        public void GetSearchTitlesReturnsTitlesListAndAddsSearchToUserSearchTable()
+        {
+            var service = new DataserviceSearches();
+            var search = "twilight, apple";
+            var titleSearch = service.GetSearchResultTitles("Tester4000", search);
+            Assert.NotNull(titleSearch);
+            Assert.Equal(124, titleSearch.Count);
+
+            using var db = new PortfolioDBContext();
+            Assert.NotNull(db.UserSearches.Where(x => x.Content == search).Where(x => x.Username == "Tester4000").FirstOrDefault());
+
+            service.ClearSearchHistory("Tester4000");
+
+        }
 
 
     }

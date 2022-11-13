@@ -132,7 +132,6 @@ namespace DataLayer
                 if (BookmarkExists(username, tConst))
                 {
                     var bookmark = db.BookmarksTitles.Where(x => x.Username == username && x.TConst == tConst).FirstOrDefault();
-                    Console.WriteLine(bookmark.Username, bookmark.TConst);
                     db.BookmarksTitles.Remove(bookmark);
                     db.SaveChanges();
                     return true;
