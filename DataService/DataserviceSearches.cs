@@ -65,6 +65,7 @@ namespace DataLayer
         {
             var allTitles = GetSearchResultTitles(username, search);
             var pagedTitles = allTitles
+                .OrderByDescending(x => x.Rank)
                 .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -92,6 +93,7 @@ namespace DataLayer
         {
             var allTitles = GetSearchResultGenres(username, search);
             var pagedTitles = allTitles
+                .OrderByDescending(x => x.Rank)
                 .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToList();
