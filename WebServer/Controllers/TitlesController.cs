@@ -3,6 +3,7 @@ using DataLayer;
 using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Numerics;
 using System.Security.Claims;
 using WebServer.Model;
 
@@ -59,16 +60,19 @@ namespace WebServer.Controllers
         }
 
         //TVSHOWS
-        [HttpGet("tvshows")]
-        public IActionResult GetTvShows()
+        [HttpGet("tvshows", Name = nameof(GetTvShows))]
+        public IActionResult GetTvShows(int page = 0, int pageSize = 20)
         {
-            var tvShows = _dataServiceTitles.GetTvShows();
+            var tvShows = _dataServiceTitles.GetTvShows(page, pageSize);
             if (tvShows == null)
             {
                 return NotFound();
             }
             var tvShowsModel = CreateTvShowsModel(tvShows);
-            return Ok(tvShowsModel);
+
+            var total = _dataServiceTitles.GetNumberOfTvShows();
+
+            return Ok(PagingForTvShows(page, pageSize, total, tvShowsModel));
         }
 
         public IList<TvShowsModel> CreateTvShowsModel(IList<Titles> tvShows)
@@ -78,6 +82,11 @@ namespace WebServer.Controllers
             foreach (var tvShow in tvShows)
             {
                 var tvShowModelElement = _mapper.Map<TvShowsModel>(tvShow);
+
+                tvShowModelElement.Url = _generator.GetUriByName(HttpContext,
+                        nameof(TitlesController.GetTvShowById),
+                        new { id = tvShow.TConst });
+
                 tvShowsModel.Add(tvShowModelElement);
             }
 
@@ -102,6 +111,8 @@ namespace WebServer.Controllers
 
         //PAGING 
 
+
+        //movie paging
         private string? CreateMoviesLink(int page, int pageSize)
         {
             return _generator.GetUriByName(
@@ -142,7 +153,46 @@ namespace WebServer.Controllers
             return result;
         }
 
+        //tvshow paging
+        private string? CreateTvShowsLink(int page, int pageSize)
+        {
+            return _generator.GetUriByName(
+                HttpContext,
+                nameof(GetTvShows), new { page, pageSize });
+        }
 
+        private object PagingForTvShows<T>(int page, int pageSize, int total, IEnumerable<T> items)
+        {
+            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
+
+            var pages = (int)Math.Ceiling((double)total / (double)pageSize);
+
+            var first = total > 0
+                ? CreateTvShowsLink(0, pageSize)
+                : null;
+
+            var prev = page > 0
+                ? CreateTvShowsLink(page - 1, pageSize)
+                : null;
+
+            var current = CreateTvShowsLink(page, pageSize);
+
+            var next = page < pages - 1
+                ? CreateTvShowsLink(page + 1, pageSize)
+                : null;
+
+            var result = new
+            {
+                first,
+                prev,
+                next,
+                current,
+                total,
+                pages,
+                items
+            };
+            return result;
+        }
 
 
     }

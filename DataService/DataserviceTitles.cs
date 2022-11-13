@@ -46,7 +46,7 @@ namespace DataLayer
             return movies;
         }
 
-        public IList<Titles> GetTvShows() {
+        public IList<Titles> GetTvShows(int page, int pageSize) {
 
             using var db = new PortfolioDBContext();
 
@@ -54,7 +54,6 @@ namespace DataLayer
                 .Select(x => new Titles
                 {
                     TConst = x.TConst,
-                    Type = x.TitleType,
                     Name = x.PrimaryTitle,
                     AiringDate = x.StartYear,
                     Rating = x.TitleRating.AverageRating,
@@ -64,13 +63,16 @@ namespace DataLayer
 
                 })
                 .Where(x => x.IsTvShow == true)
-                .Take(20).ToList();
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToList();
             if (tvShows == null) return null;
 
 
             foreach (var tvShow in tvShows)
             {               
                 var inputTConst = tvShow?.TConst?.RemoveSpaces();
+                tvShow.TConst = inputTConst;
                 tvShow.TvShowContentList = GetTvShowListElements(inputTConst);
                 tvShow.DirectorList = GetDirectorsForSpecificTitle(inputTConst);  
             }
@@ -96,6 +98,7 @@ namespace DataLayer
             if (tvShow == null) return null;
 
             var inputTConst = tvShow?.TConst?.RemoveSpaces();
+            tvShow.TConst = inputTConst;
             tvShow.DirectorList = GetDirectorsForSpecificTitle(inputTConst);
             tvShow.TvShowContentList = GetTvShowListElements(inputTConst);
 
@@ -110,6 +113,15 @@ namespace DataLayer
             return db.TitleBasics
                 .Select(x => new Titles{ IsMovie = x.IsMovie })
                 .Where(x => x.IsMovie == true).Count();
+        }
+
+        public int GetNumberOfTvShows()
+        {
+            using var db = new PortfolioDBContext();
+
+            return db.TitleBasics
+                .Select(x => new Titles { IsTvShow = x.IsTvShow })
+                .Where(x => x.IsTvShow == true).Count();
         }
         public IList<TvShowListElement> GetTvShowListElements(string parenTConst) {
             using var db = new PortfolioDBContext();
