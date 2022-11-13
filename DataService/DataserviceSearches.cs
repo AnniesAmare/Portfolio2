@@ -34,6 +34,16 @@ namespace DataLayer
             }
         }
 
+        public (IList<PersonSearch>? searchResult, int total) GetSearchResultActors(string username, string search, int page, int pageSize)
+        {
+            var allActors = GetSearchResultActors(username, search);
+            var pagedActors = allActors
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToList();
+            return (pagedActors, allActors.Count);
+        }
+
         public IList<TitleSearch> GetSearchResultTitles(string username, string search)
         {
             using var db = new PortfolioDBContext();
@@ -49,6 +59,16 @@ namespace DataLayer
             {
                 return null;
             }
+        }
+
+        public (IList<TitleSearch>? searchResult, int total) GetSearchResultTitles(string username, string search, int page, int pageSize)
+        {
+            var allTitles = GetSearchResultTitles(username, search);
+            var pagedTitles = allTitles
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToList();
+            return (pagedTitles, allTitles.Count);
         }
 
         public IList<TitleSearch> GetSearchResultGenres(string username, string search)
@@ -67,6 +87,17 @@ namespace DataLayer
                 return null;
             }
         }
+
+        public (IList<TitleSearch>? searchResult, int total) GetSearchResultGenres(string username, string search, int page, int pageSize)
+        {
+            var allTitles = GetSearchResultGenres(username, search);
+            var pagedTitles = allTitles
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToList();
+            return (pagedTitles, allTitles.Count);
+        }
+
 
         public bool ClearSearchHistory(string username)
         {

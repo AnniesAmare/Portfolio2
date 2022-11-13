@@ -5,7 +5,7 @@ using WebServer.Services;
 
 namespace WebServer.Controllers
 {
-    [Route("api/user/bookmarks")]
+    [Route("api/search")]
     [ApiController]
     public class SearchController : ControllerBase
     {
