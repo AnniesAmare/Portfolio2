@@ -83,6 +83,37 @@ namespace WebServer.Controllers
             }
         }
 
+
+
+        [HttpGet("history")]
+        [Authorize]
+        public IActionResult GetSearchHistory()
+        {
+            //method to get search history
+            return Ok();
+        }
+
+        [HttpDelete("history")]
+        [Authorize]
+        public IActionResult DeleteSearchHistory()
+        {
+            try
+            {
+                var username = GetUsername();
+                var deleted = _dataServiceSearches.ClearSearchHistory(username);
+                if (!deleted)
+                {
+                    return NotFound();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return Unauthorized();
+            }
+        }
+
+
         public string? GetUsername()
         {
             return User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value;

@@ -1,0 +1,110 @@
+﻿CREATE OR REPLACE FUNCTION best_match_genre(words_input text[])
+RETURNS TABLE (
+	tconst char(10), 
+	rank bigint, 
+	primarytitle text)
+AS $$
+DECLARE
+	word_input text;
+	q text :='';
+	is_first BOOL := true;
+BEGIN
+	q := 'SELECT t.tconst, sum(relevance) rank, primarytitle FROM title_basic t,
+				(SELECT distinct tconst, 1 relevance FROM genre WHERE genre ILIKE ''';
+	FOREACH word_input IN ARRAY words_input
+	LOOP
+		IF is_first THEN
+			q := q || word_input;
+			q := q || ''' ';			
+			is_first = false;
+		ELSE
+			q := q || 'UNION ALL SELECT DISTINCT tconst, 1 relevance FROM genre WHERE genre ILIKE ''';
+			q := q || word_input;
+			q := q || ''' ';	
+		END IF;
+	END LOOP;
+	q := q || ') w WHERE t.tconst=w.tconst GROUP BY t.tconst, primarytitle ORDER BY rank DESC;';
+	RAISE NOTICE '%', q;
+	RETURN QUERY EXECUTE q;
+END $$
+LANGUAGE 'plpgsql';
+
+-- SELECT t.tconst, sum(relevance) rank, primarytitle FROM title_basic t,
+-- 				(SELECT distinct tconst, 1 relevance FROM genre WHERE genre = 'Horror' 
+-- 				UNION ALL SELECT DISTINCT tconst, 1 relevance FROM genre WHERE genre = 'Drama') 
+-- 				w WHERE t.tconst=w.tconst GROUP BY t.tconst, primarytitle ORDER BY rank DESC;
+-- 				
+-- SELECT * FROM best_match_genre('Horror');
+
+CREATE OR REPLACE FUNCTION best_match(words_input text[])
+RETURNS TABLE (
+	tconst char(10), 
+	rank bigint, 
+	primarytitle text)
+AS $$
+DECLARE
+	word_input text;
+	q text :='';
+	is_first BOOL := true;
+BEGIN
+	q := 'SELECT t.tconst, sum(relevance) rank, primarytitle FROM title_basic t,
+				(SELECT distinct tconst, 1 relevance FROM wi WHERE word = ''';
+	FOREACH word_input IN ARRAY words_input
+	LOOP
+		IF is_first THEN
+			q := q || word_input;
+			q := q || ''' ';			
+			is_first = false;
+		ELSE
+			q := q || 'UNION ALL SELECT DISTINCT tconst, 1 relevance FROM wi WHERE word = ''';
+			q := q || word_input;
+			q := q || ''' ';	
+		END IF;
+	END LOOP;
+	q := q || ') w WHERE t.tconst=w.tconst GROUP BY t.tconst, primarytitle ORDER BY rank DESC;';
+	RAISE NOTICE '%', q;
+	RETURN QUERY EXECUTE q;
+END $$
+LANGUAGE 'plpgsql';
+
+
+DROP FUNCTION IF EXISTS string_search_name(character varying);
+DROP FUNCTION IF EXISTS string_search_name();
+
+CREATE OR REPLACE FUNCTION string_search_name(s1 varchar(100)) 
+RETURNS TABLE(
+nconst char(10),
+primaryname VARCHAR(256)
+)
+LANGUAGE plpgsql AS $$
+DECLARE
+s_val1 TEXT := '%'|| s1 || '%';
+
+BEGIN
+
+RETURN QUERY
+SELECT distinct n.nconst, n.primaryname
+FROM name_basic as n NATURAL JOIN profession as p  
+WHERE p.profession = 'actor' AND n.primaryname ILIKE s_val1 OR 
+p.profession = 'actress' AND n.primaryname ILIKE s_val1;
+END;
+$$;
+
+
+DROP FUNCTION IF EXISTS save_search();
+CREATE OR REPLACE FUNCTION save_search(uname VARCHAR(100), search_string varchar(100), category VARCHAR(100) DEFAULT NULL)
+RETURNS BOOL
+LANGUAGE plpgsql AS $$
+DECLARE
+
+BEGIN 
+
+IF uname <> '' AND search_string <> '' THEN
+INSERT INTO user_search(username, date, search_content, search_category) VALUES(uname, NOW(),search_string, category);
+RETURN true;
+ELSE
+RAISE NOTICE 'ERROR: Missing parameters, please type valid input';
+END IF; 
+END;
+$$;
+
