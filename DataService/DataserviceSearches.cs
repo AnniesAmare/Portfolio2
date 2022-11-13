@@ -47,7 +47,8 @@ namespace DataLayer
         public IList<TitleSearch> GetSearchResultTitles(string username, string search)
         {
             using var db = new PortfolioDBContext();
-            string[] searchArray = search.RemoveSpaces().Split(",");
+            string[] searchArray = search.Split(" ");
+
             var searchResult = db.TitleSearches.FromSqlInterpolated($"select * from best_match({searchArray})").ToList();
             try
             {
