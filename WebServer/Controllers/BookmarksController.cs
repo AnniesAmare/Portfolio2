@@ -39,7 +39,7 @@ namespace WebServer.Controllers
             try
             {
                 var username = GetUsername();
-                var bookmarks = _dataServiceBookmarks.getBookmarks(username);
+                var bookmarks = _dataServiceBookmarks.GetBookmarks(username);
 
                 if (bookmarks == null) return NotFound();
 
@@ -78,7 +78,7 @@ namespace WebServer.Controllers
             try
             {
                 var username = GetUsername();
-                var created = _dataServiceBookmarks.createBookmark(username, id, name);
+                var created = _dataServiceBookmarks.CreateBookmark(username, id, name);
                 if (!created) return BadRequest();
                 return Ok();
             }
@@ -95,7 +95,7 @@ namespace WebServer.Controllers
             try
             {
                 var username = GetUsername();
-                var bookmark = _dataServiceBookmarks.nameBookmark(username, id, name);
+                var bookmark = _dataServiceBookmarks.NameBookmark(username, id, name);
                 if (bookmark == null) return NotFound();
                 return Ok();
             }
@@ -112,7 +112,7 @@ namespace WebServer.Controllers
             try
             {
                 var username = GetUsername();
-                var deleted = _dataServiceBookmarks.deleteBookmark(username, id);
+                var deleted = _dataServiceBookmarks.DeleteBookmark(username, id);
                 if (!deleted) return NotFound();
                 return Ok();
             }

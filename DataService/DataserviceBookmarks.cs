@@ -14,7 +14,7 @@ namespace DataLayer
 {
     public class DataserviceBookmarks : IDataserviceBookmarks
     {
-        public IList<BookmarkListElement> getPersonBookmarks(string username)
+        public IList<BookmarkListElement> GetPersonBookmarks(string username)
         {
             using var db = new PortfolioDBContext();
             var bookmarks = db.BookmarksNames
@@ -24,7 +24,7 @@ namespace DataLayer
             return bookmarks;
         }
 
-        public IList<BookmarkListElement> getTitleBookmarks(string username)
+        public IList<BookmarkListElement> GetTitleBookmarks(string username)
         {
             using var db = new PortfolioDBContext();
             var bookmarks = db.BookmarksTitles
@@ -34,10 +34,10 @@ namespace DataLayer
             return bookmarks;
         }
 
-        public IList<BookmarkListElement> getBookmarks(string username)
+        public IList<BookmarkListElement> GetBookmarks(string username)
         {
-            var titleBookmarks= getTitleBookmarks(username);
-            var personBookmarks = getPersonBookmarks(username);
+            var titleBookmarks= GetTitleBookmarks(username);
+            var personBookmarks = GetPersonBookmarks(username);
             if (titleBookmarks == null && personBookmarks == null) return null;
 
             if (personBookmarks != null)
@@ -64,9 +64,9 @@ namespace DataLayer
             return allBookmarks;
         }
 
-        public IList<BookmarkListElement> getBookmarks(string username, int page, int pageSize)
+        public IList<BookmarkListElement> GetBookmarks(string username, int page, int pageSize)
         {
-            var allBookmarks = getBookmarks(username);
+            var allBookmarks = GetBookmarks(username);
             var pagedBookmarks = allBookmarks
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -77,7 +77,7 @@ namespace DataLayer
 
         public int GetNumberOfBookmarks(string username)
         {
-            var allBookmarks = getBookmarks(username);
+            var allBookmarks = GetBookmarks(username);
             var result = allBookmarks.Count;
             return result;
         }
@@ -86,7 +86,7 @@ namespace DataLayer
 
 
 
-        public bool createBookmark(string username, string id, string? name)
+        public bool CreateBookmark(string username, string id, string? name)
         {
             using var db = new PortfolioDBContext();
             var title = db.TitleBasics.Find(id);
@@ -120,7 +120,7 @@ namespace DataLayer
             return false;
         }
 
-        public bool deleteBookmark(string username, string id)
+        public bool DeleteBookmark(string username, string id)
         {
             using var db = new PortfolioDBContext();
             var title = db.TitleBasics.Find(id);
@@ -153,7 +153,7 @@ namespace DataLayer
             return false;
         }
 
-        public BookmarkElement nameBookmark(string username, string id, string annotation)
+        public BookmarkElement NameBookmark(string username, string id, string annotation)
         {
             using var db = new PortfolioDBContext();
             var title = db.TitleBasics.Find(id);
