@@ -20,6 +20,8 @@ builder.Services.AddSingleton<IDataserviceSpecificPerson, DataserviceSpecificPer
 builder.Services.AddSingleton<IDataserviceSpecificTitle, DataserviceSpecificTitle>();
 builder.Services.AddSingleton<IDataserviceUsers, DataserviceUsers>();
 builder.Services.AddSingleton<IDataserviceBookmarks, DataserviceBookmarks>();
+builder.Services.AddSingleton<IDataserviceTitles, DataserviceTitles>();
+builder.Services.AddSingleton<IDataservicePersons, DataservicePersons>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<Hashing>();
