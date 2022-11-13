@@ -49,7 +49,8 @@ namespace WebServer.Controllers
                 {
                     Username = user.Username,
                     Email = user.Email,
-                    Birthyear = user.BirthYear
+                    Birthyear = user.BirthYear,
+                    BookmarksUrl = _generator.GetUriByName(HttpContext, nameof(BookmarksController.GetBookmarks), new { })
                 };
                 return Ok(userModel);
             }
