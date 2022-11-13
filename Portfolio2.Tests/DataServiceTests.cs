@@ -8,7 +8,7 @@ namespace Portfolio2.Tests
         [Fact]
         public void GetSpecificTitleReturnsCompleteRecordOnValidTConst()
         {
-            var service = new DataService();
+            var service = new DataserviceSpecificTitle();
             var specificTitle = service.GetSpecificTitle("tt0052520");
             Assert.Equal("The Twilight Zone", specificTitle.Title);
             Assert.Equal(53, specificTitle.DirectorList.Count);
@@ -21,7 +21,7 @@ namespace Portfolio2.Tests
         [Fact]
         public void GetSpecificTitleReturnsCompleteRecordOnValidName()
         {
-            var service = new DataService();
+            var service = new DataserviceSpecificTitle();
             var specificTitle = service.GetSpecificTitleByName("Latchkey");
             Assert.Contains("tt0401571", specificTitle.TConst);
             Assert.Equal(1, specificTitle.DirectorList.Count);
@@ -36,7 +36,7 @@ namespace Portfolio2.Tests
         [Fact]
         public void GetSpecificPersonReturnsCompleteRecordOnValidNConst()
         {
-            var service = new DataService();
+            var service = new DataserviceSpecificPerson();
             var specificPerson = service.GetSpecificPerson("nm0424060");
             Assert.Equal("Scarlett Johansson", specificPerson.Name);
             Assert.Equal(3, specificPerson.ProfessionList.Count);
@@ -50,7 +50,7 @@ namespace Portfolio2.Tests
         [Fact]
         public void GetSpecificPersonReturnsCompleteRecordOnValidName()
         {
-            var service = new DataService();
+            var service = new DataserviceSpecificPerson();
             var specificPerson = service.GetSpecificPersonByName("Scarlett Johansson");
             Assert.Contains("nm0424060", specificPerson.NConst);
             Assert.Equal(3, specificPerson.ProfessionList.Count);
