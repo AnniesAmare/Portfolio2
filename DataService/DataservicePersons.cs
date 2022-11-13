@@ -15,7 +15,7 @@ namespace DataLayer
     public class DataservicePersons : IDataservicePersons
     {
 
-        public IList<Persons> GetActors()
+        public IList<Persons> GetActors(int page, int pageSize)
         {
             using var db = new PortfolioDBContext();
             var actors = db.NameBasics
@@ -30,7 +30,8 @@ namespace DataLayer
                 })
                 .Where(x => x.isActor == true)
                 .OrderBy(x => x.Popularity)
-                .Take(15)
+                .Skip(page * pageSize)
+                .Take(pageSize)
                 .ToList();
             if (actors == null) return null;
 
@@ -57,10 +58,13 @@ namespace DataLayer
         }
 
         //Helper functions 
-        public int GetNumberOfActors()
+        public int GetNumberOfActors(int page, int pageSize)
         {
             using var db = new PortfolioDBContext();
-            return GetActors().Count();
+             
+            return db.NameBasics
+                .Select(x => new Persons { isActor = x.IsActor})
+                .Where(x => x.isActor == true).Count();
         }
         public IList<TitleListElement> GetKnownForMovies(string nConst)
         {

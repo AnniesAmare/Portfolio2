@@ -10,7 +10,7 @@ namespace DataLayer
     public interface IDataservicePersons
     {
 
-        public IList<Persons> GetActors();
-        public int GetNumberOfActors();
+        public IList<Persons> GetActors(int page, int pageSize);
+        public int GetNumberOfActors(int page, int pageSize);
     }
 }
