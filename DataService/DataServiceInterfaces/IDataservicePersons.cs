@@ -11,6 +11,6 @@ namespace DataLayer
     {
 
         public IList<Persons> GetActors();
-        
+        public int GetNumberOfActors();
     }
 }

@@ -24,7 +24,7 @@ namespace WebServer.Controllers
         }
 
         [HttpGet("actors", Name = nameof(GetActors))]
-        public IActionResult GetActors()
+        public IActionResult GetActors(int page = 0, int pageSize = 20)
         {
             var Actors = _dataServicePersons.GetActors();
             if (Actors == null)
@@ -32,6 +32,9 @@ namespace WebServer.Controllers
                 return NotFound();
             }
             var ActorsModel = CreatePersonsModel(Actors);
+
+            var total = _dataServicePersons.GetNumberOfActors();
+
             return Ok(ActorsModel);
         }
 
