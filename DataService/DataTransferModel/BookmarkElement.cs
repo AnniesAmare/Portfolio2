@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer.DatabaseModel
+namespace DataLayer.DataTransferModel
 {
-    public class BookmarkTitle
+    public class BookmarkElement
     {
-        public string? Username { get; set; }
-        public User? User { get; set; }
+        public string? NConst { get; set; }
         public string? TConst { get; set; }
-        public TitleBasic? TitleBasic { get; set; }
         public string? Annotation { get; set; }
     }
 }

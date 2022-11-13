@@ -19,5 +19,8 @@ namespace DataLayer.DatabaseModel
         public IList<Profession>? Profession { get; set; }
         public IList<Job>? Job { get; set; }
         public IList<Character>? Character { get; set; }
+
+        //USER FRAMEWORK
+        public IList<BookmarkName> BookmarkName { get; set; }
     }
 }

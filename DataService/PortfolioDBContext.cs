@@ -49,12 +49,12 @@ namespace DataLayer
         public DbSet<TitleAka> TitleAkas { get; set; }
 
         /* USER FRAMEWORK */
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserRating> UserRatings { get; set; }
-        public DbSet<UserSearch> UserSearches { get; set; }
-        public DbSet<BookmarkTitle> BookmarksTitles { get; set; }
-        public DbSet<BookmarkName> BookmarksNames { get; set; }
-        public DbSet<Review> Reviews { get; set; }
+        public DbSet<User>? Users { get; set; }
+        public DbSet<UserRating>? UserRatings { get; set; }
+        public DbSet<UserSearch>? UserSearches { get; set; }
+        public DbSet<BookmarkTitle>? BookmarksTitles { get; set; }
+        public DbSet<BookmarkName>? BookmarksNames { get; set; }
+        public DbSet<Review>? Reviews { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -258,6 +258,7 @@ namespace DataLayer
             modelBuilder.Entity<User>().HasKey(x => new { x.Username }).HasName("users_pkey");
             modelBuilder.Entity<User>().Property(x => x.Username).HasColumnName("username");
             modelBuilder.Entity<User>().Property(x => x.Password).HasColumnName("password");
+            modelBuilder.Entity<User>().Property(x => x.Salt).HasColumnName("salt");
             modelBuilder.Entity<User>().Property(x => x.BirthYear).HasColumnName("birthyear");
             modelBuilder.Entity<User>().Property(x => x.Email).HasColumnName("email");
 
@@ -268,6 +269,10 @@ namespace DataLayer
             modelBuilder.Entity<UserRating>().Property(x => x.Date).HasColumnName("date");
             modelBuilder.Entity<UserRating>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<UserRating>().Property(x => x.Rating).HasColumnName("rating");
+            modelBuilder.Entity<UserRating>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.UserRating)
+                .HasForeignKey(x => x.Username);
 
             //USER SEARCH
             modelBuilder.Entity<UserSearch>().ToTable("user_search");
@@ -277,20 +282,40 @@ namespace DataLayer
             modelBuilder.Entity<UserSearch>().Property(x => x.Date).HasColumnName("date");
             modelBuilder.Entity<UserSearch>().Property(x => x.Content).HasColumnName("search_content");
             modelBuilder.Entity<UserSearch>().Property(x => x.Category).HasColumnName("search_category");
+            modelBuilder.Entity<UserSearch>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.UserSearch)
+                .HasForeignKey(x => x.Username);
 
             //BOOKMARK NAME
             modelBuilder.Entity<BookmarkName>().ToTable("bookmark_name");
-            modelBuilder.Entity<BookmarkName>().HasKey(x => new { x.Username }).HasName("bookmark_name_pkey");
+            modelBuilder.Entity<BookmarkName>().HasKey(x => new { x.Username, x.NConst }).HasName("bookmark_name_pkey");
             modelBuilder.Entity<BookmarkName>().Property(x => x.Username).HasColumnName("username");
             modelBuilder.Entity<BookmarkName>().Property(x => x.NConst).HasColumnName("nconst");
             modelBuilder.Entity<BookmarkName>().Property(x => x.Annotation).HasColumnName("annotation");
+            modelBuilder.Entity<BookmarkName>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.BookmarkName)
+                .HasForeignKey(x => x.Username);
+            modelBuilder.Entity<BookmarkName>()
+                .HasOne(x => x.NameBasic)
+                .WithMany(x => x.BookmarkName)
+                .HasForeignKey(x => x.NConst);
 
             //BOOKMARK TITLE
             modelBuilder.Entity<BookmarkTitle>().ToTable("bookmark_title");
-            modelBuilder.Entity<BookmarkTitle>().HasKey(x => new { x.Username }).HasName("bookmark_title_pkey");
+            modelBuilder.Entity<BookmarkTitle>().HasKey(x => new { x.Username, x.TConst }).HasName("bookmark_title_pkey");
             modelBuilder.Entity<BookmarkTitle>().Property(x => x.Username).HasColumnName("username");
             modelBuilder.Entity<BookmarkTitle>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<BookmarkTitle>().Property(x => x.Annotation).HasColumnName("annotation");
+            modelBuilder.Entity<BookmarkTitle>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.BookmarkTitle)
+                .HasForeignKey(x => x.Username);
+            modelBuilder.Entity<BookmarkTitle>()
+                .HasOne(x => x.TitleBasic)
+                .WithMany(x => x.BookmarkTitle)
+                .HasForeignKey(x => x.TConst);
 
             //REVIEW
             modelBuilder.Entity<Review>().ToTable("review");
@@ -300,6 +325,10 @@ namespace DataLayer
             modelBuilder.Entity<Review>().Property(x => x.Date).HasColumnName("date");
             modelBuilder.Entity<Review>().Property(x => x.Content).HasColumnName("review_content");
             modelBuilder.Entity<Review>().Property(x => x.IsSpoiler).HasColumnName("isspoiler");
+            modelBuilder.Entity<Review>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.Review)
+                .HasForeignKey(x => x.Username);
 
         }
 

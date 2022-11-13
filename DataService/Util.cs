@@ -10,5 +10,10 @@ public static class Util
     public static string RemoveSpaces(this string data)
     {
         return string.Concat(data.Where(c => !char.IsWhiteSpace(c)));
-    } 
+    }
+
+    public static bool IsNull(this string? data)
+    {
+        return string.IsNullOrEmpty(data);
+    }
 }

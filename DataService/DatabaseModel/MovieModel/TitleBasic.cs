@@ -31,5 +31,8 @@ namespace DataLayer.DatabaseModel
         public IList<TitlePrincipal>? TitlePrincipal { get; set; }
         public IList<Job>? Job { get; set; }
         public IList<Character>? Character { get; set; }
+
+        //USER FRAMEWORK
+        public IList<BookmarkTitle> BookmarkTitle { get; set; }
     }
 }

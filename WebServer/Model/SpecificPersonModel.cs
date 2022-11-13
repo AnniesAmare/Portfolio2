@@ -9,6 +9,7 @@ namespace WebServer.Model
         public string? DeathYear { get; set; }
         public IList<string> ProfessionList { get; set; }
         public IList<TitleListElementModel> KnownForListWithUrl { get; set; }
+        public string? Bookmark { get; set; }
     }
 
     public class TitleListElementModel
