@@ -9,6 +9,7 @@
         public IList<DirectorListElementModel>? DirectorListWithUrl { get; set; }
         public IList<ActorListElementModel>? ActorListWithUrl { get; set; }
         public float? Rating { get; set; }
+        public string? Bookmark { get; set; }
 
     }
 
