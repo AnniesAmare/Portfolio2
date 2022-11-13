@@ -42,13 +42,13 @@ namespace WebServer.Controllers
             return Ok(PagingForMovies(page, pageSize, total, moviesModel));
         }
 
-        public IList<MoviesModel> CreateMoviesModel(IList<Titles> movies)
+        public IList<MovieListModel> CreateMoviesModel(IList<Titles> movies)
         {
-            var moviesModel = new List<MoviesModel>();
+            var moviesModel = new List<MovieListModel>();
 
             foreach (var movie in movies)
             {
-                var movieModelElement = _mapper.Map<MoviesModel>(movie);
+                var movieModelElement = _mapper.Map<MovieListModel>(movie);
                 movieModelElement.Url = _generator.GetUriByName(HttpContext,
                         nameof(SpecificTitleController.GetTitleById),
                         new { id = movie.TConst });
@@ -75,13 +75,13 @@ namespace WebServer.Controllers
             return Ok(PagingForTvShows(page, pageSize, total, tvShowsModel));
         }
 
-        public IList<TvShowsModel> CreateTvShowsModel(IList<Titles> tvShows)
+        public IList<TvShowListModel> CreateTvShowsModel(IList<Titles> tvShows)
         {
-            var tvShowsModel = new List<TvShowsModel>();
+            var tvShowsModel = new List<TvShowListModel>();
 
             foreach (var tvShow in tvShows)
             {
-                var tvShowModelElement = _mapper.Map<TvShowsModel>(tvShow);
+                var tvShowModelElement = _mapper.Map<TvShowListModel>(tvShow);
 
                 tvShowModelElement.Url = _generator.GetUriByName(HttpContext,
                         nameof(TitlesController.GetTvShowById),

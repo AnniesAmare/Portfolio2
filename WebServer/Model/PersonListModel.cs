@@ -2,7 +2,7 @@
 
 namespace WebServer.Model
 {
-    public class PersonsModel
+    public class PersonListModel
     {
         public string? Name { get; set; }
         public string? BirthYear { get; set; }

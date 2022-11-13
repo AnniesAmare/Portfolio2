@@ -8,8 +8,8 @@ namespace WebServer.Model.Profiles
     {
        public TitlesModelProfile()
         {
-            CreateMap<Titles, MoviesModel>();
-            CreateMap<Titles, TvShowsModel>();
+            CreateMap<Titles, MovieListModel>();
+            CreateMap<Titles, TvShowListModel>();
         }
     }
 }

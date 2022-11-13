@@ -39,15 +39,15 @@ namespace WebServer.Controllers
         }
 
         
-        public IList<PersonsModel> CreatePersonsModel(IList<Persons> persons)
+        public IList<PersonListModel> CreatePersonsModel(IList<Persons> persons)
         {
-            var personsModel = new List<PersonsModel>();
+            var personsModel = new List<PersonListModel>();
             var knownForMoviesList = new List<TitleListElementModel>();
             var knownForTvShowsList = new List<TitleListElementModel>();
 
             foreach (var person in persons)
             {
-                var model = _mapper.Map<PersonsModel>(person);
+                var model = _mapper.Map<PersonListModel>(person);
 
                 //make moviesListWithUrl
                 foreach (var movie in person.KnownForMovies)
