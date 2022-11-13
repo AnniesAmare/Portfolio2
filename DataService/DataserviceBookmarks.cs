@@ -34,12 +34,57 @@ namespace DataLayer
             return bookmarks;
         }
 
-        public (IList<BookmarkListElement> titleBookmarks, IList<BookmarkListElement> personBookmarks) getBookmarks(string username)
+        public IList<BookmarkListElement> getBookmarks(string username)
         {
             var titleBookmarks= getTitleBookmarks(username);
             var personBookmarks = getPersonBookmarks(username);
-            return (titleBookmarks, personBookmarks);
+            if (titleBookmarks == null && personBookmarks == null) return null;
+
+            if (personBookmarks != null)
+            {
+                foreach (var personBookmark in personBookmarks)
+                {
+                    personBookmark.isPerson = true;
+                    personBookmark.isTitle = false;
+                }
+            }
+            if (titleBookmarks != null)
+            {
+                foreach (var titleBookmark in titleBookmarks)
+                {
+                    titleBookmark.isPerson = false;
+                    titleBookmark.isTitle = true;
+                }
+            }
+
+            if ( personBookmarks == null) return titleBookmarks;
+            if (titleBookmarks == null) return personBookmarks;
+
+            var allBookmarks = titleBookmarks.Concat(personBookmarks).ToList();
+            return allBookmarks;
         }
+
+        public IList<BookmarkListElement> getBookmarks(string username, int page, int pageSize)
+        {
+            var allBookmarks = getBookmarks(username);
+            var pagedBookmarks = allBookmarks
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return pagedBookmarks;
+        }
+
+        public int GetNumberOfBookmarks(string username)
+        {
+            var allBookmarks = getBookmarks(username);
+            var result = allBookmarks.Count;
+            return result;
+        }
+
+
+
+
 
         public bool createBookmark(string username, string id, string? name)
         {

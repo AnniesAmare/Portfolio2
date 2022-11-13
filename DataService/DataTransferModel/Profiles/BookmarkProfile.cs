@@ -15,10 +15,9 @@ namespace DataLayer.DataTransferModel.Profiles
             CreateMap<BookmarkName, BookmarkElement>();
             CreateMap<BookmarkTitle, BookmarkElement>();
             CreateMap<BookmarkName, BookmarkListElement>()
-                .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.NConst)); ;
+                .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.NConst));
             CreateMap<BookmarkTitle, BookmarkListElement>()
-                .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.TConst)); ;
-
+                .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.TConst));
         }
     }
 }

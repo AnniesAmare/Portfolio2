@@ -20,6 +20,8 @@ namespace WebServer.Controllers
         private readonly IMapper _mapper;
         private readonly Hashing _hashing;
         private readonly IConfiguration _configuration;
+        
+        private const int MaxPageSize = 30;
 
         public BookmarksController(IDataserviceBookmarks dataServiceBookmarks, LinkGenerator generator, IMapper mapper, Hashing hashing, IConfiguration configuration)
         {
@@ -32,30 +34,34 @@ namespace WebServer.Controllers
 
         [HttpGet(Name = nameof(GetBookmarks))]
         [Authorize]
-        public IActionResult GetBookmarks()
+        public IActionResult GetBookmarks(int page = 0, int pageSize = 20)
         {
             try
             {
                 var username = GetUsername();
-                var (titleBookmarks, personBookmarks) = _dataServiceBookmarks.getBookmarks(username);
+                var bookmarks = _dataServiceBookmarks.getBookmarks(username);
 
-                if (personBookmarks == null && titleBookmarks == null) return NotFound();
+                if (bookmarks == null) return NotFound();
 
-                var personBookmarksModel = personBookmarks.Select(x => new BookmarksModel
+                var personBookmarksModel = bookmarks.Where(x => x.isPerson).Select(x => new BookmarksModel
                 {
                     Name = x.Annotation,
                     Url = _generator.GetUriByName(HttpContext, nameof(SpecificPersonController.GetPersonById), new { id = x.Id })
 
                 }).ToList();
 
-                var titleBookmarksModel = titleBookmarks.Select(x => new BookmarksModel
+                var titleBookmarksModel = bookmarks.Where(x => x.isTitle).Select(x => new BookmarksModel
                 {
                     Name = x.Annotation,
                     Url = _generator.GetUriByName(HttpContext, nameof(SpecificTitleController.GetTitleById), new { id = x.Id })
 
                 }).ToList();
-                
-                return Ok(new { titleBookmarksModel , personBookmarksModel });
+
+                var total = _dataServiceBookmarks.GetNumberOfBookmarks(username);
+                var allBookmarks = titleBookmarksModel.Concat(personBookmarksModel);
+                var allBookmarksWithPaging = PagingForBookmarks(page, pageSize, total, allBookmarks);
+               
+                return Ok(allBookmarksWithPaging);
             }
             catch
             {
@@ -120,6 +126,44 @@ namespace WebServer.Controllers
         public string? GetUsername()
         {
             return User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value;
+        }
+
+        private string? CreateBookmarksLink(int page, int pageSize)
+        {
+            return _generator.GetUriByName(HttpContext, nameof(GetBookmarks), new { page, pageSize });
+        }
+
+        private object PagingForBookmarks<T>(int page, int pageSize, int total, IEnumerable<T> items)
+        {
+            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
+
+            var pages = (int)Math.Ceiling((double)total / (double)pageSize);
+
+            var first = total > 0
+                ? CreateBookmarksLink(0, pageSize)
+                : null;
+
+            var prev = page > 0
+                ? CreateBookmarksLink(page - 1, pageSize)
+                : null;
+
+            var current = CreateBookmarksLink(page, pageSize);
+
+            var next = page < pages - 1
+                ? CreateBookmarksLink(page + 1, pageSize)
+                : null;
+
+            var result = new
+            {
+                first,
+                prev,
+                next,
+                current,
+                total,
+                pages,
+                items
+            };
+            return result;
         }
 
     }
