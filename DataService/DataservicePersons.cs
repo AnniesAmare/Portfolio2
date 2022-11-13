@@ -57,6 +57,11 @@ namespace DataLayer
         }
 
         //Helper functions 
+        public int GetNumberOfActors()
+        {
+            using var db = new PortfolioDBContext();
+            return GetActors().Count();
+        }
         public IList<TitleListElement> GetKnownForMovies(string nConst)
         {
             DataserviceSpecificPerson anInstance = new DataserviceSpecificPerson();

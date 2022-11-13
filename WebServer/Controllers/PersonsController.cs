@@ -14,6 +14,8 @@ namespace WebServer.Controllers
         private readonly LinkGenerator _generator;
         private readonly IMapper _mapper;
 
+        private const int MaxPageSize = 30;
+
         public PersonsController(IDataservicePersons dataServicePersons, LinkGenerator generator, IMapper mapper)
         {
             _dataServicePersons = dataServicePersons;
@@ -21,7 +23,7 @@ namespace WebServer.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("actors")]
+        [HttpGet("actors", Name = nameof(GetActors))]
         public IActionResult GetActors()
         {
             var Actors = _dataServicePersons.GetActors();
