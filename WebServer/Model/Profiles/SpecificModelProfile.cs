@@ -11,6 +11,8 @@ namespace WebServer.Model.Profiles
             
             CreateMap<SpecificTitle, SpecificTitleModel>();
 
+            CreateMap<Titles, SpecificTvShowModel>();
+
         }
     }
 }

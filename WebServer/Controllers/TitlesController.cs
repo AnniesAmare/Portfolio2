@@ -103,7 +103,7 @@ namespace WebServer.Controllers
                 return NotFound();
             }
 
-            var tvShowModelElement = _mapper.Map<TvShowsModel>(tvShow);
+            var tvShowModelElement = _mapper.Map<SpecificTvShowModel>(tvShow);
 
             return Ok(tvShowModelElement);
         }
