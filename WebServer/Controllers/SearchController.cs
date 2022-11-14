@@ -87,14 +87,15 @@ namespace WebServer.Controllers
 
 
 
-        [HttpGet("history")]
+        [HttpGet("history", Name = nameof(GetSearchHistory))]
         [Authorize]
-        public IActionResult GetSearchHistory()
+        public IActionResult GetSearchHistory(int page = 0, int pageSize = 20)
         {
             try
             {
                 var username = GetUsername();
                 var searchHistory = _dataServiceSearches.GetSearchHistory(username);
+                var total = searchHistory.Count();
                 var searchHistoryList = new List<SearchHistoryListElementModel>();
                 foreach (var search in searchHistory)
                 {
@@ -120,8 +121,10 @@ namespace WebServer.Controllers
                     }
                     searchHistoryList.Add(newSearch);
                 }
-                
-                return Ok(searchHistoryList);
+
+                var searchHistoryListWithPaging =
+                    PagingForHistory(page, pageSize, total, searchHistoryList, nameof(GetSearchHistory));
+                return Ok(searchHistoryListWithPaging);
             }
             catch
             {
@@ -174,6 +177,39 @@ namespace WebServer.Controllers
 
             var next = page < pages - 1
                 ? _generator.GetUriByName(HttpContext, endpointName, new { page = page + 1, pageSize, search })
+                : null;
+
+            var result = new
+            {
+                first,
+                prev,
+                next,
+                current,
+                total,
+                pages,
+                items
+            };
+            return result;
+        }
+
+        public object PagingForHistory<T>(int page, int pageSize, int total, IEnumerable<T> items, string endpointName)
+        {
+            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
+
+            var pages = (int)Math.Ceiling((double)total / (double)pageSize);
+
+            var first = total > 0
+                ? _generator.GetUriByName(HttpContext, endpointName, new { page = 0, pageSize })
+                : null;
+
+            var prev = page > 0
+                ? _generator.GetUriByName(HttpContext, endpointName, new { page = page - 1, pageSize })
+                : null;
+
+            var current = _generator.GetUriByName(HttpContext, endpointName, new { page, pageSize });
+
+            var next = page < pages - 1
+                ? _generator.GetUriByName(HttpContext, endpointName, new { page = page + 1, pageSize })
                 : null;
 
             var result = new
