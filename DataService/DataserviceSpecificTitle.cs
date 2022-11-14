@@ -55,6 +55,46 @@ namespace DataLayer
             return title;
         }
 
+        public IList<TitlePersons> GetTitleCrewById(string tConst)
+        {
+            using var db = new PortfolioDBContext();
+            var crew = db.TitlePrincipals
+                .Include(x => x.TitleBasic)
+                .Include(x => x.NameBasic)
+                .Select(x => new TitlePersons
+                {
+                    TConst = x.TConst,
+                    NConst = x.NConst,
+                    Title = x.TitleBasic.PrimaryTitle,
+                    Name = x.NameBasic.PrimaryName,
+                    ProductionRole = x.Category,
+                    Popularity = x.NameBasic.AVGNameRating
+                })
+                .Where(x => x.TConst == tConst)
+                .OrderBy(x => x.Popularity)
+                .Distinct()
+                .ToList();
+
+            if (crew == null) return null;
+
+            foreach (var person in crew)
+            {
+                //remove spaces
+                var inputNConst = person.NConst?.RemoveSpaces();
+                person.NConst = inputNConst;
+                var inputTConst = person.TConst?.RemoveSpaces();
+                person.TConst = inputTConst;
+
+                //get List
+                person.CharacterList = GetCharactersById(person);
+
+            }
+
+            return crew;
+
+        }
+
+
         public IList<TitlePersons> GetTitleCastById(string tConst)
         {
             using var db = new PortfolioDBContext();

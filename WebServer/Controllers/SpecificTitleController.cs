@@ -34,6 +34,21 @@ namespace WebServer.Controllers
             return Ok(specificTitleModel);
         }
 
+        [HttpGet("crew/{id}", Name = nameof(GetTitleCrewById))]
+        public IActionResult GetTitleCrewById(string id)
+        {
+            var TitleCrew = _dataServiceSpecificTitle.GetTitleCrewById(id);
+
+            if (TitleCrew == null)
+            {
+                return NotFound();
+            }
+
+            var CrewModel = CreateTitleCastModel(TitleCrew);
+            return Ok(CrewModel);
+
+        }
+
         [HttpGet("cast/{id}", Name = nameof(GetTitleCastById))]
         public IActionResult GetTitleCastById(string id)
         {
