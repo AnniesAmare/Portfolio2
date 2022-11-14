@@ -1,16 +1,14 @@
-﻿using System;
+﻿using DataLayer.DatabaseModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer.DatabaseModel
+namespace DataLayer.DataTransferModel
 {
-    public class UserSearch
+    public class SearchHistoryListElement
     {
-        public string? Username { get; set; }
-        public User? User { get; set; }
-        public int SearchId { get; set; }
         public DateTime Date { get; set; }
         public string? Content { get; set; }
         public string? Category { get; set; }

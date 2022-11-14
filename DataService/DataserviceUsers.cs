@@ -47,8 +47,8 @@ namespace DataLayer
             var user = db.Users.Find(username);
             if (user != null)
             {
-                if (!email.IsNull()) user.Email = email;
-                if (!birthyear.IsNull()) user.BirthYear = birthyear;
+                if (!email.IsNullOrEmpty()) user.Email = email;
+                if (!birthyear.IsNullOrEmpty()) user.BirthYear = birthyear;
                 db.SaveChanges();
                 return true;
             }

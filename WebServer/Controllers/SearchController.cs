@@ -3,7 +3,9 @@ using DataLayer;
 using DataLayer.DataServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
+using WebServer.Model;
 using WebServer.Services;
 
 namespace WebServer.Controllers
@@ -73,7 +75,7 @@ namespace WebServer.Controllers
             try
             {
                 var username = GetUsername();
-                var searchResult = _dataServiceSearches.GetSearchResultTitles(username, search, page, pageSize);
+                var searchResult = _dataServiceSearches.GetSearchResultGenres(username, search, page, pageSize);
                 var searchResultPaging = PagingForSearch(page, pageSize, searchResult.total, searchResult.searchResult, search, nameof(SearchGenres));
                 return Ok(searchResultPaging);
             }
@@ -89,8 +91,42 @@ namespace WebServer.Controllers
         [Authorize]
         public IActionResult GetSearchHistory()
         {
-            //method to get search history
-            return Ok();
+            try
+            {
+                var username = GetUsername();
+                var searchHistory = _dataServiceSearches.GetSearchHistory(username);
+                var searchHistoryList = new List<SearchHistoryListElementModel>();
+                foreach (var search in searchHistory)
+                {
+                    var newSearch = new SearchHistoryListElementModel
+                    {
+                        Date = search.Date.Date.ToString(),
+                        Content = search.Content,
+                    };
+                    if (search.Category.Contains("Genres"))
+                    {
+                        newSearch.Url = _generator.GetUriByName(HttpContext, nameof(SearchGenres),
+                            new { search = search.Content });
+                    }
+                    if (search.Category.Contains("Titles"))
+                    {
+                        newSearch.Url = _generator.GetUriByName(HttpContext, nameof(SearchTitles),
+                            new { search = search.Content });
+                    }
+                    if (search.Category.Contains("Actors"))
+                    {
+                        newSearch.Url = _generator.GetUriByName(HttpContext, nameof(SearchActors),
+                            new { search = search.Content });
+                    }
+                    searchHistoryList.Add(newSearch);
+                }
+                
+                return Ok(searchHistoryList);
+            }
+            catch
+            {
+                return Unauthorized();
+            }
         }
 
         [HttpDelete("history")]
