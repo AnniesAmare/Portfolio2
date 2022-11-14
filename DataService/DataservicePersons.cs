@@ -59,17 +59,59 @@ namespace DataLayer
         }
 
 
-        public IList<Persons> GetCastByTitleId(string tConst)
+        public IList<TitlePersons> GetCastByTitleId(string tConst, int page, int pageSize)
         {
             using var db = new PortfolioDBContext();
             var cast = db.TitlePrincipals
-                .Select(x => new Persons
+                .Include(x => x.TitleBasic)
+                .Include(x => x.NameBasic)
+                .Select(x => new TitlePersons
                 {
+                    TConst = x.TConst,
                     NConst = x.NConst,
+                    Title = x.TitleBasic.PrimaryTitle,
+                    Name = x.NameBasic.PrimaryName,
+                    BirthYear = x.NameBasic.BirthYear,
+                    DeathYear = x.NameBasic.DeathYear,
+                    Popularity = x.NameBasic.AVGNameRating,
+                    isActor = x.NameBasic.IsActor,
+                    isMovie = x.TitleBasic.IsMovie,
+                    isTvShow = x.TitleBasic.IsTvShow
 
                 })
-                .Where(x => x.TConst)
-                
+                .Where(x => x.TConst == tConst)
+                .Where(x => x.isActor == true)
+                .Where(x => x.isMovie == true)
+                .Where(x => x.isTvShow == true)
+                .OrderBy(x => x.Popularity)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            if (cast == null) return null;
+
+            foreach (var person in cast)
+            {
+                //remove spaces
+                var inputNConst = person.NConst?.RemoveSpaces();
+                person.NConst = inputNConst;
+                var inputTConst = person.TConst?.RemoveSpaces();
+                person.TConst = inputTConst;
+                var inputBirthYear = person.BirthYear?.RemoveSpaces();
+                var inputDeathYear = person.BirthYear?.RemoveSpaces();
+
+                //get knownforLists
+                person.NConst = inputTConst;
+                person.KnownForMovies = GetKnownForMovies(inputNConst);
+                person.KnownForTvShows = GetKnownForTvShows(inputNConst);
+
+                //replace empty/null values
+                if (inputBirthYear == "") { person.BirthYear = "No registered birth date"; }
+                if (inputDeathYear == "") { person.DeathYear = "No registered death date"; }
+
+            }
+
+            return cast;
         }
 
         //Helper functions 

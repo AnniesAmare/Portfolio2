@@ -10,6 +10,7 @@ namespace DataLayer.DataTransferModel
     {
         public string? TConst { get; set; }
         public string? NConst { get; set; }
+        public string? Title { get; set; }
         public string? Name { get; set; }
         public string? BirthYear { get; set; }
         public string? DeathYear { get; set; }
