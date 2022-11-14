@@ -8,6 +8,7 @@ namespace DataLayer.DataTransferModel
 {
     public class TitlePersons
     {
+        public string? TConst { get; set; }
         public string? NConst { get; set; }
         public string? Name { get; set; }
         public string? BirthYear { get; set; }
