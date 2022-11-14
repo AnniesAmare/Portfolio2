@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Model
 {
-    public class TitlePersonsListModel
+    public class TitlePersonsModel
     {
         public string? Title { get; set; }
         public string? TitleUrl { get; set; }

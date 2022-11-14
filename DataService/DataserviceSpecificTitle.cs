@@ -1,5 +1,6 @@
 ﻿using DataLayer.DataTransferModel;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace DataLayer
 {
@@ -74,9 +75,9 @@ namespace DataLayer
 
                 })
                 .Where(x => x.TConst == tConst)
+                .Where(x => x.isTvShow == true || x.isMovie == true)
                 .Where(x => x.isActor == true)
-                .Where(x => x.isMovie == true)
-                .Where(x => x.isTvShow == true)
+                .Where(x => x.ProductionRole == "actor" || x.ProductionRole == "actress")
                 .OrderBy(x => x.Popularity)
                 .ToList();
 
@@ -91,7 +92,7 @@ namespace DataLayer
                 person.TConst = inputTConst;
 
                 //get List
-                person.Characters = GetCharactersById(inputNConst);
+                person.Characters = GetCharactersById(person);
 
             }
 
@@ -100,18 +101,22 @@ namespace DataLayer
 
 
         //Helper functions
-        public IList<string> GetCharactersById(string NConst)
+        public IList<string> GetCharactersById(TitlePersons person)
         {
             using var db = new PortfolioDBContext();
             IList<string> chara = new List<string>();
-
+            var tConst = person.TConst;
+            var nConst = person.NConst;
+            
             var characters = db.Characters
-                .Include(x => x.NameBasic)
-                .Where(x => x.NConst == NConst);
+                .Where(x => x.NConst == nConst)
+                .Where(x => x.TConst == tConst);
+            
             foreach (var character in characters) { chara.Add(character.TCharacter); }
 
             return chara;
         }
+
         private IList<ActorListElement> GetActorsForSpecificTitle(string tConst)
         {
             using var db = new PortfolioDBContext();

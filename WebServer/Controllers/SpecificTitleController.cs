@@ -37,17 +37,51 @@ namespace WebServer.Controllers
         [HttpGet("cast/{id}", Name = nameof(GetTitleCastById))]
         public IActionResult GetTitleCastById(string id)
         {
-            var specificTitle = _dataServiceSpecificTitle.GetTitleCastById(id);
-            if (specificTitle == null)
+            var TitleCast = _dataServiceSpecificTitle.GetTitleCastById(id);
+
+            if (TitleCast == null)
             {
                 return NotFound();
             }
-            var specificTitleModel = CreateSpecificTitleModel(specificTitle);
-            return Ok(specificTitleModel);
+
+            var CastModel = CreateTitleCastModel(TitleCast);
+            return Ok(CastModel);
+
         }
 
-        public TitlePersonsListModel CreateTitleCastModel(IList<TitlePersons> cast)
+        public TitlePersonsModel CreateTitleCastModel(IList<TitlePersons> cast)
         {
+            var castModel = new TitlePersonsModel();
+            var actors = new List<TitlePersonListModel>();
+
+            string title = "";
+
+            string tConst = "";
+
+
+            foreach(var person in cast)
+            {
+                title = person.Title;
+                tConst = person.TConst;
+                var model = _mapper.Map<TitlePersonListModel>(person);
+
+                model.PersonUrl = _generator.GetUriByName(HttpContext,
+                      nameof(SpecificPersonController.GetPersonById),
+                      new { id = person.NConst });
+
+                actors.Add(model);
+            }
+
+            if (title == "") { title = "No current primary title name"; }
+
+            castModel.TitleUrl = _generator.GetUriByName(HttpContext,
+                       nameof(SpecificTitleController.GetTitleById),
+                       new { id = tConst });
+
+            castModel.Title = title;
+            castModel.PersonsList = actors;
+
+            return castModel;
 
         }
 
