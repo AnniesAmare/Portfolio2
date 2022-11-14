@@ -5,6 +5,6 @@
         public string? Title { get; set; }
         public string? TitleUrl { get; set; }
 
-        public IList<PersonListModel> PersonsList { get; set; }
+        public IList<TitlePersonListModel> PersonsList { get; set; }
     }
 }

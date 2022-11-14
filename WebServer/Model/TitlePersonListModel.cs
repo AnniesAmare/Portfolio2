@@ -1,0 +1,11 @@
+﻿namespace WebServer.Model
+{
+    public class TitlePersonListModel
+    {
+        public string? Name { get; set; }
+        public IList<string> ProductionRole { get;set; }
+        public IList<string> Character { get; set; }
+        public float? Popularity { get; set; }
+        public string? PersonUrl { get; set; }
+    }
+}
