@@ -45,6 +45,7 @@ namespace WebServer.Controllers
             }
 
             var CrewModel = CreateTitleCastModel(TitleCrew);
+            if (CrewModel.TitleUrl == null) { return BadRequest(); }
             return Ok(CrewModel);
 
         }
@@ -60,6 +61,7 @@ namespace WebServer.Controllers
             }
 
             var CastModel = CreateTitleCastModel(TitleCast);
+            if (CastModel.TitleUrl == null) { return BadRequest(); }
             return Ok(CastModel);
 
         }
