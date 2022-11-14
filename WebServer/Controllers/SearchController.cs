@@ -57,7 +57,7 @@ namespace WebServer.Controllers
             {
                 var username = GetUsername();
                 var searchResult = _dataServiceSearches.GetSearchResultTitles(username, search, page, pageSize);
-                var searchResultPaging = PagingForSearch(page, pageSize, searchResult.total, searchResult.searchResult, search, nameof(SearchTitles));
+                var searchResultPaging = PagingForSearch(page, pageSize, searchResult.total,searchResult.searchResult, search, nameof(SearchTitles));
                 return Ok(searchResultPaging);
             }
             catch
@@ -120,7 +120,7 @@ namespace WebServer.Controllers
         }
 
 
-        private object PagingForSearch<T>(int page, int pageSize, int total, IEnumerable<T> items, string search, string endpointName)
+        public object PagingForSearch<T>(int page, int pageSize, int total, IEnumerable<T> items, string search, string endpointName)
         {
             pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
 
