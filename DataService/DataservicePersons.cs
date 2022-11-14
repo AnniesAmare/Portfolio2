@@ -1,5 +1,6 @@
 ﻿using DataLayer.DatabaseModel;
 using DataLayer.DataTransferModel;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -55,6 +56,20 @@ namespace DataLayer
 
             return actors;
 
+        }
+
+
+        public IList<Persons> GetCastByTitleId(string tConst)
+        {
+            using var db = new PortfolioDBContext();
+            var cast = db.TitlePrincipals
+                .Select(x => new Persons
+                {
+                    NConst = x.NConst,
+
+                })
+                .Where(x => x.TConst)
+                
         }
 
         //Helper functions 
