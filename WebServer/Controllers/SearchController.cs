@@ -40,7 +40,14 @@ namespace WebServer.Controllers
             {
                 var username = GetUsername();
                 var searchResult = _dataServiceSearches.GetSearchResultActors(username, search, page, pageSize);
-                var searchResultPaging = PagingForSearch(page, pageSize, searchResult.total, searchResult.searchResult, search, nameof(SearchActors));
+                var total = searchResult.total;
+                var searchResultModel = searchResult.searchResult
+                    .Select(x => new PersonSearchModel
+                    {
+                        Name = x.PrimaryName,
+                        Url = _generator.GetUriByName(HttpContext, nameof(SpecificPersonController.GetPersonById), new { id = x.NConst.RemoveSpaces() })
+                    });
+                var searchResultPaging = PagingForSearch(page, pageSize, total, searchResultModel, search, nameof(SearchActors));
                 return Ok(searchResultPaging);
             }
             catch
@@ -59,7 +66,15 @@ namespace WebServer.Controllers
             {
                 var username = GetUsername();
                 var searchResult = _dataServiceSearches.GetSearchResultTitles(username, search, page, pageSize);
-                var searchResultPaging = PagingForSearch(page, pageSize, searchResult.total,searchResult.searchResult, search, nameof(SearchTitles));
+                var total = searchResult.total;
+                var searchResultModel = searchResult.searchResult
+                    .Select(x => new TitleSearchModel
+                    {
+                        Title = x.PrimaryTitle,
+                        Rank = x.Rank,
+                        Url = _generator.GetUriByName(HttpContext, nameof(SpecificTitleController.GetTitleById), new { id = x.TConst.RemoveSpaces() })
+                    });
+                var searchResultPaging = PagingForSearch(page, pageSize, total,searchResultModel, search, nameof(SearchTitles));
                 return Ok(searchResultPaging);
             }
             catch
@@ -76,7 +91,16 @@ namespace WebServer.Controllers
             {
                 var username = GetUsername();
                 var searchResult = _dataServiceSearches.GetSearchResultGenres(username, search, page, pageSize);
-                var searchResultPaging = PagingForSearch(page, pageSize, searchResult.total, searchResult.searchResult, search, nameof(SearchGenres));
+                var total = searchResult.total;
+                var searchResultModel = searchResult.searchResult
+                    .Select(x => new TitleSearchModel
+                    {
+                        Title = x.PrimaryTitle,
+                        Rank = x.Rank,
+                        Url = _generator.GetUriByName(HttpContext, nameof(SpecificTitleController.GetTitleById), new { id = x.TConst.RemoveSpaces() })
+                    });
+
+                var searchResultPaging = PagingForSearch(page, pageSize, total, searchResultModel, search, nameof(SearchGenres));
                 return Ok(searchResultPaging);
             }
             catch
