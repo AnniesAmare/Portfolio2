@@ -39,6 +39,7 @@ namespace DataLayer
             foreach (var actor in actors) {
                 //remove spaces
                 var inputTConst = actor.NConst?.RemoveSpaces();
+                actor.NConst = inputTConst;
                 var inputBirthYear = actor.BirthYear?.RemoveSpaces();
                 var inputDeathYear = actor.BirthYear?.RemoveSpaces();
 
@@ -100,10 +101,11 @@ namespace DataLayer
                 var inputBirthYear = person.BirthYear?.RemoveSpaces();
                 var inputDeathYear = person.BirthYear?.RemoveSpaces();
 
-                //get knownforLists
+                //get Lists
                 person.NConst = inputTConst;
                 person.KnownForMovies = GetKnownForMovies(inputNConst);
                 person.KnownForTvShows = GetKnownForTvShows(inputNConst);
+                person.Characters = GetCharactersById(inputNConst);
 
                 //replace empty/null values
                 if (inputBirthYear == "") { person.BirthYear = "No registered birth date"; }
@@ -122,6 +124,19 @@ namespace DataLayer
             return db.NameBasics
                 .Select(x => new Persons { isActor = x.IsActor})
                 .Where(x => x.isActor == true).Count();
+        }
+
+       public IList<string> GetCharactersById(string NConst)
+        {
+            using var db = new PortfolioDBContext();
+            IList<string> chara = new List<string>();
+
+            var characters = db.Characters
+                .Include(x => x.NameBasic)
+                .Where(x => x.NConst == NConst);
+            foreach(var character in characters){chara.Add(character.TCharacter);}
+
+            return chara;
         }
         public IList<TitleListElement> GetKnownForMovies(string nConst)
         {

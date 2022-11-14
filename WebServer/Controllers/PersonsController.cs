@@ -48,6 +48,10 @@ namespace WebServer.Controllers
             foreach (var person in persons)
             {
                 var model = _mapper.Map<PersonListModel>(person);
+                
+                model.PersonUrl = _generator.GetUriByName(HttpContext,
+                       nameof(SpecificPersonController.GetPersonById),
+                       new { id = person.NConst });
 
                 //make moviesListWithUrl
                 foreach (var movie in person.KnownForMovies)
