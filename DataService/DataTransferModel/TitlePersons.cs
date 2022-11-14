@@ -13,15 +13,11 @@ namespace DataLayer.DataTransferModel
         public string? NConst { get; set; }
         public string? Title { get; set; }
         public string? Name { get; set; }
-        public string? BirthYear { get; set; }
-        public string? DeathYear { get; set; }
+        public string ProductionRole { get; set; }
         public IList<string> Characters { get; set; }
         public float? Popularity { get; set; }
         public bool isActor { get; set; }
         public bool isMovie { get; set; }
         public bool isTvShow { get; set; }
-
-        public IList<TitleListElement>? KnownForMovies { get; set; }
-        public IList<TitleListElement>? KnownForTvShows { get; set; }
     }
 }

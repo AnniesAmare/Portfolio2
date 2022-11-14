@@ -72,8 +72,7 @@ namespace DataLayer
                     NConst = x.NConst,
                     Title = x.TitleBasic.PrimaryTitle,
                     Name = x.NameBasic.PrimaryName,
-                    BirthYear = x.NameBasic.BirthYear,
-                    DeathYear = x.NameBasic.DeathYear,
+                    ProductionRole = x.Category,
                     Popularity = x.NameBasic.AVGNameRating,
                     isActor = x.NameBasic.IsActor,
                     isMovie = x.TitleBasic.IsMovie,
@@ -98,18 +97,9 @@ namespace DataLayer
                 person.NConst = inputNConst;
                 var inputTConst = person.TConst?.RemoveSpaces();
                 person.TConst = inputTConst;
-                var inputBirthYear = person.BirthYear?.RemoveSpaces();
-                var inputDeathYear = person.BirthYear?.RemoveSpaces();
 
                 //get Lists
-                person.NConst = inputTConst;
-                person.KnownForMovies = GetKnownForMovies(inputNConst);
-                person.KnownForTvShows = GetKnownForTvShows(inputNConst);
                 person.Characters = GetCharactersById(inputNConst);
-
-                //replace empty/null values
-                if (inputBirthYear == "") { person.BirthYear = "No registered birth date"; }
-                if (inputDeathYear == "") { person.DeathYear = "No registered death date"; }
 
             }
 
@@ -138,6 +128,8 @@ namespace DataLayer
 
             return chara;
         }
+
+    
         public IList<TitleListElement> GetKnownForMovies(string nConst)
         {
             DataserviceSpecificPerson anInstance = new DataserviceSpecificPerson();
