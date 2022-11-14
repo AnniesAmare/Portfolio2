@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using DataLayer;
 using DataLayer.DataTransferModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 using WebServer.Model;
 
 namespace WebServer.Controllers
@@ -60,11 +63,10 @@ namespace WebServer.Controllers
                 knownForList.Add(newTitle);
             }
             model.KnownForListWithUrl = knownForList;
-
+            model.Bookmark = _generator.GetUriByName(HttpContext, nameof(BookmarksController.CreateBookmark), new { id = person.NConst.RemoveSpaces() });
             return model;
         }
-
-
+        
     }
 }
 

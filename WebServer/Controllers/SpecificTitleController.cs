@@ -3,6 +3,7 @@ using DataLayer;
 using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Mvc;
 using NpgsqlTypes;
+using System;
 using WebServer.Model;
 
 namespace WebServer.Controllers
@@ -126,6 +127,7 @@ namespace WebServer.Controllers
 
             model.DirectorListWithUrl = getDirectorListElementModels(title);
             model.ActorListWithUrl = getActorListElementModels(title);
+            model.Bookmark = _generator.GetUriByName(HttpContext, nameof(BookmarksController.CreateBookmark), new { id = title.TConst.RemoveSpaces() });
 
             return model;
         }
