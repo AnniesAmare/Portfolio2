@@ -54,7 +54,64 @@ namespace DataLayer
             return title;
         }
 
+        public IList<TitlePersons> GetTitleCastById(string tConst)
+        {
+            using var db = new PortfolioDBContext();
+            var cast = db.TitlePrincipals
+                .Include(x => x.TitleBasic)
+                .Include(x => x.NameBasic)
+                .Select(x => new TitlePersons
+                {
+                    TConst = x.TConst,
+                    NConst = x.NConst,
+                    Title = x.TitleBasic.PrimaryTitle,
+                    Name = x.NameBasic.PrimaryName,
+                    ProductionRole = x.Category,
+                    Popularity = x.NameBasic.AVGNameRating,
+                    isActor = x.NameBasic.IsActor,
+                    isMovie = x.TitleBasic.IsMovie,
+                    isTvShow = x.TitleBasic.IsTvShow
+
+                })
+                .Where(x => x.TConst == tConst)
+                .Where(x => x.isActor == true)
+                .Where(x => x.isMovie == true)
+                .Where(x => x.isTvShow == true)
+                .OrderBy(x => x.Popularity)
+                .ToList();
+
+            if (cast == null) return null;
+
+            foreach (var person in cast)
+            {
+                //remove spaces
+                var inputNConst = person.NConst?.RemoveSpaces();
+                person.NConst = inputNConst;
+                var inputTConst = person.TConst?.RemoveSpaces();
+                person.TConst = inputTConst;
+
+                //get List
+                person.Characters = GetCharactersById(inputNConst);
+
+            }
+
+            return cast;
+        }
+
+
         //Helper functions
+        public IList<string> GetCharactersById(string NConst)
+        {
+            using var db = new PortfolioDBContext();
+            IList<string> chara = new List<string>();
+
+            var characters = db.Characters
+                .Include(x => x.NameBasic)
+                .Where(x => x.NConst == NConst);
+            foreach (var character in characters) { chara.Add(character.TCharacter); }
+
+            return chara;
+        }
         private IList<ActorListElement> GetActorsForSpecificTitle(string tConst)
         {
             using var db = new PortfolioDBContext();

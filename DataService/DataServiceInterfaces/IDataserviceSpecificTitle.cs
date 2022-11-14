@@ -12,6 +12,7 @@ namespace DataLayer
         //SPECIFIC TITLE METHODS
         SpecificTitle GetSpecificTitleByName(string name);
         SpecificTitle GetSpecificTitle(string tConst);
+        IList<TitlePersons> GetTitleCastById(string tConst);
 
     }
 }
