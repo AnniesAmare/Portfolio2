@@ -79,6 +79,7 @@ namespace DataLayer
                 .Where(x => x.isActor == true)
                 .Where(x => x.ProductionRole == "actor" || x.ProductionRole == "actress")
                 .OrderBy(x => x.Popularity)
+                .Distinct()
                 .ToList();
 
             if (cast == null) return null;
@@ -92,7 +93,7 @@ namespace DataLayer
                 person.TConst = inputTConst;
 
                 //get List
-                person.Characters = GetCharactersById(person);
+                person.CharacterList = GetCharactersById(person);
 
             }
 
@@ -101,20 +102,22 @@ namespace DataLayer
 
 
         //Helper functions
-        public IList<string> GetCharactersById(TitlePersons person)
+        public IList<CharacterListElement> GetCharactersById(TitlePersons person)
         {
             using var db = new PortfolioDBContext();
-            IList<string> chara = new List<string>();
             var tConst = person.TConst;
             var nConst = person.NConst;
-            
+
             var characters = db.Characters
                 .Where(x => x.NConst == nConst)
-                .Where(x => x.TConst == tConst);
-            
-            foreach (var character in characters) { chara.Add(character.TCharacter); }
+                .Where(x => x.TConst == tConst)
+                .Select(x => new CharacterListElement
+                {
+                    Character = x.TCharacter
+                })
+                .ToList();
 
-            return chara;
+            return characters;
         }
 
         private IList<ActorListElement> GetActorsForSpecificTitle(string tConst)

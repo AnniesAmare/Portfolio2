@@ -14,7 +14,7 @@ namespace DataLayer.DataTransferModel
         public string? Title { get; set; }
         public string? Name { get; set; }
         public string ProductionRole { get; set; }
-        public IList<string> Characters { get; set; }
+        public IList<CharacterListElement> CharacterList { get; set; }
         public float? Popularity { get; set; }
         public bool isActor { get; set; }
         public bool isMovie { get; set; }
