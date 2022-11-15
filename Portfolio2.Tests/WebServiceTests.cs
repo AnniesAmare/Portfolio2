@@ -4,6 +4,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using WebServer.Model;
 using WebServer.Controllers;
 using System.Reflection.Metadata;
+using System.Net.Http.Headers;
 
 namespace Portfolio2.Tests
 {
@@ -12,6 +13,10 @@ namespace Portfolio2.Tests
     {
         private const string registerUserAPI = "http://localhost:5001/api/user/register/";
         private const string loginUserAPI = "http://localhost:5001/api/user/login";
+        private const string GetUserAPI = "http://localhost:5001/api/user";
+        private const string CreateUnamedBookmarkAPI = "http://localhost:5001/api/user/bookmarks/create";
+
+        
 
         /* /api/...*/
 
@@ -34,6 +39,33 @@ namespace Portfolio2.Tests
         }
 
 
+        //Testing WebAPI CRUD operations
+
+        [Fact]
+        public void ApiCreateBookmark_ValidIdAndName_OK()
+        {
+            var userInfo = new UserLoginModel
+            {
+                Username = "Tester4000",
+                Password = "tester",
+            };
+
+            var body = new 
+            {
+                id = "nm0424060",
+                name = "ScarJo",
+                Description = "Bookmark Created"
+            };
+
+            var (response, statusCode) = 
+                PostDataWithAuthorization(userInfo, 
+                $"{CreateUnamedBookmarkAPI}/nm0424060/ScarJo", body);
+
+            Assert.Equal(HttpStatusCode.OK, statusCode);
+        }
+
+
+
         //user objects
         //var newUser = new UserRegisterModel
         //{
@@ -53,7 +85,6 @@ namespace Portfolio2.Tests
 
 
         // Helpers
-
         (JArray, HttpStatusCode) GetArray(string url)
         {
             var client = new HttpClient();
@@ -77,6 +108,26 @@ namespace Portfolio2.Tests
                 JsonConvert.SerializeObject(content),
                 Encoding.UTF8,
                 "application/json");
+            var response = client.PostAsync(url, requestContent).Result;
+            var data = response.Content.ReadAsStringAsync().Result;
+            return ((JObject)JsonConvert.DeserializeObject(data), response.StatusCode);
+        }
+
+        (JObject, HttpStatusCode) PostDataWithAuthorization
+         (UserLoginModel userInfo, string url, object content)
+        {
+            var (User, statusCode1) = PostData(loginUserAPI, userInfo);
+            var token = User["token"].ToString();
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var requestContent = new StringContent(
+                JsonConvert.SerializeObject(content),
+                Encoding.UTF8,
+                "application/json");
+
             var response = client.PostAsync(url, requestContent).Result;
             var data = response.Content.ReadAsStringAsync().Result;
             return ((JObject)JsonConvert.DeserializeObject(data), response.StatusCode);
