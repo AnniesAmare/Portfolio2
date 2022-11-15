@@ -64,10 +64,10 @@ namespace WebServer.Controllers
         public IActionResult Register(UserRegisterModel registerModel)
         {
             //none of the input values must be empty or null
-            if (registerModel.Username.IsNull()) return BadRequest();
-            if (registerModel.Password.IsNull()) return BadRequest();
-            if (registerModel.Email.IsNull()) return BadRequest();
-            if (registerModel.Birthyear.IsNull()) return BadRequest();
+            if (registerModel.Username.IsNullOrEmpty()) return BadRequest();
+            if (registerModel.Password.IsNullOrEmpty()) return BadRequest();
+            if (registerModel.Email.IsNullOrEmpty()) return BadRequest();
+            if (registerModel.Birthyear.IsNullOrEmpty()) return BadRequest();
 
             //username must be unique
             if (_dataServiceUsers.UserExists(registerModel.Username)) return BadRequest();

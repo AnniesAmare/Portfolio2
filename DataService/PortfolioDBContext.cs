@@ -19,10 +19,10 @@ namespace DataLayer
         //const string ConnectionString = "host=cit.ruc.dk;db=cit01;uid=cit01;pwd=0j4p2QVvDDgm";
 
         //siemje
-        const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=postgres";
+        //const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=postgres";
 
         //Atru
-        //const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=Bqm33etj";
+        const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=Bqm33etj";
 
         /* MOVIE MODEL */
         //TITLEBASICS
