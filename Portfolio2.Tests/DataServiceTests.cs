@@ -77,7 +77,7 @@ namespace Portfolio2.Tests
         public void GetSearchTitlesReturnsTitlesListAndAddsSearchToUserSearchTable()
         {
             var service = new DataserviceSearches();
-            var search = "twilight, apple";
+            var search = "twilight apple";
             var titleSearch = service.GetSearchResultTitles("Tester4000", search);
             Assert.NotNull(titleSearch);
             Assert.Equal(124, titleSearch.Count);
