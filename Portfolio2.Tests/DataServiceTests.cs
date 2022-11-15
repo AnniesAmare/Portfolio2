@@ -5,6 +5,10 @@ namespace Portfolio2.Tests
 {
     public class DataServiceTests
     {
+
+
+        //Testing whether our Domain Object Model (DOM) methods return expected values
+
         [Fact]
         public void GetSpecificTitleReturnsCompleteRecordOnValidTConst()
         {
@@ -89,6 +93,52 @@ namespace Portfolio2.Tests
 
         }
 
+
+        //Testing CRUD operation methods 
+        [Fact]
+        public void CreateUser_ValidData_CreateUserAndReturnNewObject()
+        {
+            var service = new DataserviceUsers();
+            var newUser = new
+            {
+                Username = "Tester5000", 
+                Email = "siemje@ruc.dk",
+                Birthyear = 1998, 
+                Password = "test1234"
+            };
+
+
+            var createUser = service.CreateUser();
+            var hashResult = _hashing.Hash(registerModel.Password);
+
+            var deleteUser = service.DeleteUser("Tester4001");
+
+
+            Assert.NotNull(deleteUser);
+
+            var category = service.CreateCategory("Test", "DeleteCategory_ValidId_RemoveTheCategory");
+            var result = service.DeleteCategory(category.Id);
+            Assert.True(result);
+            category = service.GetCategory(category.Id);
+            Assert.Null(category);
+        }
+
+        [Fact]
+        public void DeleteUser_ValidId_RemoveTheUserFromDatabase()
+        {
+            var service = new DataserviceUsers();
+           
+            var deleteUser = service.DeleteUser("Tester4000");
+
+
+            Assert.NotNull(deleteUser);
+
+            var category = service.CreateCategory("Test", "DeleteCategory_ValidId_RemoveTheCategory");
+            var result = service.DeleteCategory(category.Id);
+            Assert.True(result);
+            category = service.GetCategory(category.Id);
+            Assert.Null(category);
+        }
 
     }
 }
