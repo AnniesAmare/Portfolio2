@@ -41,27 +41,38 @@ namespace Portfolio2.Tests
 
         //Testing WebAPI CRUD operations
 
-        [Fact]
+        [Fact] //note that this test will fail if you already have created this test bookmark
         public void ApiCreateBookmark_ValidIdAndName_OK()
         {
-            var userInfo = new UserLoginModel
-            {
-                Username = "Tester4000",
-                Password = "tester",
-            };
-
-            var body = new 
+            var content = new 
             {
                 id = "nm0424060",
                 name = "ScarJo",
-                Description = "Bookmark Created"
+                description = "Bookmark Created"
             };
 
             var (response, statusCode) = 
-                PostDataWithAuthorization(userInfo, 
-                $"{CreateUnamedBookmarkAPI}/nm0424060/ScarJo", body);
+                PostDataWithAuthorization(
+                    $"{CreateUnamedBookmarkAPI}/{content.id}/{content.name}", content);
 
             Assert.Equal(HttpStatusCode.OK, statusCode);
+        }
+
+        [Fact] 
+        public void ApiCreateBookmark_InvalidIdAndName_BadRequest()
+        {
+            var content = new
+            {
+                id = "1234567",
+                name = "ScarJo",
+                description = "Bookmark Created"
+            };
+
+            var (response, statusCode) =
+                PostDataWithAuthorization(
+                    $"{CreateUnamedBookmarkAPI}/{content.id}/{content.name}", content);
+
+            Assert.Equal(HttpStatusCode.BadRequest, statusCode);
         }
 
 
@@ -113,9 +124,14 @@ namespace Portfolio2.Tests
             return ((JObject)JsonConvert.DeserializeObject(data), response.StatusCode);
         }
 
-        (JObject, HttpStatusCode) PostDataWithAuthorization
-         (UserLoginModel userInfo, string url, object content)
+        (JObject, HttpStatusCode) PostDataWithAuthorization(string url, object content)
         {
+            var userInfo = new UserLoginModel
+            {
+                Username = "Tester4000",
+                Password = "tester",
+            };
+
             var (User, statusCode1) = PostData(loginUserAPI, userInfo);
             var token = User["token"].ToString();
 
