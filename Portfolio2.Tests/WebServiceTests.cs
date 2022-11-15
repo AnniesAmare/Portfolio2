@@ -15,7 +15,7 @@ namespace Portfolio2.Tests
         private const string loginUserAPI = "http://localhost:5001/api/user/login";
         private const string GetUserAPI = "http://localhost:5001/api/user";
         private const string CreateUnamedBookmarkAPI = "http://localhost:5001/api/user/bookmarks/create";
-
+        private const string DeletBookmarAPI = "http://localhost:5001/api/user/bookmarks/delete";
         
 
         /* /api/...*/
@@ -42,7 +42,7 @@ namespace Portfolio2.Tests
         //Testing WebAPI CRUD operations
 
         [Fact] //note that this test will fail if you already have created this test bookmark
-        public void ApiCreateBookmark_ValidIdAndName_OK()
+        public void ApiCreateBookmark_ValidIdAndNameOK_AND_BookmarkDeletedOK()
         {
             var content = new 
             {
@@ -51,11 +51,16 @@ namespace Portfolio2.Tests
                 description = "Bookmark Created"
             };
 
-            var (response, statusCode) = 
+            var (response, statusCodeCreated) = 
                 PostDataWithAuthorization(
                     $"{CreateUnamedBookmarkAPI}/{content.id}/{content.name}", content);
 
-            Assert.Equal(HttpStatusCode.OK, statusCode);
+            Assert.Equal(HttpStatusCode.OK, statusCodeCreated);
+
+            var statusCodeDelete = DeleteDataWithAuthorization
+                ($"{DeletBookmarAPI}/{content.id}");
+
+            Assert.Equal(HttpStatusCode.OK, statusCodeDelete);
         }
 
         [Fact] 
@@ -63,7 +68,7 @@ namespace Portfolio2.Tests
         {
             var content = new
             {
-                id = "1234567",
+                id = "nm042406123",
                 name = "ScarJo",
                 description = "Bookmark Created"
             };
@@ -75,6 +80,7 @@ namespace Portfolio2.Tests
             Assert.Equal(HttpStatusCode.BadRequest, statusCode);
         }
 
+        
 
 
         //user objects
@@ -164,6 +170,25 @@ namespace Portfolio2.Tests
         HttpStatusCode DeleteData(string url)
         {
             var client = new HttpClient();
+            var response = client.DeleteAsync(url).Result;
+            return response.StatusCode;
+        }
+
+        HttpStatusCode DeleteDataWithAuthorization(string url)
+        {
+            var userInfo = new UserLoginModel
+            {
+                Username = "Tester4000",
+                Password = "tester",
+            };
+
+            var (User, statusCodeGetToken) = PostData(loginUserAPI, userInfo);
+            var token = User["token"].ToString();
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
             var response = client.DeleteAsync(url).Result;
             return response.StatusCode;
         }
