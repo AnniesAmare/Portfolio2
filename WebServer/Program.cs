@@ -23,6 +23,8 @@ builder.Services.AddSingleton<IDataserviceBookmarks, DataserviceBookmarks>();
 builder.Services.AddSingleton<IDataserviceTitles, DataserviceTitles>();
 builder.Services.AddSingleton<IDataservicePersons, DataservicePersons>();
 builder.Services.AddSingleton<IDataserviceSearches, DataserviceSearches>();
+builder.Services.AddSingleton<IDataserviceUserRatings, DataserviceUserRatings>();
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<Hashing>();
