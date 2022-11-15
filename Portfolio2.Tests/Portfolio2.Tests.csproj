@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataService\DataLayer.csproj" />
+    <ProjectReference Include="..\WebServer\WebServer.csproj" />
   </ItemGroup>
 
 </Project>
