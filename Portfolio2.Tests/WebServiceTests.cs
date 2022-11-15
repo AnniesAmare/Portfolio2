@@ -17,7 +17,7 @@ namespace Portfolio2.Tests
         private const string CreateUnamedBookmarkAPI = "http://localhost:5001/api/user/bookmarks/create";
         private const string DeletBookmarAPI = "http://localhost:5001/api/user/bookmarks/delete";
         private const string GetMoviesAPI = "http://localhost:5001/api/titles/movies";
-        
+        private const string UpdateBookmarkAPI = "http://localhost:5001/api/user/bookmarks/rename";
 
         /* /api/...*/
 
@@ -61,12 +61,12 @@ namespace Portfolio2.Tests
             {
                 id = "nm0424060",
                 name = "ScarJo",
-                description = "Bookmark Created"
+                description = "Bookmark Created!"
             };
 
             var (response, statusCodeCreated) = 
-                PostDataWithAuthorization(
-                    $"{CreateUnamedBookmarkAPI}/{content.id}/{content.name}", content);
+                PostDataWithAuthorization
+                ($"{CreateUnamedBookmarkAPI}/{content.id}/{content.name}", content.description);
 
             Assert.Equal(HttpStatusCode.OK, statusCodeCreated);
 
@@ -101,6 +101,49 @@ namespace Portfolio2.Tests
 
             Assert.Equal(HttpStatusCode.NotFound, statusCodeDelete);
         }
+
+        [Fact]
+        public void ApiBookmark_UpdateWithValid_Ok()
+        {
+
+            var content = new
+            {
+                id = "nm0189075",
+                name = "Alan Crossland",
+                description = "Bookmark Created"
+            };
+
+
+            //create bookmark 
+            var (bookmark, statusCodeCreated) =
+               PostDataWithAuthorization(
+                   $"{CreateUnamedBookmarkAPI}/{content.id}/{content.name}", 
+                   content.description);
+
+            Assert.Equal(HttpStatusCode.OK, statusCodeCreated);
+
+            var update = new
+            {
+                id = content.id,
+                name = content.name + "Updated",
+                description = content.description + "Updated"
+            };
+
+            var statusCode = PutDataWithAuthorization
+                ($"{UpdateBookmarkAPI}/{update.id}/{update.name}", update.description);
+
+            Assert.Equal(HttpStatusCode.OK, statusCode);
+
+
+            //delete bookmark
+
+            var statusCodeDelete = DeleteDataWithAuthorization
+                ($"{DeletBookmarAPI}/{content.id}");
+
+            Assert.Equal(HttpStatusCode.OK, statusCodeDelete);
+        }
+
+    
 
 
 
@@ -179,6 +222,30 @@ namespace Portfolio2.Tests
         HttpStatusCode PutData(string url, object content)
         {
             var client = new HttpClient();
+            var response = client.PutAsync(
+                url,
+                new StringContent(
+                    JsonConvert.SerializeObject(content),
+                    Encoding.UTF8,
+                    "application/json")).Result;
+            return response.StatusCode;
+        }
+
+        HttpStatusCode PutDataWithAuthorization(string url, object content)
+        {
+            var userInfo = new UserLoginModel
+            {
+                Username = "Tester4000",
+                Password = "tester",
+            };
+
+            var (User, statusCode1) = PostData(loginUserAPI, userInfo);
+            var token = User["token"].ToString();
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+        
             var response = client.PutAsync(
                 url,
                 new StringContent(
