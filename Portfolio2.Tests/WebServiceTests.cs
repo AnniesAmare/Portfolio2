@@ -11,11 +11,12 @@ namespace Portfolio2.Tests
     
     public class WebServiceTests 
     {
-        private const string registerUserAPI = "http://localhost:5001/api/user/register/";
+        private const string registerUserAPI = "http://localhost:5001/api/user/register";
         private const string loginUserAPI = "http://localhost:5001/api/user/login";
         private const string GetUserAPI = "http://localhost:5001/api/user";
         private const string CreateUnamedBookmarkAPI = "http://localhost:5001/api/user/bookmarks/create";
         private const string DeletBookmarAPI = "http://localhost:5001/api/user/bookmarks/delete";
+        private const string GetMoviesAPI = "http://localhost:5001/api/titles/movies";
         
 
         /* /api/...*/
@@ -36,6 +37,18 @@ namespace Portfolio2.Tests
             Assert.Equal("Tester4000", User["username"].ToString());
             Assert.NotNull(User["token"].ToString());
 
+        }
+
+        //testing Get Methods
+        [Fact]
+        public void ApiMovies_CompleteProduct()
+        {
+            var (movieList, statusCode) = GetObject(GetMoviesAPI);
+
+            Assert.Equal(HttpStatusCode.OK, statusCode);
+            Assert.Equal("http://localhost:5001/api/titles/movies?page=0&pageSize=20", movieList["first"]);
+            Assert.Equal("Dogville", movieList["items"].First()["name"]);
+            Assert.Equal("The Stuff", movieList["items"].Last()["name"]);
         }
 
 
@@ -80,7 +93,15 @@ namespace Portfolio2.Tests
             Assert.Equal(HttpStatusCode.BadRequest, statusCode);
         }
 
-        
+        [Fact]
+        public void ApiBookmark_DeleteWithInvalidId_NotFound()
+        {
+            var statusCodeDelete = DeleteDataWithAuthorization
+                ($"{DeletBookmarAPI}/NotValid12434");
+
+            Assert.Equal(HttpStatusCode.NotFound, statusCodeDelete);
+        }
+
 
 
         //user objects
