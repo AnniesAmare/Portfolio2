@@ -34,13 +34,14 @@ namespace WebServer.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("{username}", Name = nameof(GetUserRatings))]
+        [HttpGet(Name = nameof(GetUserRatings))]
         [Authorize]
         public IActionResult GetUserRatings(int page = 0, int pageSize = 20)
-        {            
-            var username = GetUsername();
+        {
             try
-            { 
+            {
+                var username = GetUsername();
+                Console.WriteLine(username);
                 var ratings = _dataServiceRatings.GetUserRatings(username, page, pageSize);
                 if (ratings == null)
                 {
