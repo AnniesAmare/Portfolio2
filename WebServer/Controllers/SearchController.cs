@@ -155,7 +155,7 @@ namespace WebServer.Controllers
             }
         }
 
-        [HttpDelete("user/delete/history")]
+        [HttpDelete("user/history/delete")]
         [Authorize]
         public IActionResult DeleteSearchHistory()
         {
