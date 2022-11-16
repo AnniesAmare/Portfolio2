@@ -57,8 +57,6 @@ namespace WebServer.Controllers
                 Console.WriteLine(url);
 
                 return Ok(PagingForUserRatings(page, pageSize, total, ratingsModel));
-
-
             }
             catch
             {

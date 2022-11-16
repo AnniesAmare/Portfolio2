@@ -9,7 +9,7 @@ using WebServer.Services;
 
 namespace WebServer.Controllers
 {
-    [Route("api/search")]
+    [Route("api")]
     [ApiController]
     public class SearchController : ControllerBase
     {
@@ -31,7 +31,7 @@ namespace WebServer.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("actors/{search}", Name = nameof(SearchActors))]
+        [HttpGet("search/actors/{search}", Name = nameof(SearchActors))]
         [Authorize]
         public IActionResult SearchActors(string? search, int page = 0, int pageSize = 20)
         {
@@ -57,7 +57,7 @@ namespace WebServer.Controllers
 
 
 
-        [HttpGet("titles/{search}", Name = nameof(SearchTitles))]
+        [HttpGet("search/titles/{search}", Name = nameof(SearchTitles))]
         [Authorize]
         public IActionResult SearchTitles(string? search, int page = 0, int pageSize = 20)
         {
@@ -82,7 +82,7 @@ namespace WebServer.Controllers
             }
         }
         
-        [HttpGet("genres/{search}", Name = nameof(SearchGenres))]
+        [HttpGet("search/genres/{search}", Name = nameof(SearchGenres))]
         [Authorize]
         public IActionResult SearchGenres(string? search, int page = 0, int pageSize = 20)
         {
@@ -110,7 +110,7 @@ namespace WebServer.Controllers
 
 
 
-        [HttpGet("history", Name = nameof(GetSearchHistory))]
+        [HttpGet("user/history", Name = nameof(GetSearchHistory))]
         [Authorize]
         public IActionResult GetSearchHistory(int page = 0, int pageSize = 20)
         {
@@ -155,7 +155,7 @@ namespace WebServer.Controllers
             }
         }
 
-        [HttpDelete("history")]
+        [HttpDelete("user/delete/history")]
         [Authorize]
         public IActionResult DeleteSearchHistory()
         {
