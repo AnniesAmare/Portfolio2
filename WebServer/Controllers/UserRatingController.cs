@@ -127,7 +127,7 @@ namespace WebServer.Controllers
                 if (!deleted) return NotFound();
                 return Ok();
             }
-            catch (Exception e)
+            catch
             {
                 return Unauthorized();
             }
