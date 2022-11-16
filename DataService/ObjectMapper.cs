@@ -17,6 +17,7 @@ namespace DataLayer
                 // This line ensures that internal properties are also mapped over.
                 cfg.ShouldMapProperty = p => p.GetMethod.IsPublic || p.GetMethod.IsAssembly;
                 cfg.AddProfile<BookmarkProfile>();
+                cfg.AddProfile<UserRatingProfile>();
 
             });
             var mapper = config.CreateMapper();

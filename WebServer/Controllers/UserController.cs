@@ -75,7 +75,7 @@ namespace WebServer.Controllers
             //password must have a minimum length of 8.
             const int minimumPasswordLength = 8;
             if (registerModel.Password.Length < minimumPasswordLength) return BadRequest();
-            
+
             //password is hashed
             var hashResult = _hashing.Hash(registerModel.Password);
             var user = _dataServiceUsers.CreateUser(registerModel.Username, hashResult.hash, hashResult.salt, registerModel.Email, registerModel.Birthyear);
@@ -91,7 +91,7 @@ namespace WebServer.Controllers
 
             var jwt = GenerateJwtToken(user.Username);
 
-            return Ok(new {user.Username, token = jwt});
+            return Ok(new { user.Username, token = jwt });
         }
 
 

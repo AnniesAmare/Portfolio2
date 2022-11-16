@@ -34,5 +34,7 @@ namespace DataLayer.DatabaseModel
 
         //USER FRAMEWORK
         public IList<BookmarkTitle> BookmarkTitle { get; set; }
+
+        public IList<UserRating>? UserRating { get; set; }
     }
 }

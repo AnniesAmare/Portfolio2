@@ -64,7 +64,7 @@ namespace DataLayer
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            //optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
             optionsBuilder.UseNpgsql(ConnectionString);
         }
 
@@ -277,6 +277,19 @@ namespace DataLayer
                 .HasOne(x => x.User)
                 .WithMany(x => x.UserRating)
                 .HasForeignKey(x => x.Username);
+            modelBuilder.Entity<UserRating>()
+                .HasOne(x => x.TitleBasic)
+                .WithMany(x => x.UserRating)
+                .HasForeignKey(x => x.TConst);
+
+            //modelBuilder.Entity<BookmarkTitle>()
+            //  .HasOne(x => x.User)
+            //  .WithMany(x => x.BookmarkTitle)
+            //  .HasForeignKey(x => x.Username);
+            //modelBuilder.Entity<BookmarkTitle>()
+            //    .HasOne(x => x.TitleBasic)
+            //    .WithMany(x => x.BookmarkTitle)
+            //    .HasForeignKey(x => x.TConst);
 
             //USER SEARCH
             modelBuilder.Entity<UserSearch>().ToTable("user_search");
