@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using DataLayer;
-using DataLayer.DataServiceInterfaces;
 using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Numerics;
-using System.Security.Claims;
 using WebServer.Model;
 
 namespace WebServer.Controllers
