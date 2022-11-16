@@ -2,8 +2,6 @@
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
-using DataLayer;
-using DataLayer.DatabaseModel;
 using DataLayer.DataServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

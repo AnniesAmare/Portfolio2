@@ -2,8 +2,6 @@
 using DataLayer;
 using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Mvc;
-using NpgsqlTypes;
-using System;
 using WebServer.Model;
 
 namespace WebServer.Controllers
