@@ -10,9 +10,9 @@ namespace DataLayer.DataTransferModel
     {
         public string Username { get; set; }
         public string TConst { get; set; }
-        //public string Title { get; set; }   
+        public string Title { get; set; }   
         public int Rating { get; set; }
-        //public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         
 
     }

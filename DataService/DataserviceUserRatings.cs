@@ -14,82 +14,67 @@ namespace DataLayer
     public class DataserviceUserRatings : IDataserviceUserRatings
     {
 
+        public IList<UserRatingElement> GetUserRatings(string username, int page, int pageSize)
+        {
+
+            //Console.WriteLine("I reach here");
+            using var db = new PortfolioDBContext();
+            var ratings = db.UserRatings
+                .Include(x => x.TitleBasic)
+                .Where(x => x.Username == username)
+                .Select(x => new UserRatingElement{ 
+                Title = x.TitleBasic.PrimaryTitle,
+                TConst = x.TConst,
+                Rating = x.Rating,
+                Date = x.Date
+                })
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .OrderBy(x => x.Date)   
+                .ToList();
+
+            
+            return ratings;
+        }
+
         public bool InsertUserRating(string username, string id, int rating)
         {
             using var db = new PortfolioDBContext();
             var title = db.TitleBasics.Find(id);
-            //var user = db.UserRatings.Find(username);
-
-            Console.WriteLine(username);
-            Console.WriteLine(id);
-            Console.WriteLine(rating);
-
-            try
+          
+            if (title != null)
             {
-                //add user search
-                var created = db.Database.ExecuteSqlInterpolated
-                    ($"select * save_user_rating({username},{id},{rating})");
+                db.Database.ExecuteSqlInterpolated
+                            ($"select user_rate({username},{id},{rating})");
 
-                if(created > 0)
-                {
-                    return true;
-                }
+                var created = db.UserRatings.Find(id);
 
-                return false;
+                if (created != null) return false;
                 
-            }catch{
-                return false;
+                return true;
+
             }
 
-            
+            return false;
+        }
 
-            //var searchResult = 
-            //    db.PersonSearches.FromSqlInterpolated($"select * from string_search_name({search})").ToList();
+        public bool DeleteUserRatings(string username, string id)
+        {
+            using var db = new PortfolioDBContext();
 
-            //if (title != null)
-            //{
-            //    Console.WriteLine("got hereTest");
-            //    //var userRatingTitle =
-            //    //    db.UserRatings.ToList();
-            //        //.Where(x => x.Username == username)
-            //        //.FirstOrDefault();
+            var rating = db.UserRatings
+                 .Where(x => x.Username == username)
+                 .Where(x => x.TConst == id)
+                 .FirstOrDefault();
 
-            //    //if (userRatingTitle == null) userRatingTitle. = "Not here";
-            //    //Console.WriteLine(userRatingTitle  + "heres");
-            //    var tConst = title.TConst.RemoveSpaces();
-            //    var userName = username.RemoveSpaces();
+            if(rating != null)
+            {
+                db.UserRatings.Remove(rating);
+                db.SaveChanges();
+                return true;
 
-            //    //Console.WriteLine(UserRatingExists(username, id));
-            //    //if (!UserRatingExists(username, id))
-            //    //{
-            //        Console.WriteLine("got here2");
-            //        var newRating = CreateUserRating(username, id, rating);
-            //    Console.WriteLine(newRating.Username);
-            //    Console.WriteLine(newRating.Rating);
-            //    //Console.WriteLine(newRating.Date);
-            //    //Console.WriteLine(newRating.Title);
-
-
-
-            //   // var userRating = ObjectMapper.Mapper.Map<UserRatingElement>(newRating);
-
-            //    //Console.WriteLine(userRating.Username + "test");
-            //    //Console.WriteLine(userRating);
-
-
-            //    //db.UserRatings.Add(newRating);
-
-            //    db?.UserRatings?.Add(newRating);
-            //    //db?.UserRatings?.AddObject(userRating);
-            //    Console.WriteLine(newRating + "arrived");
-            //    db.SaveChanges();
-            //    Console.WriteLine("got her3");
-
-            //        return true;
-            //    //}
-            //}
-
-            //return false;
+            }
+            return false;
         }
 
         //helper functions
@@ -106,15 +91,23 @@ namespace DataLayer
             return newRating;
         }
 
-
-        private bool UserRatingExists(string username, string id)
+        public int GetNumberOfUserRatings(string username, int page, int pageSize)
         {
-            using var db = new PortfolioDBContext();
-            var userRatingTitle = db.UserRatings.Where(x => x.Username == username && x.TConst == id)!.FirstOrDefault();
-            Console.WriteLine(userRatingTitle);
-            if (userRatingTitle == null) return false;
-            return true;
+            var allRatings = GetUserRatings(username, page, pageSize);
+            var result = allRatings.Count;
+            return result;
         }
+
+        //private bool UserRatingExists(string username, string id)
+        //{
+        //    using var db = new PortfolioDBContext();
+        //    var userRating = db.UserRatings
+        //        .Where(x => x.Username == username && x.TConst == id).FirstOrDefault();
+        //    if (userRating == null) return false;
+        //    return true;
+        //}
+
+
 
     }
 }

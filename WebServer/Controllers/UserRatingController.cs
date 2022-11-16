@@ -4,6 +4,8 @@ using DataLayer.DataServiceInterfaces;
 using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Routing;
 using System;
 using System.Security.Claims;
 using WebServer.Model;
@@ -32,6 +34,37 @@ namespace WebServer.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet("{username}", Name = nameof(GetUserRatings))]
+        [Authorize]
+        public IActionResult GetUserRatings(int page = 0, int pageSize = 20)
+        {            
+            var username = GetUsername();
+            try
+            { 
+                var ratings = _dataServiceRatings.GetUserRatings(username, page, pageSize);
+                if (ratings == null)
+                {
+                    return NotFound();
+                }
+                var ratingsModel = CreateUserRatingModel(ratings);
+
+                var total = _dataServiceRatings.GetNumberOfUserRatings(username, page, pageSize);
+
+                var url = _generator.GetUriByName
+                    (HttpContext, nameof(UserRatingController.GetUserRatings),
+                    new { page, pageSize });
+                Console.WriteLine(url);
+
+                return Ok(PagingForUserRatings(page, pageSize, total, ratingsModel));
+
+
+            }
+            catch
+            {
+                return Unauthorized();
+            }
+        }
+
         [HttpPost("create/{id}/{rating}", Name = nameof(CreateUserRating))]
         [Authorize]
         public IActionResult CreateUserRating(string id, int rating)
@@ -39,22 +72,17 @@ namespace WebServer.Controllers
             try
             {
                 var username = GetUsername();
-                var created = _dataServiceRatings.InsertUserRating(username,id, rating);
-
-                //Console.WriteLine(created.TConst);
-                //Console.WriteLine(created.Rating);
-                //Console.WriteLine(created.Username);
-                //Console.WriteLine(created.Title);
-                if (created == false) return BadRequest();
-
-                
+                var created = _dataServiceRatings.InsertUserRating(username,id, rating);     
 
                 if (created == true)
                 {
                     return Ok();
                 }
+                else { 
+                    return BadRequest(); 
+                }
 
-                return BadRequest();
+                
             }
             catch
             {
@@ -68,24 +96,84 @@ namespace WebServer.Controllers
         }
 
 
-        //public UserRatingModel CreateUserRatingModel(UserRatingElement rating)
-        //{
-        //    var model = _mapper.Map<UserRatingModel>(rating);
+        public IList<UserRatingModel> CreateUserRatingModel(IList<UserRatingElement> ratings)
+        {
+            var ratingModel = new List<UserRatingModel>();
 
-        //    model.Url = _generator.GetUriByName(HttpContext,
-        //                nameof(SpecificTitleController.GetTitleById),
-        //                new { id = tvShow.TConst })
+            foreach (var rating in ratings)
+            {
+                var tConst = rating.TConst.RemoveSpaces();
+                var model = _mapper.Map<UserRatingModel>(rating);
 
-        //    var newRating = new TitleListElementModel
-        //    {
-        //        Title = tvShow.Title,
-        //        Url = _generator.GetUriByName(HttpContext,
-        //                nameof(SpecificTitleController.GetTitleById),
-        //                new { id = tvShow.TConst })
+                model.Url = _generator.GetUriByName(HttpContext,
+                            nameof(SpecificTitleController.GetTitleById),
+                            new { id = tConst });
 
-        //    };
+                ratingModel.Add(model);
+            }
 
-        //}
+            return ratingModel;
+        }
+
+        [HttpDelete("delete/{id}", Name = nameof(DeleteUserRating))]
+        [Authorize]
+        public IActionResult DeleteUserRating(string id)
+        {
+            try
+            {
+                var username = GetUsername();
+                var deleted = _dataServiceRatings.DeleteUserRatings(username, id);
+                if (!deleted) return NotFound();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return Unauthorized();
+            }
+        }
+
+
+        //Helper functions
+
+        private string? CreateUserRatingLink(int page, int pageSize)
+        {
+            return _generator.GetUriByName(HttpContext, 
+                nameof(GetUserRatings), 
+                new { page, pageSize });
+        }
+
+        private object PagingForUserRatings<T>(int page, int pageSize, int total, IEnumerable<T> items)
+        {
+            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
+
+            var pages = (int)Math.Ceiling((double)total / (double)pageSize);
+
+            var first = total > 0
+                ? CreateUserRatingLink(0, pageSize)
+                : null;
+
+            var prev = page > 0
+                ? CreateUserRatingLink(page - 1, pageSize)
+                : null;
+
+            var current = CreateUserRatingLink(page, pageSize);
+
+            var next = page < pages - 1
+                ? CreateUserRatingLink(page + 1, pageSize)
+                : null;
+
+            var result = new
+            {
+                first,
+                prev,
+                next,
+                current,
+                total,
+                pages,
+                items
+            };
+            return result;
+        }
 
     }
 }
