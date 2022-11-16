@@ -78,18 +78,6 @@ namespace DataLayer
         }
 
         //helper functions
-        public UserRating CreateUserRating(string username, string tConst, int rating)
-        {
-            var newRating = new UserRating
-            {
-                Username = username,
-                TConst = tConst.RemoveSpaces(),
-                Rating = rating,
-                //Date = DateTime.Now,
-
-            };
-            return newRating;
-        }
 
         public int GetNumberOfUserRatings(string username, int page, int pageSize)
         {
@@ -97,15 +85,6 @@ namespace DataLayer
             var result = allRatings.Count;
             return result;
         }
-
-        //private bool UserRatingExists(string username, string id)
-        //{
-        //    using var db = new PortfolioDBContext();
-        //    var userRating = db.UserRatings
-        //        .Where(x => x.Username == username && x.TConst == id).FirstOrDefault();
-        //    if (userRating == null) return false;
-        //    return true;
-        //}
 
 
 

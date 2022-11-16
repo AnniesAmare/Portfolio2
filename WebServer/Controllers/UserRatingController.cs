@@ -36,9 +36,8 @@ namespace WebServer.Controllers
 
         [HttpGet("{username}", Name = nameof(GetUserRatings))]
         [Authorize]
-        public IActionResult GetUserRatings(int page = 0, int pageSize = 20)
+        public IActionResult GetUserRatings(string username, int page = 0, int pageSize = 20)
         {            
-            var username = GetUsername();
             try
             { 
                 var ratings = _dataServiceRatings.GetUserRatings(username, page, pageSize);
@@ -126,7 +125,7 @@ namespace WebServer.Controllers
                 if (!deleted) return NotFound();
                 return Ok();
             }
-            catch (Exception e)
+            catch
             {
                 return Unauthorized();
             }
