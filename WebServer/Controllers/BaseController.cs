@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
-using DataLayer.DataServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection.Emit;
 using System.Security.Claims;
 using System.Text;
-using WebServer.Services;
 
 namespace WebServer.Controllers
 {

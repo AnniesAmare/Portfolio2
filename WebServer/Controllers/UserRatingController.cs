@@ -4,12 +4,7 @@ using DataLayer.DataServiceInterfaces;
 using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Routing;
-using System;
-using System.Security.Claims;
 using WebServer.Model;
-using WebServer.Services;
 
 namespace WebServer.Controllers
 {

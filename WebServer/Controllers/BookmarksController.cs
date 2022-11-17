@@ -2,9 +2,7 @@
 using DataLayer.DataServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using WebServer.Model;
-using WebServer.Services;
 
 namespace WebServer.Controllers
 {
