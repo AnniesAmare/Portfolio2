@@ -1,10 +1,8 @@
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using DataLayer;
 using DataLayer.DataServiceInterfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using WebServer.Services;
 
 
@@ -16,16 +14,19 @@ builder.Services.AddControllers();
 
 
 //DATASERVICES
-builder.Services.AddSingleton<IDataserviceSpecificPerson, DataserviceSpecificPerson>();
-builder.Services.AddSingleton<IDataserviceSpecificTitle, DataserviceSpecificTitle>();
-builder.Services.AddSingleton<IDataserviceUsers, DataserviceUsers>();
-builder.Services.AddSingleton<IDataserviceBookmarks, DataserviceBookmarks>();
+/* IMDB FRAMEWORK */
 builder.Services.AddSingleton<IDataserviceTitles, DataserviceTitles>();
 builder.Services.AddSingleton<IDataservicePersons, DataservicePersons>();
+builder.Services.AddSingleton<IDataserviceSpecificPerson, DataserviceSpecificPerson>();
+builder.Services.AddSingleton<IDataserviceSpecificTitle, DataserviceSpecificTitle>();
+
+/* USER FRAMEWORK */
+builder.Services.AddSingleton<IDataserviceUsers, DataserviceUsers>();
+builder.Services.AddSingleton<IDataserviceBookmarks, DataserviceBookmarks>();
 builder.Services.AddSingleton<IDataserviceSearches, DataserviceSearches>();
 builder.Services.AddSingleton<IDataserviceUserRatings, DataserviceUserRatings>();
 
-
+//Other services
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<Hashing>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

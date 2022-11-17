@@ -25,7 +25,7 @@ namespace DataLayer
             return user;
         }
 
-        public User CreateUser(string username, string password, string salt, string email, string birthyear)
+        public bool CreateUser(string username, string password, string salt, string email, string birthyear)
         {
             using var db = new PortfolioDBContext();
             var user = new User
@@ -38,7 +38,8 @@ namespace DataLayer
             };
             db.Users.Add(user);
             db.SaveChanges();
-            return user;
+            if (UserExists(username)) return true;
+            return false;
         }
 
         public bool UpdateUser(string username, string email, string birthyear)

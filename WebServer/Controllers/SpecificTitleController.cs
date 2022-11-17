@@ -8,17 +8,13 @@ namespace WebServer.Controllers
 {
     [Route("api/title")]
     [ApiController]
-    public class SpecificTitleController : ControllerBase
+    public class SpecificTitleController : BaseController
     {
-        private IDataserviceSpecificTitle _dataServiceSpecificTitle;
-        private readonly LinkGenerator _generator;
-        private readonly IMapper _mapper;
+        private readonly IDataserviceSpecificTitle _dataServiceSpecificTitle;
 
-        public SpecificTitleController(IDataserviceSpecificTitle dataServiceSpecificTitle, LinkGenerator generator, IMapper mapper)
+        public SpecificTitleController(IDataserviceSpecificTitle dataServiceSpecificTitle, LinkGenerator generator, IMapper mapper, IConfiguration configuration) : base(generator, mapper, configuration)
         {
             _dataServiceSpecificTitle = dataServiceSpecificTitle;
-            _generator = generator;
-            _mapper = mapper;
         }
 
         [HttpGet("{id}", Name = nameof(GetTitleById))]
@@ -37,7 +33,6 @@ namespace WebServer.Controllers
         public IActionResult GetTitleCrewById(string id)
         {
             var TitleCrew = _dataServiceSpecificTitle.GetTitleCrewById(id);
-
             if (TitleCrew == null)
             {
                 return NotFound();
@@ -46,14 +41,12 @@ namespace WebServer.Controllers
             var CrewModel = CreateTitleCastModel(TitleCrew);
             if (CrewModel.TitleUrl == null) { return BadRequest(); }
             return Ok(CrewModel);
-
         }
 
         [HttpGet("cast/{id}", Name = nameof(GetTitleCastById))]
         public IActionResult GetTitleCastById(string id)
         {
             var TitleCast = _dataServiceSpecificTitle.GetTitleCastById(id);
-
             if (TitleCast == null)
             {
                 return NotFound();
@@ -62,18 +55,14 @@ namespace WebServer.Controllers
             var CastModel = CreateTitleCastModel(TitleCast);
             if (CastModel.TitleUrl == null) { return BadRequest(); }
             return Ok(CastModel);
-
         }
 
         public TitlePersonsModel CreateTitleCastModel(IList<TitlePersons> cast)
         {
             var castModel = new TitlePersonsModel();
             var actors = new List<TitlePersonListModel>();
-
             string title = "";
-
             string tConst = "";
-
 
             foreach(var person in cast)
             {
@@ -101,13 +90,10 @@ namespace WebServer.Controllers
 
         }
 
-
-
-
-        [HttpGet("name/{search}")]
-        public IActionResult GetTitleByName(string search)
+        [HttpGet("name/{name}")]
+        public IActionResult GetTitleByName(string name)
         {
-            var specificTitle = _dataServiceSpecificTitle.GetSpecificTitleByName(search);
+            var specificTitle = _dataServiceSpecificTitle.GetSpecificTitleByName(name);
             if (specificTitle == null)
             {
                 return NotFound();
@@ -120,12 +106,10 @@ namespace WebServer.Controllers
         public SpecificTitleModel CreateSpecificTitleModel(SpecificTitle title)
         {
             var model = _mapper.Map<SpecificTitleModel>(title);
-            var directorList = new List<DirectorListElementModel>();
-            var actorList = new List<ActorListElementModel>();
 
             model.DirectorListWithUrl = getDirectorListElementModels(title);
             model.ActorListWithUrl = getActorListElementModels(title);
-            model.Bookmark = _generator.GetUriByName(HttpContext, nameof(BookmarksController.CreateBookmark), new { id = title.TConst.RemoveSpaces() });
+            model.Bookmark = GenerateLink(nameof(BookmarksController.CreateBookmark), new { id = title.TConst.RemoveSpaces() });
 
             return model;
         }
@@ -138,7 +122,7 @@ namespace WebServer.Controllers
                 var newDirector = new DirectorListElementModel
                 {
                     Name = director.Name,
-                    Url = _generator.GetUriByName(HttpContext, nameof(SpecificPersonController.GetPersonById), new { id = director.NConst })
+                    Url = GenerateLink(nameof(SpecificPersonController.GetPersonById), new { id = director.NConst })
                 };
                 directorList.Add(newDirector);
             }
@@ -154,7 +138,7 @@ namespace WebServer.Controllers
                 {
                     Name = actor.Name,
                     Character = actor.Character,
-                    Url = _generator.GetUriByName(HttpContext, nameof(SpecificPersonController.GetPersonById), new { id = actor.NConst })
+                    Url = GenerateLink(nameof(SpecificPersonController.GetPersonById), new { id = actor.NConst })
                 };
                 actorList.Add(newActor);
             }

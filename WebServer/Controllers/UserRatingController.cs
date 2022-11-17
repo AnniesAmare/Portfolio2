@@ -15,23 +15,13 @@ namespace WebServer.Controllers
 {
     [Route("api/user/ratings")]
     [ApiController]
-    public class UserRatingController : Controller
+    public class UserRatingController : BaseController
     {
-        private IDataserviceUserRatings _dataServiceRatings;
-        private readonly LinkGenerator _generator;
-        private readonly IMapper _mapper;
-        private readonly Hashing _hashing;
-        private readonly IConfiguration _configuration;
+        private readonly IDataserviceUserRatings _dataServiceRatings;
 
-        private const int MaxPageSize = 30;
-
-        public UserRatingController(IDataserviceUserRatings dataServiceRatings, LinkGenerator generator, IMapper mapper, Hashing hashing, IConfiguration configuration)
+        public UserRatingController(IDataserviceUserRatings dataServiceRatings, LinkGenerator generator, IMapper mapper, IConfiguration configuration) : base(generator, mapper, configuration)
         {
             _dataServiceRatings = dataServiceRatings;
-            _generator = generator;
-            _mapper = mapper;
-            _hashing = hashing;
-            _configuration = configuration;
         }
 
         [HttpGet(Name = nameof(GetUserRatings))]
@@ -41,7 +31,6 @@ namespace WebServer.Controllers
             try
             {
                 var username = GetUsername();
-                Console.WriteLine(username);
                 var ratings = _dataServiceRatings.GetUserRatings(username, page, pageSize);
                 if (ratings == null)
                 {
@@ -51,12 +40,7 @@ namespace WebServer.Controllers
 
                 var total = _dataServiceRatings.GetNumberOfUserRatings(username, page, pageSize);
 
-                var url = _generator.GetUriByName
-                    (HttpContext, nameof(UserRatingController.GetUserRatings),
-                    new { page, pageSize });
-                Console.WriteLine(url);
-
-                return Ok(PagingForUserRatings(page, pageSize, total, ratingsModel));
+                return Ok(DefaultPagingModel(page, pageSize, total, ratingsModel, nameof(GetUserRatings)));
             }
             catch
             {
@@ -73,28 +57,18 @@ namespace WebServer.Controllers
                 var username = GetUsername();
                 var created = _dataServiceRatings.InsertUserRating(username,id, rating);     
 
-                if (created == true)
+                if (!created)
                 {
-                    return Ok();
+                    return BadRequest();
                 }
-                else { 
-                    return BadRequest(); 
-                }
-
-                
+                return Ok();
             }
             catch
             {
                 return Unauthorized();
             }
         }
-
-        public string? GetUsername()
-        {
-            return User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value;
-        }
-
-
+        
         public IList<UserRatingModel> CreateUserRatingModel(IList<UserRatingElement> ratings)
         {
             var ratingModel = new List<UserRatingModel>();
@@ -129,49 +103,6 @@ namespace WebServer.Controllers
             {
                 return Unauthorized();
             }
-        }
-
-
-        //Helper functions
-
-        private string? CreateUserRatingLink(int page, int pageSize)
-        {
-            return _generator.GetUriByName(HttpContext, 
-                nameof(GetUserRatings), 
-                new { page, pageSize });
-        }
-
-        private object PagingForUserRatings<T>(int page, int pageSize, int total, IEnumerable<T> items)
-        {
-            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
-
-            var pages = (int)Math.Ceiling((double)total / (double)pageSize);
-
-            var first = total > 0
-                ? CreateUserRatingLink(0, pageSize)
-                : null;
-
-            var prev = page > 0
-                ? CreateUserRatingLink(page - 1, pageSize)
-                : null;
-
-            var current = CreateUserRatingLink(page, pageSize);
-
-            var next = page < pages - 1
-                ? CreateUserRatingLink(page + 1, pageSize)
-                : null;
-
-            var result = new
-            {
-                first,
-                prev,
-                next,
-                current,
-                total,
-                pages,
-                items
-            };
-            return result;
         }
 
     }

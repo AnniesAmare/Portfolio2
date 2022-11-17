@@ -11,24 +11,13 @@ namespace WebServer.Controllers
 {
     [Route("api")]
     [ApiController]
-    public class SearchController : ControllerBase
+    public class SearchController : BaseController
     {
-        private IDataserviceSearches _dataServiceSearches;
-        private readonly LinkGenerator _generator;
-        private readonly IMapper _mapper;
-        private readonly Hashing _hashing;
-        private readonly IConfiguration _configuration;
+        private readonly IDataserviceSearches _dataServiceSearches;
 
-        private const int MaxPageSize = 30;
-
-        public SearchController(IDataserviceSearches dataServiceSearches, LinkGenerator generator, IMapper mapper,
-            Hashing hashing, IConfiguration configuration)
+        public SearchController(IDataserviceSearches dataServiceSearches, LinkGenerator generator, IMapper mapper, IConfiguration configuration): base(generator, mapper, configuration)
         {
             _dataServiceSearches = dataServiceSearches;
-            _generator = generator;
-            _mapper = mapper;
-            _hashing = hashing;
-            _configuration = configuration;
         }
 
         [HttpGet("search/actors/{search}", Name = nameof(SearchActors))]
@@ -44,9 +33,9 @@ namespace WebServer.Controllers
                     .Select(x => new PersonSearchModel
                     {
                         Name = x.PrimaryName,
-                        Url = _generator.GetUriByName(HttpContext, nameof(SpecificPersonController.GetPersonById), new { id = x.NConst.RemoveSpaces() })
+                        Url = GenerateLink(nameof(SpecificPersonController.GetPersonById), new { id = x.NConst.RemoveSpaces() })
                     });
-                var searchResultPaging = PagingForSearch(page, pageSize, total, searchResultModel, search, nameof(SearchActors));
+                var searchResultPaging = SearchPagingModel(page, pageSize, total, searchResultModel, search, nameof(SearchActors));
                 return Ok(searchResultPaging);
             }
             catch
@@ -71,9 +60,9 @@ namespace WebServer.Controllers
                     {
                         Title = x.PrimaryTitle,
                         Rank = x.Rank,
-                        Url = _generator.GetUriByName(HttpContext, nameof(SpecificTitleController.GetTitleById), new { id = x.TConst.RemoveSpaces() })
+                        Url = GenerateLink(nameof(SpecificTitleController.GetTitleById), new { id = x.TConst.RemoveSpaces() })
                     });
-                var searchResultPaging = PagingForSearch(page, pageSize, total,searchResultModel, search, nameof(SearchTitles));
+                var searchResultPaging = SearchPagingModel(page, pageSize, total,searchResultModel, search, nameof(SearchTitles));
                 return Ok(searchResultPaging);
             }
             catch
@@ -96,10 +85,9 @@ namespace WebServer.Controllers
                     {
                         Title = x.PrimaryTitle,
                         Rank = x.Rank,
-                        Url = _generator.GetUriByName(HttpContext, nameof(SpecificTitleController.GetTitleById), new { id = x.TConst.RemoveSpaces() })
+                        Url = GenerateLink(nameof(SpecificTitleController.GetTitleById), new { id = x.TConst.RemoveSpaces() })
                     });
-
-                var searchResultPaging = PagingForSearch(page, pageSize, total, searchResultModel, search, nameof(SearchGenres));
+                var searchResultPaging = SearchPagingModel(page, pageSize, total, searchResultModel, search, nameof(SearchGenres));
                 return Ok(searchResultPaging);
             }
             catch
@@ -129,24 +117,24 @@ namespace WebServer.Controllers
                     };
                     if (search.Category.Contains("Genres"))
                     {
-                        newSearch.Url = _generator.GetUriByName(HttpContext, nameof(SearchGenres),
+                        newSearch.Url = GenerateLink(nameof(SearchGenres),
                             new { search = search.Content });
                     }
                     if (search.Category.Contains("Titles"))
                     {
-                        newSearch.Url = _generator.GetUriByName(HttpContext, nameof(SearchTitles),
+                        newSearch.Url = GenerateLink(nameof(SearchTitles),
                             new { search = search.Content });
                     }
                     if (search.Category.Contains("Actors"))
                     {
-                        newSearch.Url = _generator.GetUriByName(HttpContext, nameof(SearchActors),
+                        newSearch.Url = GenerateLink(nameof(SearchActors),
                             new { search = search.Content });
                     }
                     searchHistoryList.Add(newSearch);
                 }
 
                 var searchHistoryListWithPaging =
-                    PagingForHistory(page, pageSize, total, searchHistoryList, nameof(GetSearchHistory));
+                    DefaultPagingModel(page, pageSize, total, searchHistoryList, nameof(GetSearchHistory));
                 return Ok(searchHistoryListWithPaging);
             }
             catch
@@ -175,31 +163,24 @@ namespace WebServer.Controllers
             }
         }
 
-
-        public string? GetUsername()
-        {
-            return User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value;
-        }
-
-
-        public object PagingForSearch<T>(int page, int pageSize, int total, IEnumerable<T> items, string search, string endpointName)
+        public object SearchPagingModel<T>(int page, int pageSize, int total, IEnumerable<T> items, string search, string endpointName)
         {
             pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
 
             var pages = (int)Math.Ceiling((double)total / (double)pageSize);
 
             var first = total > 0
-                ? _generator.GetUriByName(HttpContext, endpointName, new { page = 0, pageSize, search })
+                ? GenerateLink(endpointName, new { page = 0, pageSize, search })
                 : null;
 
             var prev = page > 0
-                ? _generator.GetUriByName(HttpContext, endpointName, new { page = page - 1, pageSize, search })
+                ? GenerateLink(endpointName, new { page = page - 1, pageSize, search })
                 : null;
 
-            var current = _generator.GetUriByName(HttpContext, endpointName, new { page, pageSize, search });
+            var current = GenerateLink(endpointName, new { page, pageSize, search });
 
             var next = page < pages - 1
-                ? _generator.GetUriByName(HttpContext, endpointName, new { page = page + 1, pageSize, search })
+                ? GenerateLink(endpointName, new { page = page + 1, pageSize, search })
                 : null;
 
             var result = new
@@ -215,37 +196,5 @@ namespace WebServer.Controllers
             return result;
         }
 
-        public object PagingForHistory<T>(int page, int pageSize, int total, IEnumerable<T> items, string endpointName)
-        {
-            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
-
-            var pages = (int)Math.Ceiling((double)total / (double)pageSize);
-
-            var first = total > 0
-                ? _generator.GetUriByName(HttpContext, endpointName, new { page = 0, pageSize })
-                : null;
-
-            var prev = page > 0
-                ? _generator.GetUriByName(HttpContext, endpointName, new { page = page - 1, pageSize })
-                : null;
-
-            var current = _generator.GetUriByName(HttpContext, endpointName, new { page, pageSize });
-
-            var next = page < pages - 1
-                ? _generator.GetUriByName(HttpContext, endpointName, new { page = page + 1, pageSize })
-                : null;
-
-            var result = new
-            {
-                first,
-                prev,
-                next,
-                current,
-                total,
-                pages,
-                items
-            };
-            return result;
-        }
     }
 }

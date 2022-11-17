@@ -8,19 +8,13 @@ namespace WebServer.Controllers
 {
     [Route("api/persons")]
     [ApiController]
-    public class PersonsController : Controller
+    public class PersonsController : BaseController
     {
-        private IDataservicePersons _dataServicePersons;
-        private readonly LinkGenerator _generator;
-        private readonly IMapper _mapper;
+        private readonly IDataservicePersons _dataServicePersons;
 
-        private const int MaxPageSize = 30;
-
-        public PersonsController(IDataservicePersons dataServicePersons, LinkGenerator generator, IMapper mapper)
+        public PersonsController(IDataservicePersons dataServicePersons, LinkGenerator generator, IMapper mapper, IConfiguration configuration) : base(generator, mapper, configuration)
         {
             _dataServicePersons = dataServicePersons;
-            _generator = generator;
-            _mapper = mapper;
         }
 
         [HttpGet("actors", Name = nameof(GetActors))]
@@ -35,7 +29,7 @@ namespace WebServer.Controllers
 
             var total = _dataServicePersons.GetNumberOfActors();
 
-            return Ok(PagingForActors(page,pageSize,total,ActorsModel));
+            return Ok(DefaultPagingModel(page,pageSize,total,ActorsModel, nameof(GetActors)));
         }
 
         
@@ -49,7 +43,7 @@ namespace WebServer.Controllers
             {
                 var model = _mapper.Map<PersonListModel>(person);
                 
-                model.PersonUrl = _generator.GetUriByName(HttpContext,
+                model.PersonUrl = GenerateLink(
                        nameof(SpecificPersonController.GetPersonById),
                        new { id = person.NConst });
 
@@ -59,9 +53,7 @@ namespace WebServer.Controllers
                     var newTitle = new TitleListElementModel
                     {
                         Title = movie.Title,
-                        Url = _generator.GetUriByName(HttpContext,
-                        nameof(SpecificTitleController.GetTitleById),
-                        new { id = movie.TConst })
+                        Url = GenerateLink(nameof(SpecificTitleController.GetTitleById), new { id = movie.TConst })
 
                     };
                    knownForMoviesList.Add(newTitle);
@@ -73,9 +65,7 @@ namespace WebServer.Controllers
                     var newTitle = new TitleListElementModel
                     {
                         Title = tvShow.Title,
-                        Url = _generator.GetUriByName(HttpContext,
-                        nameof(SpecificTitleController.GetTitleById),
-                        new { id = tvShow.TConst })
+                        Url = GenerateLink(nameof(SpecificTitleController.GetTitleById), new { id = tvShow.TConst })
 
                     };
                     knownForTvShowsList.Add(newTitle);
@@ -89,49 +79,6 @@ namespace WebServer.Controllers
 
             return personsModel;
         }
-
-
-        //PAGING 
-
-        private string? CreateActorsLink(int page, int pageSize)
-        {
-            return _generator.GetUriByName(
-                HttpContext,
-                nameof(GetActors), new { page, pageSize});
-        }
-
-        private object PagingForActors<T>(int page, int pageSize, int total, IEnumerable<T> items)
-        {
-            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
-
-            var pages = (int)Math.Ceiling((double)total / (double)pageSize);
-                      
-            var first = total > 0
-                ? CreateActorsLink(0, pageSize)
-                : null;
-
-            var prev = page > 0
-                ? CreateActorsLink(page - 1, pageSize)
-                : null;
-
-            var current = CreateActorsLink(page, pageSize);
-
-            var next = page < pages - 1
-                ? CreateActorsLink(page + 1, pageSize)
-                : null;
-
-            var result = new
-            {
-                first,
-                prev,
-                next,
-                current,
-                total,
-                pages,
-                items
-            };
-            return result;
-        }
-
+        
     }
 }

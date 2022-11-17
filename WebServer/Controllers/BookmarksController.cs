@@ -10,23 +10,13 @@ namespace WebServer.Controllers
 {
     [Route("api/user/bookmarks")]
     [ApiController]
-    public class BookmarksController : ControllerBase
+    public class BookmarksController : BaseController
     {
-        private IDataserviceBookmarks _dataServiceBookmarks;
-        private readonly LinkGenerator _generator;
-        private readonly IMapper _mapper;
-        private readonly Hashing _hashing;
-        private readonly IConfiguration _configuration;
-        
-        private const int MaxPageSize = 30;
+        private readonly IDataserviceBookmarks _dataServiceBookmarks;
 
-        public BookmarksController(IDataserviceBookmarks dataServiceBookmarks, LinkGenerator generator, IMapper mapper, Hashing hashing, IConfiguration configuration)
+        public BookmarksController(IDataserviceBookmarks dataServiceBookmarks, LinkGenerator generator, IMapper mapper, IConfiguration configuration) : base(generator, mapper, configuration)
         {
             _dataServiceBookmarks = dataServiceBookmarks;
-            _generator = generator;
-            _mapper = mapper;
-            _hashing = hashing;
-            _configuration = configuration;
         }
 
         [HttpGet(Name = nameof(GetBookmarks))]
@@ -43,20 +33,20 @@ namespace WebServer.Controllers
                 var personBookmarksModel = bookmarks.Where(x => x.isPerson).Select(x => new BookmarksModel
                 {
                     Name = x.Annotation,
-                    Url = _generator.GetUriByName(HttpContext, nameof(SpecificPersonController.GetPersonById), new { id = x.Id })
+                    Url = GenerateLink(nameof(SpecificPersonController.GetPersonById), new { id = x.Id })
 
                 }).ToList();
 
                 var titleBookmarksModel = bookmarks.Where(x => x.isTitle).Select(x => new BookmarksModel
                 {
                     Name = x.Annotation,
-                    Url = _generator.GetUriByName(HttpContext, nameof(SpecificTitleController.GetTitleById), new { id = x.Id })
+                    Url = GenerateLink(nameof(SpecificTitleController.GetTitleById), new { id = x.Id })
 
                 }).ToList();
 
                 var total = _dataServiceBookmarks.GetNumberOfBookmarks(username);
                 var allBookmarks = titleBookmarksModel.Concat(personBookmarksModel);
-                var allBookmarksWithPaging = PagingForBookmarks(page, pageSize, total, allBookmarks);
+                var allBookmarksWithPaging = DefaultPagingModel(page, pageSize, total, allBookmarks, nameof(GetBookmarks));
                
                 return Ok(allBookmarksWithPaging);
             }
@@ -113,55 +103,10 @@ namespace WebServer.Controllers
                 if (!deleted) return NotFound();
                 return Ok();
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine(e);
                 return Unauthorized();
             }
         }
-
-        public string? GetUsername()
-        {
-            return User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value;
-        }
-
-        private string? CreateBookmarksLink(int page, int pageSize)
-        {
-            return _generator.GetUriByName(HttpContext, nameof(GetBookmarks), new { page, pageSize });
-        }
-
-        private object PagingForBookmarks<T>(int page, int pageSize, int total, IEnumerable<T> items)
-        {
-            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
-
-            var pages = (int)Math.Ceiling((double)total / (double)pageSize);
-
-            var first = total > 0
-                ? CreateBookmarksLink(0, pageSize)
-                : null;
-
-            var prev = page > 0
-                ? CreateBookmarksLink(page - 1, pageSize)
-                : null;
-
-            var current = CreateBookmarksLink(page, pageSize);
-
-            var next = page < pages - 1
-                ? CreateBookmarksLink(page + 1, pageSize)
-                : null;
-
-            var result = new
-            {
-                first,
-                prev,
-                next,
-                current,
-                total,
-                pages,
-                items
-            };
-            return result;
-        }
-
     }
 }

@@ -1,34 +1,25 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
+using DataLayer;
 using DataLayer.DataServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using WebServer.Model;
 using WebServer.Services;
-using DataLayer;
 
 namespace WebServer.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
-        private IDataserviceUsers _dataServiceUsers;
-        private readonly LinkGenerator _generator;
-        private readonly IMapper _mapper;
+        private readonly IDataserviceUsers _dataServiceUsers;
         private readonly Hashing _hashing;
-        private readonly IConfiguration _configuration;
 
-        public UserController(IDataserviceUsers dataServiceUsers, LinkGenerator generator, IMapper mapper, Hashing hashing, IConfiguration configuration)
+        public UserController(IDataserviceUsers dataServiceUsers, LinkGenerator generator, IMapper mapper, Hashing hashing, IConfiguration configuration) : base(generator, mapper, configuration)
         {
             _dataServiceUsers = dataServiceUsers;
-            _generator = generator;
-            _mapper = mapper;
             _hashing = hashing;
-            _configuration = configuration;
         }
 
         [HttpGet]
@@ -37,7 +28,7 @@ namespace WebServer.Controllers
         {
             try
             {
-                var username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                var username = GetUsername();
                 var user = _dataServiceUsers.GetUser(username);
                 if (user == null)
                 {
@@ -49,7 +40,7 @@ namespace WebServer.Controllers
                     Username = user.Username,
                     Email = user.Email,
                     Birthyear = user.BirthYear,
-                    BookmarksUrl = _generator.GetUriByName(HttpContext, nameof(BookmarksController.GetBookmarks), new { })
+                    BookmarksUrl = GenerateLink(nameof(BookmarksController.GetBookmarks), new { })
                 };
                 return Ok(userModel);
             }
@@ -77,7 +68,9 @@ namespace WebServer.Controllers
 
             //password is hashed
             var hashResult = _hashing.Hash(registerModel.Password);
-            var user = _dataServiceUsers.CreateUser(registerModel.Username, hashResult.hash, hashResult.salt, registerModel.Email, registerModel.Birthyear);
+            
+            var created = _dataServiceUsers.CreateUser(registerModel.Username, hashResult.hash, hashResult.salt, registerModel.Email, registerModel.Birthyear);
+            if (!created) return BadRequest();
             return Ok();
         }
 
@@ -100,7 +93,7 @@ namespace WebServer.Controllers
         {
             try
             {
-                var username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value;
+                var username = GetUsername();
                 var updated = _dataServiceUsers.UpdateUser(username, model.Email, model.Birthyear);
                 if (!updated)
                 {
@@ -120,7 +113,7 @@ namespace WebServer.Controllers
         {
             try
             {
-                var username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                var username = GetUsername();
                 var deleted = _dataServiceUsers.DeleteUser(username);
                 if (!deleted)
                 {
@@ -133,27 +126,5 @@ namespace WebServer.Controllers
                 return Unauthorized();
             }
         }
-
-        public string? GenerateJwtToken(string username)
-        {
-            var claims = new List<Claim>{
-                new Claim(ClaimTypes.Name, username),
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Auth:secret").Value));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds);
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-            return jwt;
-        }
-
-        //if time allows make check-functions for user-stuff, so we confirm the validity of the inputs.
-        //email must contain an '@'
-        //password should be X length and so on
-        //birthyear should be a 4-char of numbers and so on.
     }
 }

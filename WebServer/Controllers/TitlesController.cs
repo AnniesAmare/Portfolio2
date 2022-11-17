@@ -8,19 +8,13 @@ namespace WebServer.Controllers
 {
     [Route("api/titles")]
     [ApiController]
-    public class TitlesController : Controller
+    public class TitlesController : BaseController
     {
-        private IDataserviceTitles _dataServiceTitles;
-        private readonly LinkGenerator _generator;
-        private readonly IMapper _mapper;
+        private readonly IDataserviceTitles _dataServiceTitles;
 
-        private const int MaxPageSize = 30;
-
-        public TitlesController(IDataserviceTitles dataServiceMovies, LinkGenerator generator, IMapper mapper)
+        public TitlesController(IDataserviceTitles dataServiceMovies, LinkGenerator generator, IMapper mapper, IConfiguration configuration) : base(generator, mapper, configuration)
         {
             _dataServiceTitles = dataServiceMovies;
-            _generator = generator;
-            _mapper = mapper;
         }
 
         //MOVIES 
@@ -36,7 +30,7 @@ namespace WebServer.Controllers
 
             var total = _dataServiceTitles.GetNumberOfMovies();
 
-            return Ok(PagingForMovies(page, pageSize, total, moviesModel));
+            return Ok(DefaultPagingModel(page, pageSize, total, moviesModel, nameof(GetMovies)));
         }
 
         public IList<MovieListModel> CreateMoviesModel(IList<Titles> movies)
@@ -69,7 +63,7 @@ namespace WebServer.Controllers
 
             var total = _dataServiceTitles.GetNumberOfTvShows();
 
-            return Ok(PagingForTvShows(page, pageSize, total, tvShowsModel));
+            return Ok(DefaultPagingModel(page, pageSize, total, tvShowsModel, nameof(GetTvShows)));
         }
 
         public IList<TvShowListModel> CreateTvShowsModel(IList<Titles> tvShows)
@@ -104,93 +98,6 @@ namespace WebServer.Controllers
 
             return Ok(tvShowModelElement);
         }
-
-
-        //PAGING 
-
-
-        //movie paging
-        private string? CreateMoviesLink(int page, int pageSize)
-        {
-            return _generator.GetUriByName(
-                HttpContext,
-                nameof(GetMovies), new { page, pageSize });
-        }
-
-        private object PagingForMovies<T>(int page, int pageSize, int total, IEnumerable<T> items)
-        {
-            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
-
-            var pages = (int)Math.Ceiling((double)total / (double)pageSize);
-
-            var first = total > 0
-                ? CreateMoviesLink(0, pageSize)
-                : null;
-
-            var prev = page > 0
-                ? CreateMoviesLink(page - 1, pageSize)
-                : null;
-
-            var current = CreateMoviesLink(page, pageSize);
-
-            var next = page < pages - 1
-                ? CreateMoviesLink(page + 1, pageSize)
-                : null;
-
-            var result = new
-            {
-                first,
-                prev,
-                next,
-                current,
-                total,
-                pages,
-                items
-            };
-            return result;
-        }
-
-        //tvshow paging
-        private string? CreateTvShowsLink(int page, int pageSize)
-        {
-            return _generator.GetUriByName(
-                HttpContext,
-                nameof(GetTvShows), new { page, pageSize });
-        }
-
-        private object PagingForTvShows<T>(int page, int pageSize, int total, IEnumerable<T> items)
-        {
-            pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
-
-            var pages = (int)Math.Ceiling((double)total / (double)pageSize);
-
-            var first = total > 0
-                ? CreateTvShowsLink(0, pageSize)
-                : null;
-
-            var prev = page > 0
-                ? CreateTvShowsLink(page - 1, pageSize)
-                : null;
-
-            var current = CreateTvShowsLink(page, pageSize);
-
-            var next = page < pages - 1
-                ? CreateTvShowsLink(page + 1, pageSize)
-                : null;
-
-            var result = new
-            {
-                first,
-                prev,
-                next,
-                current,
-                total,
-                pages,
-                items
-            };
-            return result;
-        }
-
-
+        
     }
 }

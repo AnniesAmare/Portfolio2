@@ -8,17 +8,13 @@ namespace WebServer.Controllers
 {
     [Route("api/person")]
     [ApiController]
-    public class SpecificPersonController : ControllerBase
+    public class SpecificPersonController : BaseController
     {
-        private IDataserviceSpecificPerson _dataServiceSpecificPerson;
-        private readonly LinkGenerator _generator;
-        private readonly IMapper _mapper;
+        private readonly IDataserviceSpecificPerson _dataServiceSpecificPerson;
 
-        public SpecificPersonController(IDataserviceSpecificPerson dataServiceSpecificPerson, LinkGenerator generator, IMapper mapper)
+        public SpecificPersonController(IDataserviceSpecificPerson dataServiceSpecificPerson, LinkGenerator generator, IMapper mapper, IConfiguration configuration) : base(generator, mapper, configuration)
         {
             _dataServiceSpecificPerson = dataServiceSpecificPerson;
-            _generator = generator;
-            _mapper = mapper;
         }
 
         [HttpGet("{id}", Name = nameof(GetPersonById))]
@@ -33,10 +29,10 @@ namespace WebServer.Controllers
             return Ok(specificPersonModel);
         }
 
-        [HttpGet("name/{search}")]
-        public IActionResult GetPersonByName(string search)
+        [HttpGet("name/{name}")]
+        public IActionResult GetPersonByName(string name)
         {
-            var specificPerson = _dataServiceSpecificPerson.GetSpecificPersonByName(search);
+            var specificPerson = _dataServiceSpecificPerson.GetSpecificPersonByName(name);
             if (specificPerson == null)
             {
                 return NotFound();
@@ -55,12 +51,12 @@ namespace WebServer.Controllers
                 var newTitle = new TitleListElementModel
                 {
                     Title = title.Title,
-                    Url = _generator.GetUriByName(HttpContext, nameof(SpecificTitleController.GetTitleById), new { id = title.TConst })
+                    Url = GenerateLink(nameof(SpecificTitleController.GetTitleById), new { id = title.TConst })
                 };
                 knownForList.Add(newTitle);
             }
             model.KnownForListWithUrl = knownForList;
-            model.Bookmark = _generator.GetUriByName(HttpContext, nameof(BookmarksController.CreateBookmark), new { id = person.NConst.RemoveSpaces() });
+            model.Bookmark = GenerateLink(nameof(BookmarksController.CreateBookmark), new { id = person.NConst.RemoveSpaces() });
             return model;
         }
         
