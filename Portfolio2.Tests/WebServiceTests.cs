@@ -11,13 +11,13 @@ namespace Portfolio2.Tests
     
     public class WebServiceTests 
     {
-        private const string registerUserAPI = "http://localhost:5001/api/user/register";
-        private const string loginUserAPI = "http://localhost:5001/api/user/login";
-        private const string GetUserAPI = "http://localhost:5001/api/user";
-        private const string CreateUnamedBookmarkAPI = "http://localhost:5001/api/user/bookmarks/create";
-        private const string DeletBookmarAPI = "http://localhost:5001/api/user/bookmarks/delete";
-        private const string GetMoviesAPI = "http://localhost:5001/api/titles/movies";
-        private const string UpdateBookmarkAPI = "http://localhost:5001/api/user/bookmarks/rename";
+        private const string registerUserAPI = "https://localhost:5001/api/user/register";
+        private const string loginUserAPI = "https://localhost:5001/api/user/login";
+        private const string GetUserAPI = "https://localhost:5001/api/user";
+        private const string CreateUnamedBookmarkAPI = "https://localhost:5001/api/user/bookmarks/create";
+        private const string DeletBookmarAPI = "https://localhost:5001/api/user/bookmarks/delete";
+        private const string GetMoviesAPI = "https://localhost:5001/api/titles/movies";
+        private const string UpdateBookmarkAPI = "https://localhost:5001/api/user/bookmarks/rename";
 
         /* /api/...*/
 
@@ -38,7 +38,8 @@ namespace Portfolio2.Tests
             Assert.NotNull(User["token"].ToString());
 
         }
-#if COMMENT
+
+
         //testing Get Methods
         [Fact]
         public void ApiMovies_CompleteProduct()
@@ -46,7 +47,7 @@ namespace Portfolio2.Tests
             var (movieList, statusCode) = GetObject(GetMoviesAPI);
 
             Assert.Equal(HttpStatusCode.OK, statusCode);
-            Assert.Equal("http://localhost:5001/api/titles/movies?page=0&pageSize=20", movieList["first"]);
+            Assert.Equal("https://localhost:5001/api/titles/movies?page=0&pageSize=20", movieList["first"]);
             Assert.Equal("Dogville", movieList["items"].First()["name"]);
             Assert.Equal("The Stuff", movieList["items"].Last()["name"]);
         }
@@ -59,8 +60,8 @@ namespace Portfolio2.Tests
         {
             var content = new 
             {
-                id = "nm0424060",
-                name = "ScarJo",
+                id = "nm2552623",
+                name = "Victy",
                 description = "Bookmark Created!"
             };
 
@@ -143,7 +144,7 @@ namespace Portfolio2.Tests
             Assert.Equal(HttpStatusCode.OK, statusCodeDelete);
         }
 
-    
+
 
 
 
@@ -163,7 +164,7 @@ namespace Portfolio2.Tests
         //    Email = "atru@ruc.dk",
         //    Birthyear = "1998"
         //};
-
+#if COMMENT
 #endif
         // Helpers
         (JArray, HttpStatusCode) GetArray(string url)
