@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DataLayer
 {
@@ -31,8 +32,7 @@ namespace DataLayer
                 .Skip(page * pageSize)
                 .Take(pageSize)
                 .OrderBy(x => x.Date)   
-                .ToList();
-
+                .ToList();        
             
             return ratings;
         }
@@ -44,8 +44,15 @@ namespace DataLayer
           
             if (title != null)
             {
-                db.Database.ExecuteSqlInterpolated
-                            ($"select user_rate({username},{id},{rating})");
+                try
+                {
+                    db.Database.ExecuteSqlInterpolated
+                                ($"select user_rate({username},{id},{rating})");
+                }
+                catch
+                {
+                    return false;
+                }
 
                 var created = db.UserRatings.Find(id);
 

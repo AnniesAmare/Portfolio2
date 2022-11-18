@@ -38,7 +38,7 @@ namespace Portfolio2.Tests
             Assert.NotNull(User["token"].ToString());
 
         }
-
+#if COMMENT
         //testing Get Methods
         [Fact]
         public void ApiMovies_CompleteProduct()
@@ -164,7 +164,7 @@ namespace Portfolio2.Tests
         //    Birthyear = "1998"
         //};
 
-
+#endif
         // Helpers
         (JArray, HttpStatusCode) GetArray(string url)
         {
