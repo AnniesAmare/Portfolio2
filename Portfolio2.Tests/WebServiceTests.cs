@@ -1,9 +1,5 @@
 ﻿
-using System;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using WebServer.Model;
-using WebServer.Controllers;
-using System.Reflection.Metadata;
 using System.Net.Http.Headers;
 
 namespace Portfolio2.Tests
@@ -11,12 +7,14 @@ namespace Portfolio2.Tests
     
     public class WebServiceTests 
     {
-        private const string registerUserAPI = "https://localhost:5001/api/user/register";
+        //private const string registerUserAPI = "https://localhost:5001/api/user/register";
         private const string loginUserAPI = "https://localhost:5001/api/user/login";
-        private const string GetUserAPI = "https://localhost:5001/api/user";
         private const string CreateUnamedBookmarkAPI = "https://localhost:5001/api/user/bookmarks/create";
         private const string DeletBookmarAPI = "https://localhost:5001/api/user/bookmarks/delete";
         private const string GetMoviesAPI = "https://localhost:5001/api/titles/movies";
+        private const string GetMoviesInvalidAPI = "https://localhost:5001/api/title/movies";
+        private const string GetTitleByIdAPI = "https://localhost:5001/api/title/tt0052520";
+        private const string GetTitleByIdInvalidAPI = "https://localhost:5001/api/title/XX0052520";
         private const string UpdateBookmarkAPI = "https://localhost:5001/api/user/bookmarks/rename";
 
         /* /api/...*/
@@ -27,7 +25,7 @@ namespace Portfolio2.Tests
             var userInfo = new UserLoginModel
             {
                 Username = "Tester4000",
-                Password = "tester",
+                Password = "tester1999",
             };
 
             var (User, statusCode) = PostData(loginUserAPI, userInfo);
@@ -40,7 +38,7 @@ namespace Portfolio2.Tests
         }
 
 
-        //testing Get Methods
+        //Testing WebAPI CRUD operations
         [Fact]
         public void ApiMovies_CompleteProduct()
         {
@@ -52,10 +50,37 @@ namespace Portfolio2.Tests
             Assert.Equal("The Stuff", movieList["items"].Last()["name"]);
         }
 
+        [Fact]
+        public void ApiMovies_CompleteProduct_InvalidResourcePath()
+        {
+            var (movieList, statusCode) = GetObject(GetMoviesInvalidAPI);
 
-        //Testing WebAPI CRUD operations
+            Assert.Equal(HttpStatusCode.NotFound, statusCode);
+        }      
 
-        [Fact] //note that this test will fail if you already have created this test bookmark
+        [Fact]
+        public void ApiTitle_CompleteProduct()
+        {
+            var (movie, statusCode) = GetObject(GetTitleByIdAPI);
+
+            Assert.Equal(HttpStatusCode.OK, statusCode);
+            Assert.Equal("Drama", movie["genre"].First());
+            Assert.Equal("Horror", movie["genre"].Last());
+
+        }
+
+        [Fact]
+        public void ApiTitle_CompleteProduct_InvalidRequestTarget()
+        {
+            var (movie, statusCode) = GetObject(GetTitleByIdInvalidAPI);
+
+            Assert.Equal(HttpStatusCode.NotFound, statusCode);
+
+        }
+
+
+
+        [Fact] 
         public void ApiCreateBookmark_ValidIdAndNameOK_AND_BookmarkDeletedOK()
         {
             var content = new 
@@ -82,8 +107,8 @@ namespace Portfolio2.Tests
         {
             var content = new
             {
-                id = "nm042406123",
-                name = "ScarJo",
+                id = "XXXX2623",
+                name = "Victy",
                 description = "Bookmark Created"
             };
 
@@ -104,7 +129,7 @@ namespace Portfolio2.Tests
         }
 
         [Fact]
-        public void ApiBookmark_UpdateWithValid_Ok()
+        public void ApiBookmark_Update_Valid_Ok()
         {
 
             var content = new
@@ -130,6 +155,7 @@ namespace Portfolio2.Tests
                 description = content.description + "Updated"
             };
 
+            //update bookmark
             var statusCode = PutDataWithAuthorization
                 ($"{UpdateBookmarkAPI}/{update.id}/{update.name}", update.description);
 
@@ -144,29 +170,51 @@ namespace Portfolio2.Tests
             Assert.Equal(HttpStatusCode.OK, statusCodeDelete);
         }
 
+        [Fact]
+        public void ApiBookmark_Update_Invalid()
+        {
+
+            var content = new
+            {
+                id = "nm0189075",
+                name = "Alan Crossland",
+                description = "Bookmark Created"
+            };
+
+
+            //create bookmark 
+            var (bookmark, statusCodeCreated) =
+               PostDataWithAuthorization(
+                   $"{CreateUnamedBookmarkAPI}/{content.id}/{content.name}",
+                   content.description);
+
+            Assert.Equal(HttpStatusCode.OK, statusCodeCreated);
+
+            var update = new
+            {
+                id = content.id + "Invalid NConst",
+                name = content.name + "Updated",
+                description = content.description + "Updated"
+            };
+
+            //update bookmark
+            var statusCode = PutDataWithAuthorization
+                ($"{UpdateBookmarkAPI}/{update.id}/{update.name}", update.description);
+
+            Assert.Equal(HttpStatusCode.NotFound, statusCode);
+
+
+            //delete bookmark
+
+            var statusCodeDelete = DeleteDataWithAuthorization
+                ($"{DeletBookmarAPI}/{content.id}");
+
+            Assert.Equal(HttpStatusCode.OK, statusCodeDelete);
+        }
 
 
 
-
-        //user objects
-        //var newUser = new UserRegisterModel
-        //{
-        //    Username = "Tester5000",
-        //    Email = "siemje@ruc.dk",
-        //    Birthyear = "1998",
-        //    Password = "test1234"
-        //};
-
-        //var newUser = new UserRegisterModel
-        //{
-        //    Username = "Tester4000",
-        //    Password = "tester1999",
-        //    Email = "atru@ruc.dk",
-        //    Birthyear = "1998"
-        //};
-#if COMMENT
-#endif
-        // Helpers
+        // Helper functions
         (JArray, HttpStatusCode) GetArray(string url)
         {
             var client = new HttpClient();
