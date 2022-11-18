@@ -75,28 +75,13 @@ namespace WebServer.Controllers
                 var tvShowModelElement = _mapper.Map<TvShowListModel>(tvShow);
 
                 tvShowModelElement.Url = _generator.GetUriByName(HttpContext,
-                        nameof(TitlesController.GetTvShowById),
+                        nameof(SpecificTitleController.GetTvShowById),
                         new { id = tvShow.TConst });
 
                 tvShowsModel.Add(tvShowModelElement);
             }
 
             return tvShowsModel;
-        }
-
-        [HttpGet("tvshows/{id}", Name = nameof(GetTvShowById))]
-        public IActionResult GetTvShowById(string id)
-        {
-            var tvShow = _dataServiceTitles.GetTvShowById(id);
-
-            if (tvShow == null)
-            {
-                return NotFound();
-            }
-
-            var tvShowModelElement = _mapper.Map<SpecificTvShowModel>(tvShow);
-
-            return Ok(tvShowModelElement);
         }
         
     }

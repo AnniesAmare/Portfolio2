@@ -29,6 +29,21 @@ namespace WebServer.Controllers
             return Ok(specificTitleModel);
         }
 
+        [HttpGet("tvshow/{id}", Name = nameof(GetTvShowById))]
+        public IActionResult GetTvShowById(string id)
+        {
+            var tvShow = _dataServiceSpecificTitle.GetTvShowById(id);
+
+            if (tvShow == null)
+            {
+                return NotFound();
+            }
+
+            var tvShowModelElement = _mapper.Map<SpecificTvShowModel>(tvShow);
+
+            return Ok(tvShowModelElement);
+        }
+
         [HttpGet("crew/{id}", Name = nameof(GetTitleCrewById))]
         public IActionResult GetTitleCrewById(string id)
         {

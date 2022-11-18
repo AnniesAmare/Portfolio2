@@ -12,7 +12,6 @@ namespace DataLayer
     {
         IList<Titles> GetMovies(int page, int pageSize);
         IList<Titles> GetTvShows(int page, int pageSize);
-        Titles GetTvShowById(string TConst);
         public int GetNumberOfMovies();
         public int GetNumberOfTvShows();
     }
