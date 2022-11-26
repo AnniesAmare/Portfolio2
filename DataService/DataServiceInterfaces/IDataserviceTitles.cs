@@ -14,5 +14,6 @@ namespace DataLayer
         IList<Titles> GetTvShows(int page, int pageSize);
         public int GetNumberOfMovies();
         public int GetNumberOfTvShows();
+        EpisodeListElement GetEpisodeById(string id);
     }
 }

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Annotations;
 using DataLayer;
 using DataLayer.DataTransferModel;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using WebServer.Model;
 
 namespace WebServer.Controllers
@@ -39,10 +41,94 @@ namespace WebServer.Controllers
                 return NotFound();
             }
 
-            var tvShowModelElement = _mapper.Map<SpecificTvShowModel>(tvShow);
+            var tvShowContent = CreateTvShowModel(tvShow);
+
+            //var tvShowModelElement = _mapper.Map<TvShowListElement>(tvShow);
+            TvShowListModel tvShowModelElement = new TvShowListModel();
+            tvShowModelElement.Name = tvShow.Name;
+            tvShowModelElement.AiringDate = tvShow.AiringDate;
+            tvShowModelElement.TvShowContentList = tvShowContent;
+            tvShowModelElement.Rating = tvShow.Rating;
+            tvShowModelElement.Url = 
+                GenerateLink(nameof(GetTvShowById), new { id = tvShow.TConst });
+
+            tvShowModelElement.TvShowContentList = tvShowContent;
 
             return Ok(tvShowModelElement);
         }
+
+        [HttpGet("episode/{id}", Name = nameof(GetEpisodeById))]
+        public IActionResult GetEpisodeById(string id)
+        {
+            DataserviceTitles instance = new DataserviceTitles();
+            var episode = instance.GetEpisodeById(id);
+
+            if (episode == null)
+            {
+                return NotFound();
+            }
+
+
+            var episodeModel = _mapper.Map<EpisodeModel>(episode);
+      
+            episodeModel.URL = GenerateLink(nameof(GetEpisodeById), new { id = episode.TConst});
+
+            return Ok(episodeModel);
+        }
+
+
+
+
+        public IList<TvShowModel> CreateTvShowModel(Titles tvShow)
+        {
+
+            IList<TvShowModel> tvShowContent = new List<TvShowModel>();
+
+            IList<EpisodeModel> episodes = new List<EpisodeModel>();
+            IList<DirectorListElementModel> directors = new List<DirectorListElementModel>();
+
+
+            foreach (var director in tvShow.DirectorList)
+            {
+                DirectorListElementModel newDirector = new DirectorListElementModel();  
+
+                newDirector.Name = director.Name;
+
+                newDirector.Url = GenerateLink(nameof(SpecificPersonController.GetPersonById), new { id = director.NConst });
+
+                directors.Add(newDirector);
+            }
+
+            foreach (var season in tvShow.TvShowContentList)
+            {
+                var newSeason = new TvShowModel();
+
+                newSeason.Season = season.Season;
+                
+                foreach (var episode in season.Episodes)
+                {
+                    var tConst = episode.TConst.RemoveSpaces();
+                    var newEpisode = new EpisodeModel{
+
+                        Episode = episode.Episode,
+                        Name = episode.Name,
+                        URL = GenerateLink(nameof(GetEpisodeById), new { id = tConst })
+                    };
+
+                    episodes.Add(newEpisode);
+
+                }
+
+                newSeason.Episodes = episodes;
+
+                tvShowContent.Add(newSeason);
+            }
+
+
+
+            return tvShowContent;
+        }
+
 
         [HttpGet("crew/{id}", Name = nameof(GetTitleCrewById))]
         public IActionResult GetTitleCrewById(string id)

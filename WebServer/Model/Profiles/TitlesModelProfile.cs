@@ -10,6 +10,7 @@ namespace WebServer.Model.Profiles
         {
             CreateMap<Titles, MovieListModel>();
             CreateMap<Titles, TvShowListModel>();
+            CreateMap<Titles, TvShowModel>();
         }
     }
 }

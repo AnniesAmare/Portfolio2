@@ -121,9 +121,7 @@ namespace DataLayer
 
             return tvShowContentList;
         }
-
-
-
+     
         public IList<EpisodeListElement> GetEpisodeListElements(string parenTConst, int? seasonNum)
         {
             using var db = new PortfolioDBContext();            
@@ -160,6 +158,22 @@ namespace DataLayer
             if (name == null) return null;
 
             return name;
+        }
+
+        public EpisodeListElement GetEpisodeById(string id)
+        {
+            using var db = new PortfolioDBContext();
+            var episodeListElement = new EpisodeListElement();
+
+            var episode = db.TitleEpisodes
+                .Where(x => x.TConst == id)
+                .FirstOrDefault();
+            var tConst = episode.TConst.RemoveSpaces();
+            episodeListElement.TConst = tConst;
+            episodeListElement.Episode = episode.EpisodeNumber;
+            episodeListElement.Name = getEpisodeName(id);
+
+            return episodeListElement;
         }
 
 

@@ -14,6 +14,7 @@ namespace WebServer.Model.Profiles
             CreateMap<Titles, SpecificTvShowModel>();
 
             CreateMap<SearchHistoryListElement, SearchHistoryListElementModel>();
+
         }
     }
 }
