@@ -110,7 +110,7 @@ namespace WebServer.Controllers
                 {
                     var newSearch = new SearchHistoryListElementModel
                     {
-                        Date = search.Date.Date.ToString(),
+                        Date = search.Date.ToString(),
                         Content = search.Content,
                     };
                     if (search.Category.Contains("Genres"))
