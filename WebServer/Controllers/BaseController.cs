@@ -22,6 +22,7 @@ namespace WebServer.Controllers
         }
 
         //Link functions
+        [NonAction]
         public string? GenerateLink(string endpointName, object input)
         {
             var link = _generator.GetUriByName(HttpContext, endpointName, input);
@@ -29,6 +30,7 @@ namespace WebServer.Controllers
         }
 
         //MODEL FUNCIONS
+        [NonAction]
         public object DefaultPagingModel<T>(int page, int pageSize, int total, IEnumerable<T> items, string endpointName)
         {
             pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
@@ -64,11 +66,13 @@ namespace WebServer.Controllers
 
 
         //TOKEN FUNCTIONS
+        [NonAction]
         public string? GetUsername()
         {
             return User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value;
         }
 
+        [NonAction]
         public string? GenerateJwtToken(string username)
         {
             var claims = new List<Claim>{
