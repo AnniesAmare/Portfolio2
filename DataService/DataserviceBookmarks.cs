@@ -91,6 +91,7 @@ namespace DataLayer
             using var db = new PortfolioDBContext();
             var title = db.TitleBasics.Find(id);
             var person = db.NameBasics.Find(id);
+           
 
             name = string.IsNullOrEmpty(name) ? "Unnamed" : name;
 
@@ -160,7 +161,7 @@ namespace DataLayer
 
             if (title != null)
             {
-                var tConst = title.TConst;
+                var tConst = title.TConst.RemoveSpaces();
                 if (BookmarkExists(username, tConst))
                 {
                     var bookmark = db.BookmarksTitles.Find(username, tConst);
