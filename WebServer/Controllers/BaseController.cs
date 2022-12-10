@@ -30,7 +30,6 @@ namespace WebServer.Controllers
         }
 
         //MODEL FUNCIONS
-        [NonAction]
         public object DefaultPagingModel<T>(int page, int pageSize, int total, IEnumerable<T> items, string endpointName)
         {
             pageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;

@@ -24,7 +24,7 @@ namespace WebServer.Controllers
             try
             {
                 var username = GetUsername();
-                var bookmarks = _dataServiceBookmarks.GetBookmarks(username);
+                var bookmarks = _dataServiceBookmarks.GetBookmarks(username, page, pageSize);
 
                 if (bookmarks == null) return NotFound();
 

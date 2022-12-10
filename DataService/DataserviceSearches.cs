@@ -113,8 +113,32 @@ namespace DataLayer
                     Content = x.Content
                 })
                 .ToList();
+            return searches;
+        }
+
+        public IList<SearchHistoryListElement> GetSearchHistory(string username, int page, int pageSize)
+        {
+            using var db = new PortfolioDBContext();
+            var searches = db.UserSearches
+                .Where(x => x.Username == username)
+                .Select(x => new SearchHistoryListElement
+                {
+                    Date = x.Date,
+                    Category = x.Category,
+                    Content = x.Content
+                })
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToList();
             
             return searches;
+        }
+
+        public int GetNumberOfSearchHistory(string username)
+        {
+            var allSearches = GetSearchHistory(username);
+            var result = allSearches.Count;
+            return result;
         }
 
 

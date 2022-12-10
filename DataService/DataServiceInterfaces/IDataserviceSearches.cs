@@ -12,7 +12,8 @@ namespace DataLayer.DataServiceInterfaces
         IList<TitleSearch>? GetSearchResultGenres(string username, string search);
         (IList<TitleSearch>? searchResult, int total) GetSearchResultGenres(string username, string search, int page, int pageSize);
 
-        IList<SearchHistoryListElement> GetSearchHistory(string username);
+        IList<SearchHistoryListElement> GetSearchHistory(string username, int page, int pageSize);
+        int GetNumberOfSearchHistory(string username);
         bool ClearSearchHistory(string username);
 
     }

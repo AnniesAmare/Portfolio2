@@ -103,8 +103,8 @@ namespace WebServer.Controllers
             try
             {
                 var username = GetUsername();
-                var searchHistory = _dataServiceSearches.GetSearchHistory(username);
-                var total = searchHistory.Count();
+                var searchHistory = _dataServiceSearches.GetSearchHistory(username, page, pageSize);
+                var total = _dataServiceSearches.GetNumberOfSearchHistory(username);
                 var searchHistoryList = new List<SearchHistoryListElementModel>();
                 foreach (var search in searchHistory)
                 {
