@@ -1,0 +1,14 @@
+﻿CREATE OR REPLACE FUNCTION person_words_table(name_input varchar(256)) 
+RETURNS TABLE (
+	word TEXT, 
+	rank BIGINT)
+LANGUAGE SQL AS
+$$
+	SELECT word, sum(relevance) rank FROM
+	(
+	SELECT word, 1 relevance FROM wi 
+	WHERE tconst IN (SELECT tconst FROM title_principal
+			NATURAL JOIN name_basic WHERE primaryname LIKE name_input) 
+	) words_by_tconsts
+	GROUP BY word ORDER BY rank DESC;
+$$;

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DataLayer.DatabaseModel;
 using DataLayer.DatabaseModel.MovieModel;
 using DataLayer.DatabaseModel.SearchModel;
+using DataLayer.DatabaseModel.WordCloudModel;
 using Microsoft.Extensions.Logging;
 
 namespace DataLayer
@@ -16,13 +17,13 @@ namespace DataLayer
     public class PortfolioDBContext : DbContext
     {
         //ruc server 
-        const string ConnectionString = "host=cit.ruc.dk;db=cit11;uid=cit11;pwd=nICrojAxtDeX";
+        //const string ConnectionString = "host=cit.ruc.dk;db=cit11;uid=cit11;pwd=nICrojAxtDeX";
 
         //siemje
         //const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=postgres";
 
         //Atru
-        //const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=Bqm33etj";
+        const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=Bqm33etj";
 
         /* MOVIE MODEL */
         //TITLEBASICS
@@ -60,6 +61,9 @@ namespace DataLayer
         /* SEARCH FRAMEWORK */
         public DbSet<PersonSearch> PersonSearches { get; set; }
         public DbSet<TitleSearch> TitleSearches { get; set; }
+
+        /* WORD CLOUD FRAMEWORK */
+        public DbSet<WordObject> WordObjects { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -359,6 +363,13 @@ namespace DataLayer
             modelBuilder.Entity<TitleSearch>().Property(x => x.TConst).HasColumnName("tconst");
             modelBuilder.Entity<TitleSearch>().Property(x => x.Rank).HasColumnName("rank");
             modelBuilder.Entity<TitleSearch>().Property(x => x.PrimaryTitle).HasColumnName("primarytitle");
+
+            /* WORD CLOUD FRAMEWORK */
+            //WORD OBJECT
+            modelBuilder.Entity<WordObject>().HasNoKey();
+            modelBuilder.Entity<WordObject>().Property(x => x.Word).HasColumnName("word");
+            modelBuilder.Entity<WordObject>().Property(x => x.Rank).HasColumnName("rank");
+
         }
 
     }
