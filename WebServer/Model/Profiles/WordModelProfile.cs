@@ -10,7 +10,7 @@ namespace WebServer.Model.Profiles
         {
             CreateMap<WordObject, WordModel>()
                 .ForMember(dst => dst.Text, opt => opt.MapFrom(src => src.Word))
-                .ForMember(dst => dst.Weight, opt => opt.MapFrom(src => src.Rank));
+                .ForMember(dst => dst.Value, opt => opt.MapFrom(src => src.Rank));
         }
     }
 }
