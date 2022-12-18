@@ -73,7 +73,7 @@ namespace DataLayer
             {               
                 var inputTConst = tvShow?.TConst?.RemoveSpaces();
                 tvShow.TConst = inputTConst;
-                tvShow.TvShowContentList = GetTvShowListElements(inputTConst);
+                //tvShow.TvShowContentList = GetTvShowListElements(inputTConst);
                 tvShow.DirectorList = GetDirectorsForSpecificTitle(inputTConst);  
             }
             return tvShows;

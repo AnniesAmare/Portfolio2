@@ -52,6 +52,21 @@ namespace WebServer.Controllers
             tvShowModelElement.Url = 
                 GenerateLink(nameof(GetTvShowById), new { id = tvShow.TConst });
 
+            IList<DirectorListElementModel> directors = new List<DirectorListElementModel>();
+
+
+            foreach (var director in tvShow.DirectorList)
+            {
+                DirectorListElementModel newDirector = new DirectorListElementModel();
+
+                newDirector.Name = director.Name;
+
+                newDirector.Url = GenerateLink(nameof(SpecificPersonController.GetPersonById), new { id = director.NConst });
+
+                directors.Add(newDirector);
+            }
+            tvShowModelElement.DirectorListWithUrl = directors;
+
             tvShowModelElement.TvShowContentList = tvShowContent;
 
             return Ok(tvShowModelElement);
@@ -85,19 +100,6 @@ namespace WebServer.Controllers
             IList<TvShowModel> tvShowContent = new List<TvShowModel>();
 
             IList<EpisodeModel> episodes = new List<EpisodeModel>();
-            IList<DirectorListElementModel> directors = new List<DirectorListElementModel>();
-
-
-            foreach (var director in tvShow.DirectorList)
-            {
-                DirectorListElementModel newDirector = new DirectorListElementModel();  
-
-                newDirector.Name = director.Name;
-
-                newDirector.Url = GenerateLink(nameof(SpecificPersonController.GetPersonById), new { id = director.NConst });
-
-                directors.Add(newDirector);
-            }
 
             foreach (var season in tvShow.TvShowContentList)
             {
