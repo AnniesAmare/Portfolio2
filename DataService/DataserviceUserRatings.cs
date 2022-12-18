@@ -65,21 +65,39 @@ namespace DataLayer
             return false;
         }
 
+        //var title = db.TitleBasics.Find(id);
+        //var person = db.NameBasics.Find(id);
+
+        //    if (title != null)
+        //{
+        //    var tConst = title.TConst.RemoveSpaces();
+        //    if (BookmarkExists(username, tConst))
+        //    {
+        //        var bookmark = db.BookmarksTitles.Where(x => x.Username == username && x.TConst == tConst).FirstOrDefault();
+        //        db.BookmarksTitles.Remove(bookmark);
+        //        db.SaveChanges();
+        //        return true;
+        //    }
+        //}
+
         public bool DeleteUserRatings(string username, string id)
         {
             using var db = new PortfolioDBContext();
+            var title = db.TitleBasics.Find(id.RemoveSpaces());
 
-            var rating = db.UserRatings
-                 .Where(x => x.Username == username)
-                 .Where(x => x.TConst == id)
-                 .FirstOrDefault();
-
-            if(rating != null)
+            if (title != null)
             {
-                db.UserRatings.Remove(rating);
-                db.SaveChanges();
-                return true;
+                try
+                {
+                    db.Database.ExecuteSqlInterpolated
+                        ($"select delete_rating({username},{title.TConst})");
+                }
+                catch
+                {
+                    return false;
+                }
 
+                return true;
             }
             return false;
         }
