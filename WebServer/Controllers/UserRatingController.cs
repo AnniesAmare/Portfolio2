@@ -91,11 +91,13 @@ namespace WebServer.Controllers
             {
                 var username = GetUsername();
                 var deleted = _dataServiceRatings.DeleteUserRatings(username, id);
+                Console.WriteLine(deleted);
                 if (!deleted) return NotFound();
                 return Ok();
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine(e.Message);
                 return Unauthorized();
             }
         }

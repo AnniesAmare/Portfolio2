@@ -68,18 +68,29 @@ namespace DataLayer
         public bool DeleteUserRatings(string username, string id)
         {
             using var db = new PortfolioDBContext();
+            var title = db.TitleBasics.Find(id);
 
-            var rating = db.UserRatings
-                 .Where(x => x.Username == username && x.TConst == id)
-                 .FirstOrDefault();
 
-            if(rating != null)
+            if (title != null)
             {
-                db.UserRatings.Remove(rating);
-                db.SaveChanges();
-                return true;
+                var tConst = title.TConst.RemoveSpaces();
+                var rating = db.UserRatings
+                .Where(x => x.Username == username)
+                .Where(x => x.TConst == tConst)
+                .FirstOrDefault();
+
+                Console.WriteLine(rating);
+
+                if (rating != null)
+                {
+                    db.UserRatings.Remove(rating);
+                    db.SaveChanges();
+                    return true;
+
+                }
 
             }
+
             return false;
         }
 
