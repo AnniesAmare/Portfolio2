@@ -1,0 +1,10 @@
+﻿
+CREATE OR REPLACE FUNCTION delete_rating(given_username varchar(20), given_tconst VARCHAR)
+RETURNS BOOL
+LANGUAGE plpgsql as
+$$
+BEGIN
+		DELETE FROM user_rating WHERE username = given_username AND tconst like given_tconst;
+		RETURN TRUE;
+END;
+$$;
