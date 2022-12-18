@@ -73,19 +73,17 @@ namespace WebServer.Controllers
             foreach (var tvShow in tvShows)
             {
 
-                var tvShowContent = CreateTvShowModel(tvShow);
+                //var tvShowContent = CreateTvShowModel(tvShow);
 
-                //var tvShowModelElement = _mapper.Map<TvShowListElement>(tvShow);
                 TvShowListModel tvShowModelElement = new TvShowListModel();
                 tvShowModelElement.Name = tvShow.Name;
                 tvShowModelElement.AiringDate = tvShow.AiringDate;
-                tvShowModelElement.TvShowContentList = tvShowContent;
+                //tvShowModelElement.TvShowContentList = tvShowContent;
                 tvShowModelElement.Rating = tvShow.Rating;
-                tvShowModelElement.Url =
-                    GenerateLink(nameof(SpecificTitleController.GetTvShowById), new { id = tvShow.TConst });
+                //tvShowModelElement.Url =
+                //    GenerateLink(nameof(SpecificTitleController.GetTvShowById), new { id = tvShow.TConst });
 
-                tvShowModelElement.TvShowContentList = tvShowContent;
-                //var tvShowModelElement = _mapper.Map<TvShowListModel>(tvShow);
+                //tvShowModelElement.TvShowContentList = tvShowContent;
 
                 tvShowModelElement.Url = _generator.GetUriByName(HttpContext,
                         nameof(SpecificTitleController.GetTvShowById),

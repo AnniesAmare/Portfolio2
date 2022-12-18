@@ -70,8 +70,7 @@ namespace DataLayer
             using var db = new PortfolioDBContext();
 
             var rating = db.UserRatings
-                 .Where(x => x.Username == username)
-                 .Where(x => x.TConst == id)
+                 .Where(x => x.Username == username && x.TConst == id)
                  .FirstOrDefault();
 
             if(rating != null)
