@@ -17,13 +17,13 @@ namespace DataLayer
     public class PortfolioDBContext : DbContext
     {
         //ruc server 
-        //const string ConnectionString = "host=cit.ruc.dk;db=cit11;uid=cit11;pwd=nICrojAxtDeX";
+        const string ConnectionString = "host=cit.ruc.dk;db=cit11;uid=cit11;pwd=nICrojAxtDeX";
 
-        //siemje
+        //siemje - localhost database
         //const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=postgres";
 
-        //Atru
-        const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=Bqm33etj";
+        //atru - localhost database
+        //const string ConnectionString = "host=localhost;db=imdb;uid=postgres;pwd=Bqm33etj";
 
         /* MOVIE MODEL */
         //TITLEBASICS
