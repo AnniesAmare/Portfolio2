@@ -17,8 +17,6 @@ namespace DataLayer
 
         public IList<UserRatingElement> GetUserRatings(string username, int page, int pageSize)
         {
-
-            //Console.WriteLine("I reach here");
             using var db = new PortfolioDBContext();
             var ratings = db.UserRatings
                 .Include(x => x.TitleBasic)
