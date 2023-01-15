@@ -51,7 +51,8 @@ namespace WebServer.Controllers
             try
             {
                 var username = GetUsername();
-                var searchResult = _dataServiceSearches.GetSearchResultTitles(username, search, page, pageSize);
+                var search_content = search.ToLower();
+                var searchResult = _dataServiceSearches.GetSearchResultTitles(username, search_content, page, pageSize);
                 var total = searchResult.total;
                 var searchResultModel = searchResult.searchResult
                     .Select(x => new TitleSearchModel
@@ -60,7 +61,7 @@ namespace WebServer.Controllers
                         Rank = x.Rank,
                         Url = GenerateLink(nameof(SpecificTitleController.GetTitleById), new { id = x.TConst.RemoveSpaces() })
                     });
-                var searchResultPaging = SearchPagingModel(page, pageSize, total,searchResultModel, search, nameof(SearchTitles));
+                var searchResultPaging = SearchPagingModel(page, pageSize, total,searchResultModel, search_content, nameof(SearchTitles));
                 return Ok(searchResultPaging);
             }
             catch
